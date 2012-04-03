@@ -1,0 +1,23 @@
+HKCR
+{
+	Salsita.ScriptServiceInstance.1 = s 'ScriptServiceInstance Class'
+	{
+		CLSID = s '{455D36B6-6BDD-4F02-938A-A94F7F5D326C}'
+	}
+	Salsita.ScriptServiceInstance = s 'ScriptServiceInstance Class'
+	{
+		CLSID = s '{455D36B6-6BDD-4F02-938A-A94F7F5D326C}'
+		CurVer = s 'Salsita.ScriptServiceInstance.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {455D36B6-6BDD-4F02-938A-A94F7F5D326C} = s 'ScriptServiceInstance Class'
+		{
+			ProgID = s 'Salsita.ScriptServiceInstance.1'
+			VersionIndependentProgID = s 'Salsita.ScriptServiceInstance'
+			ForceRemove 'Programmable'
+			LocalServer32 = s '%MODULE%'
+			'TypeLib' = s '{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}'
+		}
+	}
+}
