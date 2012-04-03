@@ -1,2 +1,3 @@
 
-#define IDR_SCRIPTSERVICE               102
+#define IDR_SCRIPTSERVICE  101
+#define IDS_MAINFRAME      110

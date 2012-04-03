@@ -2,14 +2,22 @@
 
 #include "service.h"
 #include "resource.h"
+#include "ScriptServiceInstance.h"
+
+// CScriptServiceCallback
+struct CScriptServiceCallback
+{
+  virtual void OnFinalRelease(BSTR bsID) = 0;
+};
 
 class ATL_NO_VTABLE CScriptService :
+  public CScriptServiceCallback,
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CScriptService, &CLSID_ScriptService>,
 	public IScriptService
 {
 private:
-  //CAtlMap<CString, CScriptServiceInstanceComObject*>   m_Objects;
+  CAtlMap<CString, CScriptServiceInstanceComObject*> m_Objects;
 
 public:
 	CScriptService()

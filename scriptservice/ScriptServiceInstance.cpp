@@ -1,40 +1,40 @@
 #include "stdafx.h"
 #include "ScriptServiceInstance.h"
 #include "ScriptService.h"
-/*#include "..\..\libbhohelper\libbhohelper\libbhohelper.h"
-using namespace LIB_BhoHelper;*/
+#include "libcomhelper\libcomhelper.h"
+using namespace LIB_COMHelper;
 
 // CScriptServiceInstance
 HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR bsID)
 {
-	/*if(m_HiddenWindow.CreateEx() == NULL)
+	if(m_HiddenWindow.CreateEx() == NULL)
 	{
 		return E_FAIL;
 	}
   m_pScriptServiceCallback = pCallback;
-  m_bsID = bsID;*/
+  m_bsID = bsID;
   return S_OK;
 }
 
 void CScriptServiceInstance::UnInit()
 {
-  /*m_Handlers.RemoveAll();
+  m_Handlers.RemoveAll();
   if (m_HiddenWindow)
   {
     m_HiddenWindow.DestroyWindow();
   }
-  m_pScriptServiceCallback = NULL;*/
+  m_pScriptServiceCallback = NULL;
 }
 
 HRESULT CScriptServiceInstance::FinalConstruct()
 {
-  //m_pScriptServiceCallback = NULL;
+  m_pScriptServiceCallback = NULL;
 	return S_OK;
 }
 
 void CScriptServiceInstance::FinalRelease()
 {
-  /*m_Handlers.RemoveAll();
+  m_Handlers.RemoveAll();
   if (m_HiddenWindow)
   {
     m_HiddenWindow.DestroyWindow();
@@ -43,7 +43,7 @@ void CScriptServiceInstance::FinalRelease()
   if (m_pScriptServiceCallback)
   {
     m_pScriptServiceCallback->OnFinalRelease(m_bsID);
-  }*/
+  }
 }
 
 // IScriptServiceInstanceAdmin
@@ -58,7 +58,7 @@ STDMETHODIMP CScriptServiceInstance::ReleaseCallback()
 }
 
 STDMETHODIMP CScriptServiceInstance::addMsgHandler(LPDISPATCH handler, LONG* pvtRet)
-{/*
+{
   if (!pvtRet)
   {
     return E_POINTER;
@@ -66,19 +66,19 @@ STDMETHODIMP CScriptServiceInstance::addMsgHandler(LPDISPATCH handler, LONG* pvt
   void* key = (void*)handler;
   m_Handlers[key] = handler;
 
-  *pvtRet = (long)key;*/
+  *pvtRet = (long)key;
   return S_OK;
 }
 
 STDMETHODIMP CScriptServiceInstance::removeMsgHandler(LONG handlerID)
-{/*
+{
   void* key = (void*)(handlerID);
-  m_Handlers.RemoveKey(key);*/
+  m_Handlers.RemoveKey(key);
   return S_OK;
 }
 
 STDMETHODIMP CScriptServiceInstance::sendMsg(LONG handlerID, VARIANT data)
-{/*
+{
   void* key;
   CComPtr<IDispatch> value;
   DISPID disp_this = DISPID_THIS;
@@ -97,6 +97,6 @@ STDMETHODIMP CScriptServiceInstance::sendMsg(LONG handlerID, VARIANT data)
       m_Handlers.RemoveAtPos(currentPos);
     }
   }
-  */
+
   return S_OK;
 }

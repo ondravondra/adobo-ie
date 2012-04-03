@@ -3,6 +3,7 @@
 
 #include "service.h"
 #include "resource.h"
+#include "MainFrm.h"
 
 struct CScriptServiceCallback;
 
@@ -15,9 +16,8 @@ class ATL_NO_VTABLE CScriptServiceInstance :
 private:
   // My id
   CComBSTR                  m_bsID;
-  //CMainFrame                m_HiddenWindow;
-  CAtlMap<void*, CComPtr<IDispatch> >
-    m_Handlers;
+  CMainFrame                m_HiddenWindow;
+  CAtlMap<void*, CComPtr<IDispatch>> m_Handlers;
 
   // The scripting service. Have to notify him
   // when I'm about to destroy myself

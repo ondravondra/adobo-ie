@@ -67,11 +67,12 @@ IDR_SCRIPTSERVICE REGISTRY "ScriptService.rgs"
 //
 // String Table
 //
-/*
+
 STRINGTABLE 
 BEGIN
+    IDS_MAINFRAME           "MainFrame"
 END
-*/
+
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,12 +3,12 @@
 
 void CScriptService::OnFinalRelease(BSTR bsID)
 {
-  //m_Objects.RemoveKey(bsID);
+  m_Objects.RemoveKey(bsID);
 }
 
 void CScriptService::FinalRelease()
 {
-  /*CScriptServiceInstanceComObject* pObject;
+  CScriptServiceInstanceComObject* pObject;
   CString sID;
   POSITION pos = m_Objects.GetStartPosition();
   while(pos)
@@ -16,13 +16,12 @@ void CScriptService::FinalRelease()
     m_Objects.GetNextAssoc(pos, sID, pObject);
     pObject->UnInit();
   }
-  m_Objects.RemoveAll();*/
+  m_Objects.RemoveAll();
 }
-
 
 STDMETHODIMP CScriptService::GetServiceFor(BSTR bsID, LPUNKNOWN* ppUnk)
 {
-  /*CScriptServiceInstanceComObject* pObject = NULL;
+  CScriptServiceInstanceComObject* pObject = NULL;
   if (!m_Objects.Lookup(bsID, pObject))
   {
     ATLTRACE(_T("ADD OBJECT %s\n"), bsID);
@@ -43,7 +42,7 @@ STDMETHODIMP CScriptService::GetServiceFor(BSTR bsID, LPUNKNOWN* ppUnk)
   {
     ATLTRACE(_T("FOUND OBJECT %s\n"), bsID);
   }
-  return pObject->QueryInterface<IUnknown>(ppUnk);*/
+  return pObject->QueryInterface<IUnknown>(ppUnk);
   return S_OK;
 }
 

@@ -26,4 +26,6 @@ if(version_build)
 	add_definitions("-DVER_NUMBER_BUILD=${version_build}")
 endif(version_build)
 
+add_subdirectory(libcomhelper)
 add_subdirectory(scriptservice)
+
