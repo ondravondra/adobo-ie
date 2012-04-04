@@ -28,4 +28,5 @@ endif(version_build)
 
 add_subdirectory(libcomhelper)
 add_subdirectory(scriptservice)
+add_subdirectory(scriptservice-testconsumer)
 
