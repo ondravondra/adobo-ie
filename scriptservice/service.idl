@@ -14,44 +14,6 @@ interface IScriptService : IUnknown
 };
 
 [
-  object,
-  uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
-  dual,
-  nonextensible,
-  pointer_default(unique)
-]
-interface IScriptServiceInstance : IDispatch
-{
-  [id(1)] HRESULT addMsgHandler([in] LPDISPATCH handler, [out, retval] LONG* pvtRet);
-  [id(2)] HRESULT removeMsgHandler([in] LONG handlerID);
-  [id(3)] HRESULT sendMsg([in] LONG handlerID, [in] VARIANT data);
-};
-
-[
-  object,
-  uuid(C89BFD36-10DA-4001-901F-6B436113A2D5),
-  oleautomation,
-  nonextensible,
-  pointer_default(unique)
-]
-interface IScriptServiceInstanceAdmin : IUnknown
-{
-  HRESULT SetCallback([in] LPUNKNOWN pUnk);
-  HRESULT ReleaseCallback();
-};
-[
-  object,
-  uuid(1CF497CD-54CE-4800-8160-3E684BBC8E55),
-  oleautomation,
-  nonextensible,
-  pointer_default(unique)
-]
-interface IScriptServiceScriptSource : IUnknown
-{
-  HRESULT GetScriptFor([in] BSTR bsID, [out, retval] BSTR* pbsRet);
-};
-
-[
   uuid(7B05CBF9-1DFF-46C0-BE10-9EC7D1236AC1),
   version(1.0),
 ]
@@ -66,5 +28,43 @@ library scriptservicelib
   coclass ScriptService
   {
     [default] interface IScriptService;
+  };
+
+  [
+    object,
+    uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface IScriptServiceInstance : IDispatch
+  {
+    [id(1)] HRESULT addMsgHandler([in] LPDISPATCH handler, [out, retval] LONG* pvtRet);
+    [id(2)] HRESULT removeMsgHandler([in] LONG handlerID);
+    [id(3)] HRESULT sendMsg([in] LONG handlerID, [in] VARIANT data);
+  };
+
+  [
+    object,
+    uuid(C89BFD36-10DA-4001-901F-6B436113A2D5),
+    oleautomation,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface IScriptServiceInstanceAdmin : IUnknown
+  {
+    HRESULT SetCallback([in] LPUNKNOWN pUnk);
+    HRESULT ReleaseCallback();
+  };
+  [
+    object,
+    uuid(1CF497CD-54CE-4800-8160-3E684BBC8E55),
+    oleautomation,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface IScriptServiceScriptSource : IUnknown
+  {
+    HRESULT GetScriptFor([in] BSTR bsID, [out, retval] BSTR* pbsRet);
   };
 };

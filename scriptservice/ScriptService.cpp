@@ -43,6 +43,5 @@ STDMETHODIMP CScriptService::GetServiceFor(BSTR bsID, LPUNKNOWN* ppUnk)
     ATLTRACE(_T("FOUND OBJECT %s\n"), bsID);
   }
   return pObject->QueryInterface<IUnknown>(ppUnk);
-  return S_OK;
 }
 
