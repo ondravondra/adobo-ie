@@ -19,7 +19,7 @@ void CScriptService::FinalRelease()
   m_Objects.RemoveAll();
 }
 
-STDMETHODIMP CScriptService::GetServiceFor(BSTR bsID, LPUNKNOWN* ppUnk)
+STDMETHODIMP CScriptService::GetBackgroundScriptService(BSTR bsID, BSTR initialUrl, LPUNKNOWN* ppUnk)
 {
   CScriptServiceInstanceComObject* pObject = NULL;
   if (!m_Objects.Lookup(bsID, pObject))
@@ -30,7 +30,7 @@ STDMETHODIMP CScriptService::GetServiceFor(BSTR bsID, LPUNKNOWN* ppUnk)
     {
       return hr;
     }
-    hr = pObject->Init(this, bsID);
+    hr = pObject->Init(this, bsID, initialUrl);
     if (FAILED(hr))
     {
       delete pObject;

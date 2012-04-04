@@ -5,8 +5,9 @@
 using namespace LIB_COMHelper;
 
 // CScriptServiceInstance
-HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR bsID)
+HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR bsID, BSTR initialUrl)
 {
+  m_HiddenWindow.m_initialUrl = initialUrl;
 	if(m_HiddenWindow.CreateEx() == NULL)
 	{
 		return E_FAIL;

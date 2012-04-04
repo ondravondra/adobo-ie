@@ -12,6 +12,5 @@ CScriptingSrvcModule _AtlModule;
 extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, 
                                 LPTSTR /*lpCmdLine*/, int nShowCmd)
 {
-  MessageBox(NULL, L"asdf", L"asdf", MB_OK);
   return _AtlModule.WinMain(nShowCmd);
 }

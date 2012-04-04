@@ -15,13 +15,13 @@ class ATL_NO_VTABLE CScriptServiceInstance :
 {
 private:
   // My id
-  CComBSTR                  m_bsID;
-  CMainFrame                m_HiddenWindow;
+  CComBSTR m_bsID;
+  CMainFrame m_HiddenWindow;
   CAtlMap<void*, CComPtr<IDispatch>> m_Handlers;
 
   // The scripting service. Have to notify him
   // when I'm about to destroy myself
-  CScriptServiceCallback*   m_pScriptServiceCallback;
+  CScriptServiceCallback *m_pScriptServiceCallback;
 
   // Callback interfaces
   struct
@@ -55,7 +55,7 @@ public:
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  HRESULT Init(CScriptServiceCallback* pCallback, BSTR bsID);
+  HRESULT Init(CScriptServiceCallback* pCallback, BSTR bsID, BSTR initialUrl);
   void UnInit();
 
   HRESULT FinalConstruct();

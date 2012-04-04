@@ -44,7 +44,7 @@ public:
 	void FinalRelease();
 
 public:
-  STDMETHOD(GetServiceFor)(BSTR bsID, LPUNKNOWN* ppUnk);
+  STDMETHOD(GetBackgroundScriptService)(BSTR bsID, BSTR initialUrl, LPUNKNOWN* ppUnk);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ScriptService), CScriptService)

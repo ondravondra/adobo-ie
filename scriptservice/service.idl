@@ -10,7 +10,7 @@ import "ocidl.idl";
 ]
 interface IScriptService : IUnknown
 {
-  HRESULT GetServiceFor([in] BSTR bsID, [out, retval] LPUNKNOWN* ppUnk);
+  HRESULT GetBackgroundScriptService([in] BSTR bsID, [in] BSTR initialUrl, [out, retval] LPUNKNOWN* ppUnk);
 };
 
 [
