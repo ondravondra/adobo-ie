@@ -2,7 +2,7 @@ file(GLOB_RECURSE source_files *.cpp *.h)
 
 add_library(libcomhelper STATIC ${source_files})
 
-add_definitions("-D_CRT_SECURE_NO_WARNINGS -D_UNICODE")
+add_definitions("-D_CRT_SECURE_NO_WARNINGS -D_UNICODE -D_CRT_NON_CONFORMING_SWPRINTFS")
 
 set_target_properties(libcomhelper PROPERTIES STATIC_LIBRARY_FLAGS "/NODEFAULTLIB")
 

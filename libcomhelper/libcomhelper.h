@@ -54,6 +54,10 @@ namespace LIB_COMHelper
       return S_OK;
     }
 
+    // Put a property
+    HRESULT SetProperty(LPOLESTR lpsName, CComVariant vtValue);
+    HRESULT SetPropertyByRef(LPOLESTR lpsName, CComVariant vtValue);
+
     // Wrapper used if T == TCast
     template <class T, VARTYPE VT> HRESULT Get(LPOLESTR lpsName, T &Ret)
       {return Get<T, VT, T>(lpsName, Ret);}
