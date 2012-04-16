@@ -15,6 +15,7 @@ LRESULT CHiddenBrowserView::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
   spHost->QueryControl(IID_IWebBrowser2, (void**)&m_pWebBrowser.p);
 	return 0;
 }
+
 LRESULT CHiddenBrowserView::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
   m_pWebBrowser.Release();
