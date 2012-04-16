@@ -1,0 +1,211 @@
+/****************************************************************************
+ * Magpie.idl : IDL source for Magpie
+ * Copyright 2012 Salsita Software.
+ * Author: Arne Seib <kontakt@seiberspace.de>
+ ****************************************************************************/
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+/*==========================================================================*/
+[
+	helpstring(
+    "IMagpieApplication Interface. This is the interface "
+    "for handling a magpie instance. Use it to initialize, "
+    "run and shutdown the instance. "
+    "It also offeres an aggregated IConnectionPointContainer "
+    "interface for attaching a console implementation."
+  ),
+	object,
+	uuid(684092D4-C67B-4456-8BC8-86FA9E7F16F6),
+	pointer_default(unique)
+]
+interface IMagpieApplication : IUnknown
+{
+  [helpstring(
+    "Init-method. Pass the root folder of the script application in "
+    "lpszFolderName."
+  )]
+  HRESULT Init([in, string] const OLECHAR* lpszFolderName);
+
+  [helpstring(
+    "Run-method. Pass the module ID of your main script in "
+    "lpszModuleID."
+  )]
+  HRESULT Run([in, string] const OLECHAR* lpszModuleID);
+
+  [helpstring(
+    "Shutdown-method. Call to stop the script engine and cleanup everything."
+  )]
+  HRESULT Shutdown();
+};
+
+/*==========================================================================*/
+[
+	helpstring("Magpie 1.0 Type Library"),
+	uuid(E043C840-CD76-4F58-920D-DF37C1A404DD),
+	version(1.0)
+]
+library MagpieLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+/*==========================================================================*/
+  [
+	  helpstring(
+      "Enum LogFacility. All known log facilities. Can be used "
+      "by a _IMagpieLoggerEvents implementation for internal processing."
+    ),
+	  uuid(55A14E7D-99D8-48ab-86A2-01DAD6D8675C)
+  ]
+  enum LogFacility
+  {
+    LT_LOG,
+    LT_DEBUG,
+    LT_INFO,
+    LT_WARN,
+    LT_ERROR
+  };
+
+/*==========================================================================*/
+  [
+	  helpstring(
+      "_IMagpieLoggerEvents event interface. Implement this interface to "
+      "receive log events."
+    ),
+	  uuid(A4E761D5-C092-4312-A491-341E749D177B)
+  ]
+  dispinterface _IMagpieLoggerEvents
+  {
+    properties:
+    methods:
+    [id(1), helpstring(
+      "Method OnLog"
+    )]
+    void OnLog([in] VARIANT val, [in] BSTR bsModuleID);
+
+    [id(2), helpstring(
+      "Method OnDebug"
+    )]
+    void OnDebug([in] VARIANT val, [in] BSTR bsModuleID);
+
+    [id(3), helpstring(
+      "Method OnInfo"
+    )]
+    void OnInfo([in] VARIANT val, [in] BSTR bsModuleID);
+
+    [id(4), helpstring(
+      "Method OnWarn"
+    )]
+    void OnWarn([in] VARIANT val, [in] BSTR bsModuleID);
+
+    [id(5), helpstring(
+      "Method OnError"
+    )]
+    void OnError([in] VARIANT val, [in] BSTR bsModuleID);
+  };
+
+/*==========================================================================*/
+  [
+	  helpstring(
+      "IMagpieConsole interface. The magpie console implements this interface."
+    ),
+	  object,
+	  uuid(405F6C54-6E87-49b9-B3FB-7F9E56AE8CEE),
+	  dual,
+	  nonextensible,
+	  pointer_default(unique)
+  ]
+  interface IMagpieConsole : IDispatch
+  {
+    [id(1), helpstring(
+      "Method log"
+    )]
+    HRESULT log([in] VARIANT val);
+
+    [id(2), helpstring(
+      "Method debug"
+    )]
+    HRESULT debug([in] VARIANT val);
+
+    [id(3), helpstring(
+      "Method info"
+    )]
+    HRESULT info([in] VARIANT val);
+
+    [id(4), helpstring(
+      "Method warn"
+    )]
+    HRESULT warn([in] VARIANT val);
+
+    [id(5), helpstring(
+      "Method error"
+    )]
+    HRESULT error([in] VARIANT val);
+  };
+
+/*==========================================================================*/
+  [
+    helpstring(
+      "IMagpieModule interface. Each module implements this interface. "
+      "Gets injected into the module's js."
+    ),
+    object,
+    uuid(38742A79-0D30-4fda-B088-0AB045E0110B),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface IMagpieModule : IDispatch
+  {
+    [propget, id(1), helpstring(
+      "Property id. The module's absolute ID."
+    )]
+    HRESULT id([out, retval] VARIANT* pVal);
+
+    [propget, id(2), helpstring(
+      "Property exports. The module's exported API."
+    )]
+    HRESULT exports([out, retval] VARIANT* pVal);
+  };
+
+/*==========================================================================*/
+  [
+    helpstring(
+      "IMagpieRequire interface. Gets injected into a module's js as 'require'."
+    ),
+    object,
+    uuid(20D05B88-9974-4d09-B45F-5D8B8FC3C782),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface IMagpieRequire : IDispatch
+  {
+    [id(0), helpstring(
+      "Default method. This method is called when you write require(<some-module-ID>)."
+    )]
+    HRESULT require([in] BSTR moduleID, [out, retval] VARIANT* pvtExports);
+
+    [propget, id(2), helpstring(
+      "Property main. Represents the top-level 'module' object of the program. "
+      "Referentially identical to the 'module' object of the main program."
+    )]
+    HRESULT main([out, retval] VARIANT* pVal);
+  };
+
+/*==========================================================================*/
+	[
+		helpstring(
+      "MagpieApplication Class. "
+      "The only object that can be intantiated directly. "
+      "A Magpie application hold a reference to this."
+    ),
+		uuid(42F2CA19-AAA6-4CC1-99DA-AC4E0D89F508)
+	]
+	coclass MagpieApplication
+	{
+		[default] interface IMagpieApplication;
+	};
+};
