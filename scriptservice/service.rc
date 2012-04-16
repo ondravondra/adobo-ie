@@ -43,9 +43,9 @@ BEGIN
             VALUE "CompanyName", VER_COMPANY
             VALUE "FileDescription", "Background Script Service"
             VALUE "FileVersion", VER_NUMBER_STRING
-            VALUE "InternalName", "bmext.dll"
+            VALUE "InternalName", "scriptservice.exe"
             VALUE "LegalCopyright", VER_COPYRIGHT
-            VALUE "OriginalFilename", "bmext.dll"
+            VALUE "OriginalFilename", "scriptservice.exe"
             VALUE "ProductName", VER_PRODUCT
             VALUE "ProductVersion", VER_NUMBER_STRING
         END
