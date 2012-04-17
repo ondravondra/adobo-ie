@@ -1,5 +1,10 @@
 #pragma once
 
+#pragma comment(linker, "/include:_library_version_libcomhelper")
+extern "C" {
+  extern const wchar_t *library_version_libcomhelper;
+}
+
 namespace LIB_COMHelper
 {
 

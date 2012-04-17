@@ -4,8 +4,7 @@
 //
 #define IDS_PROJNAME                    100
 #define IDR_MAGPIE                      101
-#define IDR_MAGPIESYSTEM                102
-#define IDR_MAGPIEAPPLICATION           201
+#define IDR_MAGPIEAPPLICATION           102
 
 // Next default values for new objects
 // 

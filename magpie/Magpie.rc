@@ -30,7 +30,6 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 // REGISTRY
 //
 
-IDR_MAGPIESYSTEM        REGISTRY                "MagpieSystem.rgs"
 IDR_MAGPIEAPPLICATION   REGISTRY                "MagpieApplication.rgs"
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
