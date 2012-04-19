@@ -116,9 +116,12 @@ public:
       return E_UNEXPECTED;
     }
 
+    DWORD id = m_SourceContextSeq ++;
+    m_scriptModuleNameMap.Add(id, lpszModuleName);
+
     // parse script text
 	  IF_FAILED_RET(m_ScriptEngineParser->ParseScriptText(
-      lpszSource, lpszModuleName, 0, 0, 0, 0, SCRIPTTEXT_ISPERSISTENT, 0, 0));
+      lpszSource, lpszModuleName, 0, 0, id, 1, SCRIPTTEXT_ISPERSISTENT, 0, 0));
     return S_OK;
   }
 
@@ -251,9 +254,13 @@ public:
     ULONG lLine = 0;
     long lChar = 0;
     pscripterror->GetSourcePosition(&dwSourceContext, &lLine, &lChar);
+    CString cstrModuleName = m_scriptModuleNameMap.Lookup(dwSourceContext);
+    LPCWSTR moduleName = cstrModuleName;
 
     CString sOut;
-    sOut.Format(_T("================================================================================\nError 0x%08x\nat line %i pos %i:\n%s\n%s\n================================================================================\n"), inf.scode, lLine, lChar, sErr, sDesc);
+    sOut.Format(_T("================================================================================\nError 0x%08x\nin %s at line %i pos %i:\n%s\n%s\n================================================================================\n"),
+      inf.scode, moduleName, lLine, lChar, sErr, sDesc);
+
     ATLTRACE(sOut);
 #endif
     return S_OK;
@@ -270,6 +277,9 @@ public:
   }
 
 protected:
+  CActiveScriptT() : m_SourceContextSeq(0)
+  {}
+
   // -------------------------------------------------------------------------
   // protected members
 
@@ -281,4 +291,7 @@ protected:
 
   // IDispatchEx for global script namespace
   CComQIPtr<IDispatchEx>		  m_ScriptGlobal;
+
+  DWORD m_SourceContextSeq;
+  CSimpleMap<DWORD, CString>  m_scriptModuleNameMap;
 };
