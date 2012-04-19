@@ -79,8 +79,7 @@ public:
   IDispatch *GetRequire()
                   {return m_Require;}
 
-  IDispatchEx *GetExports()
-                  {return m_Exports;}
+  HRESULT GetExports(VARIANT * pvtExports);
 
   CMagpieApplication *GetApplication()
                   {return m_pApplication;}
@@ -118,7 +117,7 @@ private:
           * m_pApplication;
 
   // Flag indicating that the module ran already.
-  //  This flag is used to prevent circular inclusions. Immediately before 
+  //  This flag is used to prevent circular inclusions. Immediately before
   //  this module runs the flag is set (inside Run() method), so calling
   //  Run() again does nothing.
   BOOL

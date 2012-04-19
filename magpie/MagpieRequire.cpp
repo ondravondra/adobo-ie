@@ -78,14 +78,7 @@ STDMETHODIMP CMagpieRequire::require(
   CComPtr<CMagpieModuleComObject> module;
   IF_FAILED_RET(m_pModule->RunModule(moduleID, &module));
 
-  IDispatchEx *pExports = module->GetExports();
-  if (!pExports)
-  {
-    return E_UNEXPECTED;
-  }
-  IF_FAILED_RET(pExports->QueryInterface(IID_IDispatch, (void**)&pvtExports->pdispVal));
-  pvtExports->vt = VT_DISPATCH;
-  return S_OK;
+  return module->GetExports(pvtExports);
 }
 
 //----------------------------------------------------------------------------

@@ -91,6 +91,17 @@ HRESULT CMagpieModule::RunModule(
 }
 
 //----------------------------------------------------------------------------
+//  GetExports
+HRESULT CMagpieModule::GetExports(VARIANT * pvtExports)
+{
+  ENSURE_RETVAL(pvtExports);
+  ATLASSERT(m_pApplication);
+  CIDispatchHelper script;
+  IF_FAILED_RET(m_pApplication->GetScriptEngine().GetScriptDispatch(m_sID, &script));
+  return script.GetPropertyByName(L"exports", pvtExports);
+}
+
+//----------------------------------------------------------------------------
 //  Run
 HRESULT CMagpieModule::Run()
 {

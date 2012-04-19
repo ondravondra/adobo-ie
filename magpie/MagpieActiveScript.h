@@ -75,6 +75,10 @@ public:
                        IDispatch  * pDisp,
                        DWORD        dwFlags);
 
+  // Returns the script dispatch for a module
+  HRESULT GetScriptDispatch(LPCOLESTR     pstrName,
+                            IDispatch  ** ppDisp);
+
 public:
   // -------------------------------------------------------------------------
   // IActiveScriptSite methods overriding CActiveScriptT.

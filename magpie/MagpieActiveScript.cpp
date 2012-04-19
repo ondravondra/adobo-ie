@@ -43,8 +43,7 @@ HRESULT CMagpieActiveScript::RunModule(
   CMagpieModule* pModule)
 {
   CComPtr<IDispatch> pModuleRequireOb(pModule->GetRequire());
-  CComPtr<IDispatchEx> pModuleExportsOb(pModule->GetExports());
-  if (!pModuleRequireOb || !pModuleExportsOb)
+  if (!pModuleRequireOb)
   {
     return E_UNEXPECTED;
   }
@@ -62,10 +61,16 @@ HRESULT CMagpieActiveScript::RunModule(
   CIDispatchHelper script;
   IF_FAILED_RET(m_ScriptEngine->GetScriptDispatch(sModuleID, &script));
 
+  // create exports object
+  CIDispatchHelper scriptGlobal;
+  IF_FAILED_RET(m_ScriptEngine->GetScriptDispatch(NULL, &scriptGlobal));
+  CComPtr<IDispatch> pModuleExportsOb;
+  IF_FAILED_RET(scriptGlobal.CreateObject(L"Object", &pModuleExportsOb));
+
   // inject CommonJS objects
   script.SetPropertyByRef(L"require", CComVariant(pModuleRequireOb));
-  script.SetPropertyByRef(L"exports", CComVariant(pModuleExportsOb));
   script.SetPropertyByRef(L"module", CComVariant(pModule));
+  script.SetPropertyByRef(L"exports", CComVariant(pModuleExportsOb));
 
   // now run the module
   m_Application.EnterModule(sModuleID);
@@ -78,6 +83,15 @@ HRESULT CMagpieActiveScript::RunModule(
   m_Application.ExitModule();
 
   return S_OK;
+}
+
+//----------------------------------------------------------------------------
+//  GetScriptDispatch
+HRESULT CMagpieActiveScript::GetScriptDispatch(
+  LPCOLESTR     pstrName,
+  IDispatch  ** ppDisp)
+{
+  return m_ScriptEngine->GetScriptDispatch(pstrName, ppDisp);
 }
 
 //----------------------------------------------------------------------------
