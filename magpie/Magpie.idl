@@ -38,6 +38,9 @@ interface IMagpieApplication : IUnknown
     "Shutdown-method. Call to stop the script engine and cleanup everything."
   )]
   HRESULT Shutdown();
+
+  [helpstring("Adds a script named item into the active script.")]
+  HRESULT ScriptAddNamedItem([in, string] const OLECHAR *name, [in] LPDISPATCH pDisp, [in] ULONG dwFlags);
 };
 
 /*==========================================================================*/

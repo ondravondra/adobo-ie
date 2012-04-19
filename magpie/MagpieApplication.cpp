@@ -318,3 +318,7 @@ STDMETHODIMP CMagpieApplication::Shutdown()
   return S_OK;
 }
 
+STDMETHODIMP CMagpieApplication::ScriptAddNamedItem(const OLECHAR *name, LPDISPATCH pDisp, ULONG dwFlags)
+{
+  return m_ScriptEngine.AddNamedItem(name, pDisp, dwFlags);
+}
