@@ -8,7 +8,6 @@
 #include "resource.h"
 #include "Magpie.h"
 #include "dllmain.h"
-#include "Magpie_i.c"
 
 CMagpieAtlDllModule _AtlModule;
 

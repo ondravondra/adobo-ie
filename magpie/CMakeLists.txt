@@ -1,6 +1,8 @@
 file(GLOB_RECURSE source_files *.cpp *.h *.def *.rgs *.idl *.rc)
+set(generated_files "${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)/magpie_i.c")
 
-add_library(magpie SHARED ${source_files})
+add_library(magpie SHARED ${source_files} ${generated_files})
+set_source_files_properties(${generated_files} PROPERTIES GENERATED 1)
 
 include_directories("${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)")
 
