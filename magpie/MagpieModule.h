@@ -12,7 +12,6 @@
 #endif
 
 #include "MagpieRequire.h"
-#include "MagpieModuleExports.h"
 
 // forwards
 class CMagpieActiveScript;
@@ -94,7 +93,6 @@ public:
   // -------------------------------------------------------------------------
   // IMagpieModule methods. See .idl for description.
   STDMETHOD(get_id)(VARIANT* pVal);
-  STDMETHOD(get_exports)(VARIANT* pVal);
 
 protected:
   // -------------------------------------------------------------------------
@@ -134,10 +132,5 @@ private:
   // the module's require object
   CComPtr<CMagpieRequireComObject>
             m_Require;
-
-  // the module's exported API
-  CComPtr<CMagpieModuleExportsComObject>
-            m_Exports;
-
 };
 

@@ -166,11 +166,6 @@ library MagpieLib
       "Property id. The module's absolute ID."
     )]
     HRESULT id([out, retval] VARIANT* pVal);
-
-    [propget, id(2), helpstring(
-      "Property exports. The module's exported API."
-    )]
-    HRESULT exports([out, retval] VARIANT* pVal);
   };
 
 /*==========================================================================*/

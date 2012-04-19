@@ -56,7 +56,6 @@ HRESULT CMagpieModule::FinalConstruct()
 //  FinalRelease
 void CMagpieModule::FinalRelease()
 {
-  m_Exports.Release();
   m_Require.Release();
 }
 
@@ -73,9 +72,6 @@ HRESULT CMagpieModule::Init(
 
   // create "require" object
   IF_FAILED_RET(CMagpieRequire::CreateObject(*this, m_Require.p));
-
-  // create "exports" object
-  IF_FAILED_RET(CMagpieModuleExports::CreateObject(m_Exports.p));
 
   return S_OK;
 }
@@ -115,9 +111,6 @@ HRESULT CMagpieModule::Run()
   m_bDidRun = TRUE;
   IF_FAILED_RET(m_pApplication->GetScriptEngine().RunModule(this));
 
-  // prevent changes to exports
-  m_Exports->SetReadonly(TRUE);
-  
   return S_OK;
 }
 
@@ -133,18 +126,5 @@ STDMETHODIMP CMagpieModule::get_id(
   ENSURE_RETVAL(pVal);
   pVal->vt = VT_BSTR;
   pVal->bstrVal = m_sID.AllocSysString();
-  return S_OK;
-}
-
-//----------------------------------------------------------------------------
-//  get_exports
-STDMETHODIMP CMagpieModule::get_exports(
-  VARIANT* pVal)
-{
-  ENSURE_RETVAL(pVal);
-
-  IF_FAILED_RET(
-    m_Exports->QueryInterface(IID_IDispatch, (void**)&pVal->pdispVal));
-  pVal->vt = VT_DISPATCH;
   return S_OK;
 }
