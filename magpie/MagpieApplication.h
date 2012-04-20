@@ -25,8 +25,8 @@
  * This is the startpoint for every magpie program.
  */
 class ATL_NO_VTABLE CMagpieApplication :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CMagpieApplication, &CLSID_MagpieApplication>,
+  public CComObjectRootEx<CComSingleThreadModel>,
+  public CComCoClass<CMagpieApplication, &CLSID_MagpieApplication>,
   public IMagpieApplication
 {
 public:
@@ -46,7 +46,7 @@ public:
   // COM interface map
   BEGIN_COM_MAP(CMagpieApplication)
     // The main interface.
-	  COM_INTERFACE_ENTRY(IMagpieApplication)
+    COM_INTERFACE_ENTRY(IMagpieApplication)
     // Since the console is hidden inside CMagpieApplication but we still want
     //  to allow advising to the console events offer the console's connection
     //  point as an aggregated interface.
@@ -56,8 +56,8 @@ public:
 public:
   // -------------------------------------------------------------------------
   // COM standard methods
-	HRESULT FinalConstruct();
-	void FinalRelease();
+  HRESULT FinalConstruct();
+  void FinalRelease();
 
 public:
   // -------------------------------------------------------------------------

@@ -68,7 +68,7 @@ IDR_SCRIPTSERVICE REGISTRY "ScriptService.rgs"
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_MAINFRAME           "MainFrame"
 END

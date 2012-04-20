@@ -21,8 +21,8 @@ class CMagpieApplication;
  * Console injected into the global script namespace.
  */
 class ATL_NO_VTABLE CMagpieConsole :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IMagpieConsole, &IID_IMagpieConsole, &LIBID_MagpieLib,
+  public CComObjectRootEx<CComSingleThreadModel>,
+  public IDispatchImpl<IMagpieConsole, &IID_IMagpieConsole, &LIBID_MagpieLib,
                        /*wMajor =*/ 1, /*wMinor =*/ 0>,
   public IConnectionPointContainerImpl<CMagpieConsole>,
   public CProxy_IMagpieLoggerEvents<CMagpieConsole>
@@ -30,21 +30,21 @@ class ATL_NO_VTABLE CMagpieConsole :
 public:
   // -------------------------------------------------------------------------
   // ctor
-	CMagpieConsole(CMagpieApplication & application);
+  CMagpieConsole(CMagpieApplication & application);
 
 public:
   // -------------------------------------------------------------------------
   // COM standard stuff
   DECLARE_NO_REGISTRY();
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+  DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 public:
   // -------------------------------------------------------------------------
   // COM interface map
   BEGIN_COM_MAP(CMagpieConsole)
-	  COM_INTERFACE_ENTRY(IMagpieConsole)
+    COM_INTERFACE_ENTRY(IMagpieConsole)
     COM_INTERFACE_ENTRY(IConnectionPointContainer)
-	  COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IDispatch)
   END_COM_MAP()
 
 public:
@@ -58,7 +58,7 @@ public:
   // -------------------------------------------------------------------------
   // COM standard methods
   HRESULT FinalConstruct();
-	void FinalRelease();
+  void FinalRelease();
 
 public:
   // -------------------------------------------------------------------------

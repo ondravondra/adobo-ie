@@ -53,7 +53,7 @@ HRESULT CMagpieRequire::Init(
 //  FinalConstruct
 HRESULT CMagpieRequire::FinalConstruct()
 {
-	return S_OK;
+  return S_OK;
 }
 
 //----------------------------------------------------------------------------

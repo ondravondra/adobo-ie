@@ -25,8 +25,8 @@ typedef CComObject<CMagpieModule> CMagpieModuleComObject;
  * Implements a module.
  */
 class ATL_NO_VTABLE CMagpieModule :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IMagpieModule, &IID_IMagpieModule, &LIBID_MagpieLib,
+  public CComObjectRootEx<CComSingleThreadModel>,
+  public IDispatchImpl<IMagpieModule, &IID_IMagpieModule, &LIBID_MagpieLib,
                       /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
@@ -34,14 +34,14 @@ public:
   // COM standard stuff
   DECLARE_NO_REGISTRY();
   DECLARE_NOT_AGGREGATABLE(CMagpieModule)
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+  DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 public:
   // -------------------------------------------------------------------------
   // COM interface map
   BEGIN_COM_MAP(CMagpieModule)
-	  COM_INTERFACE_ENTRY(IMagpieModule)
-	  COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IMagpieModule)
+    COM_INTERFACE_ENTRY(IDispatch)
   END_COM_MAP()
 
 public:
@@ -56,7 +56,7 @@ public:
   // -------------------------------------------------------------------------
   // COM standard methods
   HRESULT FinalConstruct();
-	void FinalRelease();
+  void FinalRelease();
 
 public:
   // -------------------------------------------------------------------------
@@ -97,12 +97,12 @@ public:
 protected:
   // -------------------------------------------------------------------------
   // ctor
-	CMagpieModule();
+  CMagpieModule();
 
 private:
   // -------------------------------------------------------------------------
   // Private methods.
-	HRESULT Init(CMagpieApplication & application,
+  HRESULT Init(CMagpieApplication & application,
                 LPCOLESTR           lpsModuleID,
                 LPCOLESTR           lpsFileName);
 

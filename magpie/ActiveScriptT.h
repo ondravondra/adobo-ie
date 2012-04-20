@@ -28,24 +28,24 @@ public:
   // Terminates script execution and unloads the script engine.
   void UnloadScriptEngine()
   {
-	  if (m_ScriptEngine)
-	  {
-		  EXCEPINFO inf = {};
-		  m_ScriptEngine->InterruptScriptThread(SCRIPTTHREADID_ALL, &inf, 0);
-		  if (inf.bstrSource)
-			  SysFreeString(inf.bstrSource);
-		  if (inf.bstrDescription)
-			  SysFreeString(inf.bstrDescription);
-		  if (inf.bstrHelpFile)
-			  SysFreeString(inf.bstrHelpFile);
-	  }
-	  m_ScriptGlobal.Release();
-	  m_ScriptEngineParser.Release();
     if (m_ScriptEngine)
-	  {
-		  m_ScriptEngine->Close();
-	  }
-	  m_ScriptEngine.Release();
+    {
+      EXCEPINFO inf = {};
+      m_ScriptEngine->InterruptScriptThread(SCRIPTTHREADID_ALL, &inf, 0);
+      if (inf.bstrSource)
+        SysFreeString(inf.bstrSource);
+      if (inf.bstrDescription)
+        SysFreeString(inf.bstrDescription);
+      if (inf.bstrHelpFile)
+        SysFreeString(inf.bstrHelpFile);
+    }
+    m_ScriptGlobal.Release();
+    m_ScriptEngineParser.Release();
+    if (m_ScriptEngine)
+    {
+      m_ScriptEngine->Close();
+    }
+    m_ScriptEngine.Release();
   }
 
   // Loads and prepares the script engine.
@@ -58,13 +58,13 @@ public:
     {
       return E_UNEXPECTED;
     }
-	  HRESULT hr = E_FAIL;
-	  ATLASSERT(NULL == m_ScriptGlobal);
+    HRESULT hr = E_FAIL;
+    ATLASSERT(NULL == m_ScriptGlobal);
 
     do
     {
-	    // create engine
-	    hr = ::CoCreateInstance(
+      // create engine
+      hr = ::CoCreateInstance(
         clsid, NULL, CLSCTX_ALL, IID_IActiveScript, (void **)&m_ScriptEngine);
       if(FAILED(hr)) break;
 
@@ -74,17 +74,17 @@ public:
       if(FAILED(hr)) break;
 
       // get IActiveScriptParse-interface
-		  hr = m_ScriptEngine->QueryInterface(
+      hr = m_ScriptEngine->QueryInterface(
         IID_IActiveScriptParse, (void**)&m_ScriptEngineParser);
       if(FAILED(hr)) break;
 
       // init IActiveScriptParse
-		  hr = m_ScriptEngineParser->InitNew();
+      hr = m_ScriptEngineParser->InitNew();
       if(FAILED(hr)) break;
 
       // get the script dispatch for global namespace
       CComPtr<IDispatch> pDisp;
-		  hr = m_ScriptEngine->GetScriptDispatch(NULL, &pDisp);
+      hr = m_ScriptEngine->GetScriptDispatch(NULL, &pDisp);
       if(FAILED(hr)) break;
 
       m_ScriptGlobal = pDisp;
@@ -93,7 +93,7 @@ public:
     {
       // something failed, cleanup
       ATLASSERT(0);
-	    UnloadScriptEngine();
+      UnloadScriptEngine();
     }
     return hr;
   }
@@ -107,11 +107,11 @@ public:
   // lpszSource is the script encoded as UTF-16.
   // lpszModuleName is the namespace for the module, in case it is NULL
   //  the script will get added to the global namespace.
-	HRESULT AddScript(LPCOLESTR lpszSource,
+  HRESULT AddScript(LPCOLESTR lpszSource,
                     LPCOLESTR lpszModuleName = NULL)
   {
-	  ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
-	  if(!m_ScriptEngine || !m_ScriptEngineParser)
+    ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
+    if(!m_ScriptEngine || !m_ScriptEngineParser)
     {
       return E_UNEXPECTED;
     }
@@ -120,20 +120,20 @@ public:
     m_scriptModuleNameMap.Add(id, lpszModuleName);
 
     // parse script text
-	  IF_FAILED_RET(m_ScriptEngineParser->ParseScriptText(
+    IF_FAILED_RET(m_ScriptEngineParser->ParseScriptText(
       lpszSource, lpszModuleName, 0, 0, id, 1, SCRIPTTEXT_ISPERSISTENT, 0, 0));
     return S_OK;
   }
 
   // Add script stored in a resource in RT_HTML-type resouces.
   // The script text has to be UTF-16, so nSrcCodePage is used for conversion.
-	HRESULT AddScriptResource(HINSTANCE hInstance,
+  HRESULT AddScriptResource(HINSTANCE hInstance,
                             LPCWSTR   nResourceID,
                             LPCOLESTR lpszModuleName = NULL,
                             UINT      nSrcCodePage = CP_ACP)
   {
-	  ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
-	  if(!m_ScriptEngine || !m_ScriptEngineParser)
+    ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
+    if(!m_ScriptEngine || !m_ScriptEngineParser)
     {
       return E_UNEXPECTED;
     }
@@ -142,75 +142,75 @@ public:
 
     HRSRC hRes = FindResource(
       hInstance, nResourceID, MAKEINTRESOURCE(RT_HTML));
-	  if (hRes)
-	  {
-		  DWORD dwSize = SizeofResource(hInstance, hRes);
-		  HGLOBAL hResLoad = LoadResource(hInstance, hRes);
-		  if (hResLoad)
-		  {
-			  LPVOID lpResLock = LockResource(hResLoad);
-			  if (lpResLock)
-			  {
+    if (hRes)
+    {
+      DWORD dwSize = SizeofResource(hInstance, hRes);
+      HGLOBAL hResLoad = LoadResource(hInstance, hRes);
+      if (hResLoad)
+      {
+        LPVOID lpResLock = LockResource(hResLoad);
+        if (lpResLock)
+        {
           LPSTR lps = (LPSTR)new BYTE[dwSize + 1];
-				  if (!lps)
-					  return E_OUTOFMEMORY;
-				  memcpy(lps, lpResLock, dwSize);
+          if (!lps)
+            return E_OUTOFMEMORY;
+          memcpy(lps, lpResLock, dwSize);
           lps[dwSize] = 0;
           HRESULT hr = AddScript(
             CA2WEX<4096>(lps, nSrcCodePage), lpszModuleName);
           delete [] lps;
           return hr;
-			  }
-		  }
-	  }
+        }
+      }
+    }
     return HRESULT_FROM_WIN32(::GetLastError());
   }
 
 #ifdef _USE_SCRIPTS_FROM_FILES
   // Reads a script text from a file. Requires atlfile.h.
-	HRESULT AddScriptFile(LPCOLESTR lpszFileName,
+  HRESULT AddScriptFile(LPCOLESTR lpszFileName,
                         LPCOLESTR lpszModuleName = NULL,
                         UINT      nSrcCodePage = CP_ACP)
   {
-	  ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
-	  if(!m_ScriptEngine || !m_ScriptEngineParser)
+    ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
+    if(!m_ScriptEngine || !m_ScriptEngineParser)
     {
       return E_UNEXPECTED;
     }
 
-	  CAtlFile f;
+    CAtlFile f;
 
-	  IF_FAILED_RET(f.Create(
+    IF_FAILED_RET(f.Create(
       lpszFileName, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING));
 
-	  ULONGLONG nLen = 0;
+    ULONGLONG nLen = 0;
     HRESULT hr = E_FAIL;
 
     IF_FAILED_RET(f.GetSize(nLen));
     // limit script size to 4GB
-	  if (nLen > 0x00000000ffffffff)
-		  return E_OUTOFMEMORY;
+    if (nLen > 0x00000000ffffffff)
+      return E_OUTOFMEMORY;
 
-	  DWORD dwLen = (DWORD)(nLen & 0x00000000ffffffff);
-	  CStringA sImpl;
-	  LPVOID lpv = sImpl.GetBuffer(dwLen);
-	  if (!lpv)
-		  return E_OUTOFMEMORY;
-	  hr = f.Read(lpv, dwLen);
-	  sImpl.ReleaseBuffer(dwLen);
-	  f.Close();
+    DWORD dwLen = (DWORD)(nLen & 0x00000000ffffffff);
+    CStringA sImpl;
+    LPVOID lpv = sImpl.GetBuffer(dwLen);
+    if (!lpv)
+      return E_OUTOFMEMORY;
+    hr = f.Read(lpv, dwLen);
+    sImpl.ReleaseBuffer(dwLen);
+    f.Close();
     IF_FAILED_RET(hr);
 
-	  return AddScript(CA2WEX<4096>(sImpl, nSrcCodePage), lpszModuleName);
+    return AddScript(CA2WEX<4096>(sImpl, nSrcCodePage), lpszModuleName);
   }
 #endif
 
   // -------------------------------------------------------------------------
   // IActiveScriptSite implementation
-	STDMETHOD(GetLCID)(LCID *plcid)
+  STDMETHOD(GetLCID)(LCID *plcid)
   {
-	  *plcid = LOCALE_USER_DEFAULT;
-	  return S_OK;
+    *plcid = LOCALE_USER_DEFAULT;
+    return S_OK;
   }
 
   STDMETHOD(GetItemInfo)(LPCOLESTR pstrName, DWORD dwReturnMask, IUnknown **ppiunkItem, ITypeInfo **ppti)
@@ -218,23 +218,23 @@ public:
     return TYPE_E_ELEMENTNOTFOUND;
   }
 
-	STDMETHOD(GetDocVersionString)(BSTR *pbstrVersion)
+  STDMETHOD(GetDocVersionString)(BSTR *pbstrVersion)
   {
     return E_NOTIMPL;
   }
 
-	STDMETHOD(OnScriptTerminate)(const VARIANT *pvarResult, const EXCEPINFO *pexcepinfo)
+  STDMETHOD(OnScriptTerminate)(const VARIANT *pvarResult, const EXCEPINFO *pexcepinfo)
   {
     return S_OK;
   }
 
-	STDMETHOD(OnStateChange)(SCRIPTSTATE ssScriptState)
+  STDMETHOD(OnStateChange)(SCRIPTSTATE ssScriptState)
   {
     ATLTRACE(_T("SCRIPT OnStateChange: %i\n"), ssScriptState);
     return S_OK;
   }
 
-	STDMETHOD(OnScriptError)(IActiveScriptError *pscripterror)
+  STDMETHOD(OnScriptError)(IActiveScriptError *pscripterror)
   {
 #ifdef _DEBUG
     CString sSrc;
@@ -244,11 +244,11 @@ public:
     pscripterror->GetExceptionInfo(&inf);
     if (inf.bstrDescription)
     {
-	    sDesc = inf.bstrDescription;
+      sDesc = inf.bstrDescription;
     }
     if (inf.bstrSource)
     {
-	    sErr = inf.bstrSource;
+      sErr = inf.bstrSource;
     }
     DWORD dwSourceContext;
     ULONG lLine = 0;
@@ -266,12 +266,12 @@ public:
     return S_OK;
   }
 
-	STDMETHOD(OnEnterScript)()
+  STDMETHOD(OnEnterScript)()
   {
     return S_OK;
   }
 
-	STDMETHOD(OnLeaveScript)()
+  STDMETHOD(OnLeaveScript)()
   {
     return S_OK;
   }

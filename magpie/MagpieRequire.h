@@ -21,8 +21,8 @@ typedef CComObject<CMagpieRequire>  CMagpieRequireComObject;
  * Implements the require object for a module.
  */
 class ATL_NO_VTABLE CMagpieRequire :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IMagpieRequire, &IID_IMagpieRequire, &LIBID_MagpieLib,
+  public CComObjectRootEx<CComSingleThreadModel>,
+  public IDispatchImpl<IMagpieRequire, &IID_IMagpieRequire, &LIBID_MagpieLib,
                       /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
@@ -30,14 +30,14 @@ public:
   // COM standard stuff
   DECLARE_NO_REGISTRY();
   DECLARE_NOT_AGGREGATABLE(CMagpieRequire)
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+  DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 public:
   // -------------------------------------------------------------------------
   // COM interface map
   BEGIN_COM_MAP(CMagpieRequire)
-	  COM_INTERFACE_ENTRY(IMagpieRequire)
-	  COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IMagpieRequire)
+    COM_INTERFACE_ENTRY(IDispatch)
   END_COM_MAP()
 
 public:
@@ -50,7 +50,7 @@ public:
   // -------------------------------------------------------------------------
   // COM standard methods
   HRESULT FinalConstruct();
-	void FinalRelease();
+  void FinalRelease();
 
 public:
   // -------------------------------------------------------------------------
@@ -63,7 +63,7 @@ public:
 protected:
   // -------------------------------------------------------------------------
   // ctor
-	CMagpieRequire();
+  CMagpieRequire();
 
 private:
   // -------------------------------------------------------------------------

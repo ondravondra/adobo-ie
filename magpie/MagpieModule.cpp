@@ -49,7 +49,7 @@ CMagpieModule::CMagpieModule() :
 //  FinalConstruct
 HRESULT CMagpieModule::FinalConstruct()
 {
-	return S_OK;
+  return S_OK;
 }
 
 //----------------------------------------------------------------------------

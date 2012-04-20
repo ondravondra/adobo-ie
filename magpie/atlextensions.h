@@ -21,56 +21,56 @@ template <class Base, class CTORARG>
 class CComObjectStackRefCtorArg : public Base
 {
 public:
-	typedef Base _BaseClass;
+  typedef Base _BaseClass;
 
   CComObjectStackRefCtorArg(CTORARG & arg) : Base(arg)
-	{ 
+  {
 #ifdef _DEBUG
-		m_dwRef = 0;
+    m_dwRef = 0;
 #endif
-		m_hResFinalConstruct = _AtlInitialConstruct();
-		if (SUCCEEDED(m_hResFinalConstruct))
-			m_hResFinalConstruct = FinalConstruct(); 
-	}
+    m_hResFinalConstruct = _AtlInitialConstruct();
+    if (SUCCEEDED(m_hResFinalConstruct))
+      m_hResFinalConstruct = FinalConstruct();
+  }
 
-	virtual ~CComObjectStackRefCtorArg()
-	{
-		// This assert indicates mismatched ref counts.
-		//
-		// The ref count has no control over the
-		// lifetime of this object, so you must ensure
-		// by some other means that the object remains 
-		// alive while clients have references to its interfaces.
-		ATLASSUME(m_dwRef == 0);
-		FinalRelease();
+  virtual ~CComObjectStackRefCtorArg()
+  {
+    // This assert indicates mismatched ref counts.
+    //
+    // The ref count has no control over the
+    // lifetime of this object, so you must ensure
+    // by some other means that the object remains
+    // alive while clients have references to its interfaces.
+    ATLASSUME(m_dwRef == 0);
+    FinalRelease();
 #ifdef _ATL_DEBUG_INTERFACES
-		_AtlDebugInterfacesModule.DeleteNonAddRefThunk(_GetRawUnknown());
+    _AtlDebugInterfacesModule.DeleteNonAddRefThunk(_GetRawUnknown());
 #endif
-	}
+  }
 
-	STDMETHOD_(ULONG, AddRef)() throw()
-	{
+  STDMETHOD_(ULONG, AddRef)() throw()
+  {
 #ifdef _DEBUG
-		return InternalAddRef();
+    return InternalAddRef();
 #else
-		return 0;
+    return 0;
 #endif
-	}
+  }
 
-	STDMETHOD_(ULONG, Release)() throw()
-	{
+  STDMETHOD_(ULONG, Release)() throw()
+  {
 #ifdef _DEBUG
-		return InternalRelease();
+    return InternalRelease();
 #else
-		return 0;
+    return 0;
 #endif
-	}
+  }
 
-	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) throw()
-	{
-		return _InternalQueryInterface(iid, ppvObject);
-	}
+  STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) throw()
+  {
+    return _InternalQueryInterface(iid, ppvObject);
+  }
 
-	HRESULT m_hResFinalConstruct;
+  HRESULT m_hResFinalConstruct;
 
 };

@@ -110,7 +110,7 @@ HRESULT CMagpieActiveScript::AddNamedItem(
 //  FinalConstruct
 HRESULT CMagpieActiveScript::FinalConstruct()
 {
-	return S_OK;
+  return S_OK;
 }
 
 //----------------------------------------------------------------------------

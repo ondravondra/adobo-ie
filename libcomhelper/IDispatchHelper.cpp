@@ -15,13 +15,13 @@ namespace LIB_COMHelper
     {
       return E_UNEXPECTED;
     }
-	  DISPID did = 0;
-	  HRESULT hr = scriptDispatch->GetDispID(CComBSTR(lpsName), fdexNameEnsure, &did);
-	  if (FAILED(hr))
-		  return hr;
-	  DISPID namedArgs[] = {DISPID_PROPERTYPUT};
-	  DISPPARAMS params = {&vtValue, namedArgs, 1, 1};
-	  return scriptDispatch->InvokeEx(did, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUT, &params, NULL, NULL, NULL);
+    DISPID did = 0;
+    HRESULT hr = scriptDispatch->GetDispID(CComBSTR(lpsName), fdexNameEnsure, &did);
+    if (FAILED(hr))
+      return hr;
+    DISPID namedArgs[] = {DISPID_PROPERTYPUT};
+    DISPPARAMS params = {&vtValue, namedArgs, 1, 1};
+    return scriptDispatch->InvokeEx(did, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUT, &params, NULL, NULL, NULL);
   }
 
   HRESULT CIDispatchHelper::SetPropertyByRef(LPOLESTR lpsName, CComVariant vtValue)
@@ -32,13 +32,13 @@ namespace LIB_COMHelper
     {
       return E_UNEXPECTED;
     }
-	  DISPID did = 0;
-	  HRESULT hr = scriptDispatch->GetDispID(CComBSTR(lpsName), fdexNameEnsure, &did);
-	  if (FAILED(hr))
-		  return hr;
-	  DISPID namedArgs[] = {DISPID_PROPERTYPUT};
-	  DISPPARAMS params = {&vtValue, namedArgs, 1, 1};
-	  return scriptDispatch->InvokeEx(did, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUTREF, &params, NULL, NULL, NULL);
+    DISPID did = 0;
+    HRESULT hr = scriptDispatch->GetDispID(CComBSTR(lpsName), fdexNameEnsure, &did);
+    if (FAILED(hr))
+      return hr;
+    DISPID namedArgs[] = {DISPID_PROPERTYPUT};
+    DISPPARAMS params = {&vtValue, namedArgs, 1, 1};
+    return scriptDispatch->InvokeEx(did, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUTREF, &params, NULL, NULL, NULL);
   }
 
   HRESULT CIDispatchHelper::Call(LPOLESTR lpsName, DISPPARAMS* pParams, CComVariant* pvtRet)

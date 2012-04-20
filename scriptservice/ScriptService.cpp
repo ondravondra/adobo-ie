@@ -19,7 +19,6 @@ void CScriptService::FinalRelease()
   m_Objects.RemoveAll();
 }
 
-
 STDMETHODIMP CScriptService::GetServiceFor(BSTR bsID, LPUNKNOWN* ppUnk)
 {
   CScriptServiceInstanceComObject* pObject;

@@ -73,7 +73,7 @@ HRESULT CMagpieApplication::ResolveModuleID(
 
   HRESULT hr = E_FAIL;
   CString sSrcModuleID;
-  // if no source module is given id will be 
+  // if no source module is given id will be
   // relative to root (means sSrcModuleID will be empty)
   if (pSrcModule)
   {
@@ -327,7 +327,7 @@ STDMETHODIMP CMagpieApplication::FindExportsFor(const OLECHAR *lpszModuleID, VAR
 {
   HRESULT hr;
   CComPtr<CMagpieModuleComObject>module;
-  
+
   hr = GetModule(lpszModuleID, module.p);
   IF_FAILED_RET(hr);
 

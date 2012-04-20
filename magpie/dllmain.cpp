@@ -17,6 +17,6 @@ CLSID CLSID_JScript = {0xf414c260,0x6ac0,0x11cf,{0xb6,0xd1,0x00,0xaa,0x00,0xbb,0
 // DLL Entry Point
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-	hInstance;
-	return _AtlModule.DllMain(dwReason, lpReserved); 
+  hInstance;
+  return _AtlModule.DllMain(dwReason, lpReserved);
 }

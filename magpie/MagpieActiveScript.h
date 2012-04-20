@@ -26,7 +26,7 @@ class CMagpieModule;
  * The magpie implementation for IActiveScriptSite based on CActiveScriptT.
  */
 class ATL_NO_VTABLE CMagpieActiveScript :
-	public CComObjectRootEx<CComSingleThreadModel>,
+  public CComObjectRootEx<CComSingleThreadModel>,
   public CActiveScriptT<CMagpieActiveScript>
 {
 public:
@@ -39,20 +39,20 @@ public:
   // COM standard stuff
   DECLARE_NO_REGISTRY();
   DECLARE_NOT_AGGREGATABLE(CMagpieActiveScript)
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+  DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 public:
   // -------------------------------------------------------------------------
   // COM interface map
   BEGIN_COM_MAP(CMagpieActiveScript)
-	  COM_INTERFACE_ENTRY(IActiveScriptSite)
+    COM_INTERFACE_ENTRY(IActiveScriptSite)
   END_COM_MAP()
 
 public:
   // -------------------------------------------------------------------------
   // COM standard methods
   HRESULT FinalConstruct();
-	void FinalRelease();
+  void FinalRelease();
 
 public:
   // -------------------------------------------------------------------------

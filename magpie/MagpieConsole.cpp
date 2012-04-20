@@ -63,7 +63,7 @@ void CMagpieConsole::ExitModule()
 //  FinalConstruct
 HRESULT CMagpieConsole::FinalConstruct()
 {
-	return S_OK;
+  return S_OK;
 }
 
 //----------------------------------------------------------------------------
