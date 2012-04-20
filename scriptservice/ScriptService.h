@@ -12,17 +12,17 @@ struct CScriptServiceCallback
 
 class ATL_NO_VTABLE CScriptService :
   public CScriptServiceCallback,
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CScriptService, &CLSID_ScriptService>,
-	public IScriptService
+  public CComObjectRootEx<CComSingleThreadModel>,
+  public CComCoClass<CScriptService, &CLSID_ScriptService>,
+  public IScriptService
 {
 private:
   CAtlMap<CString, CScriptServiceInstanceComObject*> m_Objects;
 
 public:
-	CScriptService()
-	{
-	}
+  CScriptService()
+  {
+  }
 
   DECLARE_REGISTRY_RESOURCEID(IDR_SCRIPTSERVICE)
   DECLARE_CLASSFACTORY_SINGLETON(CScriptService)
@@ -30,21 +30,22 @@ public:
   DECLARE_NOT_AGGREGATABLE(CScriptService)
 
   BEGIN_COM_MAP(CScriptService)
-	  COM_INTERFACE_ENTRY(IScriptService)
+    COM_INTERFACE_ENTRY(IScriptService)
   END_COM_MAP()
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+  DECLARE_PROTECT_FINAL_CONSTRUCT()
 
   virtual void OnFinalRelease(BSTR bsID);
-	HRESULT FinalConstruct()
-	{
-		return S_OK;
-	}
+  HRESULT FinalConstruct()
+  {
+    return S_OK;
+  }
 
-	void FinalRelease();
+  void FinalRelease();
 
 public:
-  STDMETHOD(GetBackgroundScriptService)(BSTR bsID, BSTR initialUrl, LPUNKNOWN* ppUnk);
+// IGlobalObject
+  STDMETHOD(GetServiceFor)(BSTR bsID, LPUNKNOWN* ppUnk);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ScriptService), CScriptService)

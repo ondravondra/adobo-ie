@@ -3,45 +3,51 @@ import "ocidl.idl";
 
 [
   object,
-  uuid(6DA1B727-A93F-4D77-B444-6B019D00B9F3),
+  uuid(954448CA-1894-4743-9261-BBE3C932FA26),
   oleautomation,
   nonextensible,
+  helpstring("IScriptService Interface"),
   pointer_default(unique)
 ]
 interface IScriptService : IUnknown
 {
-  HRESULT GetBackgroundScriptService([in] BSTR bsID, [in] BSTR initialUrl, [out, retval] LPUNKNOWN* ppUnk);
+  HRESULT GetServiceFor([in] BSTR bsID, [out, retval] LPUNKNOWN* ppUnk);
 };
 
 [
-  uuid(7B05CBF9-1DFF-46C0-BE10-9EC7D1236AC1),
-  version(1.0),
+  object,
+  uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
+  dual,
+  nonextensible,
+  helpstring("IScriptServiceInstance Interface"),
+  pointer_default(unique)
 ]
-library scriptservicelib
+interface IScriptServiceInstance : IDispatch
+{
+  [id(1), propget, helpstring("propety main")] HRESULT main([out, retval] VARIANT * pRet);
+};
+
+
+[
+  uuid(2B2B8941-29D3-4F81-BB1C-381AA74C0E0D),
+  version(1.0),
+  helpstring("ScriptingSrvc 1.0 Type Library")
+]
+library ScriptingSrvcLib
 {
   importlib("stdole2.tlb");
 
   [
-    uuid(B5ABEF92-6105-46A2-9465-EA875E7FD25F), // this needs to be changed when the library is reused
-    helpstring("ScriptService Class")
-  ]
-  coclass ScriptService
-  {
-    [default] interface IScriptService;
-  };
-
-  [
     object,
-    uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
-    dual,
+    uuid(1CF497CD-54CE-4800-8160-3E684BBC8E55),
+    oleautomation,
     nonextensible,
+    helpstring("IScriptServiceScriptSource Interface"),
     pointer_default(unique)
   ]
-  interface IScriptServiceInstance : IDispatch
+  interface IScriptServiceScriptSource : IUnknown
   {
-    [id(1)] HRESULT addMsgHandler([in] LPDISPATCH handler, [out, retval] LONG* pvtRet);
-    [id(2)] HRESULT removeMsgHandler([in] LONG handlerID);
-    [id(3)] HRESULT sendMsg([in] LONG handlerID, [in] VARIANT data);
+    HRESULT GetScriptFor([in] BSTR bsID, [out, retval] BSTR* pbsRet);
   };
 
   [
@@ -49,6 +55,7 @@ library scriptservicelib
     uuid(C89BFD36-10DA-4001-901F-6B436113A2D5),
     oleautomation,
     nonextensible,
+    helpstring("IScriptServiceInstanceAdmin Interface"),
     pointer_default(unique)
   ]
   interface IScriptServiceInstanceAdmin : IUnknown
@@ -56,15 +63,13 @@ library scriptservicelib
     HRESULT SetCallback([in] LPUNKNOWN pUnk);
     HRESULT ReleaseCallback();
   };
+
   [
-    object,
-    uuid(1CF497CD-54CE-4800-8160-3E684BBC8E55),
-    oleautomation,
-    nonextensible,
-    pointer_default(unique)
+    uuid(B5ABEF92-6105-46A2-9465-EA875E7FD25F),
+    helpstring("ScriptService Class")
   ]
-  interface IScriptServiceScriptSource : IUnknown
+  coclass ScriptService
   {
-    HRESULT GetScriptFor([in] BSTR bsID, [out, retval] BSTR* pbsRet);
+    [default] interface IScriptService;
   };
 };

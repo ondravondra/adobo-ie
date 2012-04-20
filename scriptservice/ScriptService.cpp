@@ -19,21 +19,16 @@ void CScriptService::FinalRelease()
   m_Objects.RemoveAll();
 }
 
-STDMETHODIMP CScriptService::GetBackgroundScriptService(BSTR bsID, BSTR initialUrl, LPUNKNOWN* ppUnk)
+
+STDMETHODIMP CScriptService::GetServiceFor(BSTR bsID, LPUNKNOWN* ppUnk)
 {
-  CScriptServiceInstanceComObject* pObject = NULL;
+  CScriptServiceInstanceComObject* pObject;
   if (!m_Objects.Lookup(bsID, pObject))
   {
     ATLTRACE(_T("ADD OBJECT %s\n"), bsID);
-    HRESULT hr = CScriptServiceInstanceComObject::CreateInstance(&pObject);
+    HRESULT hr = CScriptServiceInstance::CreateObject(this, bsID, pObject);
     if (FAILED(hr))
     {
-      return hr;
-    }
-    hr = pObject->Init(this, bsID, initialUrl);
-    if (FAILED(hr))
-    {
-      delete pObject;
       return hr;
     }
     m_Objects[bsID] = pObject;

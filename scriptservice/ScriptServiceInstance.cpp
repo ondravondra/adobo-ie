@@ -4,42 +4,88 @@
 #include "libcomhelper\libcomhelper.h"
 using namespace LIB_COMHelper;
 
-// CScriptServiceInstance
-HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR bsID, BSTR initialUrl)
+HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, BSTR bsID, CScriptServiceInstanceComObject *& retVal)
 {
-  m_HiddenWindow.m_initialUrl = initialUrl;
-	if(m_HiddenWindow.CreateEx() == NULL)
-	{
-		return E_FAIL;
-	}
+  ATLASSERT(pService);
+  CScriptServiceInstanceComObject* pObject = NULL;
+  retVal = NULL;
+  HRESULT hr = CScriptServiceInstanceComObject::CreateInstance(&pObject);
+  if (FAILED(hr))
+  {
+    return hr;
+  }
+  hr = pObject->Init(pService, bsID);
+  if (FAILED(hr))
+  {
+    delete pObject;
+    return hr;
+  }
+  retVal = pObject;
+  return S_OK;
+}
+
+HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR bsID)
+{
   m_pScriptServiceCallback = pCallback;
   m_bsID = bsID;
+
+  CRegKey regKey;
+  CString s, sPath, sScript;
+  s.Format(_T("Software\\Salsita\\ScriptingService\\%s"), bsID);
+  if (ERROR_SUCCESS != regKey.Open(HKEY_CURRENT_USER, s))
+  {
+    return E_FAIL;
+  }
+
+  ULONG nChars = _MAX_PATH;
+  if (ERROR_SUCCESS != regKey.QueryStringValue(_T("ScriptRoot"), sPath.GetBuffer(_MAX_PATH+1), &nChars))
+  {
+    sPath.ReleaseBuffer();
+    return E_FAIL;
+  }
+  sPath.ReleaseBuffer();
+
+  nChars = _MAX_PATH;
+  if (ERROR_SUCCESS != regKey.QueryStringValue(_T("ScriptMain"), sScript.GetBuffer(_MAX_PATH+1), &nChars))
+  {
+    sScript.ReleaseBuffer();
+    return E_FAIL;
+  }
+  sScript.ReleaseBuffer();
+  m_MainModuleID = sScript;
+
+  HRESULT hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);
+  if (FAILED(hr))
+  {
+    return hr;
+  }
+  hr = m_Magpie->Init((LPWSTR)(LPCWSTR)sPath);
+  if (FAILED(hr))
+  {
+    return hr;
+  }
+  hr = m_Magpie->Run((LPWSTR)(LPCWSTR)sScript);
+  if (FAILED(hr))
+  {
+    return hr;
+  }
+
   return S_OK;
 }
 
 void CScriptServiceInstance::UnInit()
 {
-  m_Handlers.RemoveAll();
-  if (m_HiddenWindow)
-  {
-    m_HiddenWindow.DestroyWindow();
-  }
   m_pScriptServiceCallback = NULL;
 }
 
 HRESULT CScriptServiceInstance::FinalConstruct()
 {
   m_pScriptServiceCallback = NULL;
-	return S_OK;
+  return S_OK;
 }
 
 void CScriptServiceInstance::FinalRelease()
 {
-  m_Handlers.RemoveAll();
-  if (m_HiddenWindow)
-  {
-    m_HiddenWindow.DestroyWindow();
-  }
   m_CallbackInterfaces.Release();
   if (m_pScriptServiceCallback)
   {
@@ -47,7 +93,6 @@ void CScriptServiceInstance::FinalRelease()
   }
 }
 
-// IScriptServiceInstanceAdmin
 STDMETHODIMP CScriptServiceInstance::SetCallback(LPUNKNOWN pUnk)
 {
   return m_CallbackInterfaces.Set(pUnk);
@@ -58,46 +103,13 @@ STDMETHODIMP CScriptServiceInstance::ReleaseCallback()
   return m_CallbackInterfaces.Release();
 }
 
-STDMETHODIMP CScriptServiceInstance::addMsgHandler(LPDISPATCH handler, LONG* pvtRet)
+STDMETHODIMP CScriptServiceInstance::get_main(VARIANT * pRet)
 {
-  if (!pvtRet)
+  ATLASSERT(m_Magpie);
+  if (!m_Magpie)
   {
-    return E_POINTER;
+    return E_UNEXPECTED;
+  } else {
+    return m_Magpie->FindExportsFor((LPWSTR)(LPCWSTR)m_MainModuleID, pRet);
   }
-  void* key = (void*)handler;
-  m_Handlers[key] = handler;
-
-  *pvtRet = (long)key;
-  return S_OK;
-}
-
-STDMETHODIMP CScriptServiceInstance::removeMsgHandler(LONG handlerID)
-{
-  void* key = (void*)(handlerID);
-  m_Handlers.RemoveKey(key);
-  return S_OK;
-}
-
-STDMETHODIMP CScriptServiceInstance::sendMsg(LONG handlerID, VARIANT data)
-{
-  void* key;
-  CComPtr<IDispatch> value;
-  DISPID disp_this = DISPID_THIS;
-  HRESULT hr;
-  POSITION currentPos, pos = m_Handlers.GetStartPosition();
-  while(pos)
-  {
-    currentPos = pos;
-    m_Handlers.GetNextAssoc(pos, key, value);
-    CIDispatchHelper disp = value;
-    VARIANTARG vt[3] = {CComVariant(disp), data, CComVariant(handlerID)};
-    DISPPARAMS params = {vt, &disp_this, 3, 1};
-    hr = disp.Call(L"onMessage", &params);
-    if (FAILED(hr))
-    {
-      m_Handlers.RemoveAtPos(currentPos);
-    }
-  }
-
-  return S_OK;
 }

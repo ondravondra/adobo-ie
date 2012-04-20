@@ -5,7 +5,7 @@
 
 LRESULT CHiddenBrowserView::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
-	DefWindowProc();
+  DefWindowProc();
 
   CComPtr<IAxWinHostWindow> spHost;
   HRESULT hr = QueryHost(__uuidof(IAxWinHostWindow), (void**)&spHost);
@@ -13,11 +13,11 @@ LRESULT CHiddenBrowserView::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
     return -1;
 
   spHost->QueryControl(IID_IWebBrowser2, (void**)&m_pWebBrowser.p);
-	return 0;
+  return 0;
 }
 
 LRESULT CHiddenBrowserView::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
   m_pWebBrowser.Release();
-	return 0;
+  return 0;
 }

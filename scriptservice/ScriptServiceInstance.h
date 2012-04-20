@@ -1,5 +1,7 @@
 
 #pragma once
+class CScriptServiceInstance;
+typedef CComObject<CScriptServiceInstance> CScriptServiceInstanceComObject;
 
 #include "service.h"
 #include "resource.h"
@@ -11,17 +13,17 @@ class ATL_NO_VTABLE CScriptServiceInstance :
   public CComObjectRootEx<CComSingleThreadModel>,
   public CComCoClass<CScriptServiceInstance>,
   public IScriptServiceInstanceAdmin,
-  public IDispatchImpl<IScriptServiceInstance, &IID_IScriptServiceInstance, &LIBID_scriptservicelib>
+  public IDispatchImpl<IScriptServiceInstance, &IID_IScriptServiceInstance, &LIBID_ScriptingSrvcLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 private:
   // My id
-  CComBSTR m_bsID;
-  CMainFrame m_HiddenWindow;
-  CAtlMap<void*, CComPtr<IDispatch>> m_Handlers;
+  CComBSTR                    m_bsID;
+  CString                     m_MainModuleID;
+  CComPtr<IMagpieApplication> m_Magpie;
 
   // The scripting service. Have to notify him
   // when I'm about to destroy myself
-  CScriptServiceCallback *m_pScriptServiceCallback;
+  CScriptServiceCallback*   m_pScriptServiceCallback;
 
   // Callback interfaces
   struct
@@ -41,9 +43,6 @@ private:
   } m_CallbackInterfaces;
 
 public:
-  CScriptServiceInstance()
-  {
-  }
 
   DECLARE_NOT_AGGREGATABLE(CScriptServiceInstance)
 
@@ -55,20 +54,25 @@ public:
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  HRESULT Init(CScriptServiceCallback* pCallback, BSTR bsID, BSTR initialUrl);
+  static HRESULT CreateObject(CScriptServiceCallback* pService, BSTR bsID, CScriptServiceInstanceComObject *& retVal);
+  HRESULT Init(CScriptServiceCallback* pCallback, BSTR bsID);
   void UnInit();
 
   HRESULT FinalConstruct();
   void FinalRelease();
 
 public:
-  // IScriptServiceInstanceAdmin
+// IScriptServiceInstanceAdmin
   STDMETHOD(SetCallback)(LPUNKNOWN pUnk);
   STDMETHOD(ReleaseCallback)();
 
-  // IScriptServiceInstance
-  STDMETHOD(addMsgHandler)(LPDISPATCH handler, LONG* pvtRet);
-  STDMETHOD(removeMsgHandler)(LONG handlerID);
-  STDMETHOD(sendMsg)(LONG handlerID, VARIANT data);
+// IScriptServiceInstance
+  STDMETHOD(get_main)(VARIANT * pRet);
+
+protected:
+  CScriptServiceInstance()
+  {
+  }
+
 };
-typedef CComObject<CScriptServiceInstance> CScriptServiceInstanceComObject;
+
