@@ -13,7 +13,7 @@ class ATL_NO_VTABLE CScriptServiceInstance :
   public CComObjectRootEx<CComSingleThreadModel>,
   public CComCoClass<CScriptServiceInstance>,
   public IScriptServiceInstanceAdmin,
-  public IDispatchImpl<IScriptServiceInstance, &IID_IScriptServiceInstance, &LIBID_ScriptingSrvcLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+  public IDispatchImpl<IScriptServiceInstance, &IID_IScriptServiceInstance, &LIBID_ScriptServiceLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 private:
   // My id

@@ -33,9 +33,9 @@ interface IScriptServiceInstance : IDispatch
 [
   uuid(2B2B8941-29D3-4F81-BB1C-381AA74C0E0D),
   version(1.0),
-  helpstring("ScriptingSrvc 1.0 Type Library")
+  helpstring("ScriptService 1.0 Type Library")
 ]
-library ScriptingSrvcLib
+library ScriptServiceLib
 {
   importlib("stdole2.tlb");
 
