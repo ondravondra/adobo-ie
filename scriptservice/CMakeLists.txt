@@ -19,3 +19,9 @@ set_property(TARGET scriptservice PROPERTY LIBRARY_OUTPUT_DIRECTORY_DEBUG ${outd
 set_property(TARGET scriptservice PROPERTY ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${outdir_lib_release})
 set_property(TARGET scriptservice PROPERTY ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${outdir_lib_debug})
 
+add_custom_command(
+	TARGET scriptservice
+	POST_BUILD
+	COMMAND if $<CONFIGURATION>==Debug \"$(TargetPath)\" /regserver 
+	)
+
