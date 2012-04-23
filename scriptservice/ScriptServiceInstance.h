@@ -13,7 +13,7 @@ class ATL_NO_VTABLE CScriptServiceInstance :
   public CComObjectRootEx<CComSingleThreadModel>,
   public CComCoClass<CScriptServiceInstance>,
   public IScriptServiceInstanceAdmin,
-  public IDispatchImpl<IScriptServiceInstance, &IID_IScriptServiceInstance, &LIBID_ScriptServiceLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+  public IScriptServiceInstance
 {
 private:
   // My id
@@ -48,7 +48,6 @@ public:
   DECLARE_NOT_AGGREGATABLE(CScriptServiceInstance)
 
   BEGIN_COM_MAP(CScriptServiceInstance)
-    COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IScriptServiceInstance)
     COM_INTERFACE_ENTRY(IScriptServiceInstanceAdmin)
   END_COM_MAP()
@@ -77,4 +76,3 @@ protected:
   }
 
 };
-

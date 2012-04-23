@@ -15,23 +15,6 @@ interface IScriptService : IUnknown
 };
 
 [
-  object,
-  uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
-  dual,
-  nonextensible,
-  helpstring("IScriptServiceInstance Interface"),
-  pointer_default(unique)
-]
-interface IScriptServiceInstance : IDispatch
-{
-  [helpstring("loads the specified module unless it has been loaded already")]
-  HRESULT LoadModule([in] BSTR moduleID);
-
-  [helpstring("exports a property of the window object into the global scope - used fo jQuery")]
-  HRESULT MakeJsWindowMemberGlobal([in] BSTR memberName);
-};
-
-[
   uuid(2B2B8941-29D3-4F81-BB1C-381AA74C0E0D),
   version(1.0),
   helpstring("ScriptService 1.0 Type Library")
@@ -65,6 +48,23 @@ library ScriptServiceLib
   {
     HRESULT SetCallback([in] LPUNKNOWN pUnk);
     HRESULT ReleaseCallback();
+  };
+
+  [
+  object,
+  uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
+  oleautomation,
+  nonextensible,
+  helpstring("IScriptServiceInstance Interface"),
+  pointer_default(unique)
+  ]
+  interface IScriptServiceInstance : IUnknown
+  {
+    [helpstring("loads the specified module unless it has been loaded already")]
+    HRESULT LoadModule([in] BSTR moduleID);
+
+    [helpstring("exports a property of the window object into the global scope - used fo jQuery")]
+    HRESULT MakeJsWindowMemberGlobal([in] BSTR memberName);
   };
 
   [
