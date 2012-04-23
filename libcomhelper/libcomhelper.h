@@ -88,6 +88,11 @@ namespace LIB_COMHelper
     BOOL Call_exOnDeactivateWindow();
   };
 
+  class CComUtil {
+  public:
+    static CComQIPtr<IHTMLWindow2> IWebBrowserToIHTMLWindow(CComPtr<IWebBrowser2> &spBrowser);
+  };
+
   ///////////////////////////////////////////////////////////
   // CUri
   // template class for URI implentations
