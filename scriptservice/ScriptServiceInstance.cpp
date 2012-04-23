@@ -4,7 +4,7 @@
 #include "libcomhelper\libcomhelper.h"
 using namespace LIB_COMHelper;
 
-HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, BSTR bsID, CScriptServiceInstanceComObject *& retVal)
+HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, BSTR serviceIdentifier, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal)
 {
   ATLASSERT(pService);
   CScriptServiceInstanceComObject* pObject = NULL;
@@ -14,7 +14,7 @@ HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, B
   {
     return hr;
   }
-  hr = pObject->Init(pService, bsID);
+  hr = pObject->Init(pService, serviceIdentifier, resourcesDir);
   if (FAILED(hr))
   {
     delete pObject;
@@ -24,47 +24,17 @@ HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, B
   return S_OK;
 }
 
-HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR bsID)
+HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR serviceIdentifier, BSTR resourcesDir)
 {
   m_pScriptServiceCallback = pCallback;
-  m_bsID = bsID;
-
-  CRegKey regKey;
-  CString s, sPath, sScript;
-  s.Format(_T("Software\\Salsita\\ScriptingService\\%s"), bsID);
-  if (ERROR_SUCCESS != regKey.Open(HKEY_CURRENT_USER, s))
-  {
-    return E_FAIL;
-  }
-
-  ULONG nChars = _MAX_PATH;
-  if (ERROR_SUCCESS != regKey.QueryStringValue(_T("ScriptRoot"), sPath.GetBuffer(_MAX_PATH+1), &nChars))
-  {
-    sPath.ReleaseBuffer();
-    return E_FAIL;
-  }
-  sPath.ReleaseBuffer();
-
-  nChars = _MAX_PATH;
-  if (ERROR_SUCCESS != regKey.QueryStringValue(_T("ScriptMain"), sScript.GetBuffer(_MAX_PATH+1), &nChars))
-  {
-    sScript.ReleaseBuffer();
-    return E_FAIL;
-  }
-  sScript.ReleaseBuffer();
-  m_MainModuleID = sScript;
+  m_serviceIdentifier = serviceIdentifier;
 
   HRESULT hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);
   if (FAILED(hr))
   {
     return hr;
   }
-  hr = m_Magpie->Init((LPWSTR)(LPCWSTR)sPath);
-  if (FAILED(hr))
-  {
-    return hr;
-  }
-  hr = m_Magpie->Run((LPWSTR)(LPCWSTR)sScript);
+  hr = m_Magpie->Init((LPWSTR)resourcesDir);
   if (FAILED(hr))
   {
     return hr;
@@ -89,7 +59,7 @@ void CScriptServiceInstance::FinalRelease()
   m_CallbackInterfaces.Release();
   if (m_pScriptServiceCallback)
   {
-    m_pScriptServiceCallback->OnFinalRelease(m_bsID);
+    m_pScriptServiceCallback->OnFinalRelease(m_serviceIdentifier);
   }
 }
 
@@ -111,5 +81,16 @@ STDMETHODIMP CScriptServiceInstance::get_main(VARIANT * pRet)
     return E_UNEXPECTED;
   } else {
     return m_Magpie->FindExportsFor((LPWSTR)(LPCWSTR)m_MainModuleID, pRet);
+  }
+}
+
+STDMETHODIMP CScriptServiceInstance::LoadModule(BSTR moduleID)
+{
+  ATLASSERT(m_Magpie);
+  if (!m_Magpie)
+  {
+    return E_UNEXPECTED;
+  } else {
+    return m_Magpie->Run((LPWSTR)moduleID);
   }
 }

@@ -17,7 +17,7 @@ class ATL_NO_VTABLE CScriptServiceInstance :
 {
 private:
   // My id
-  CComBSTR                    m_bsID;
+  CComBSTR                    m_serviceIdentifier;
   CString                     m_MainModuleID;
   CComPtr<IMagpieApplication> m_Magpie;
 
@@ -54,8 +54,8 @@ public:
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  static HRESULT CreateObject(CScriptServiceCallback* pService, BSTR bsID, CScriptServiceInstanceComObject *& retVal);
-  HRESULT Init(CScriptServiceCallback* pCallback, BSTR bsID);
+  static HRESULT CreateObject(CScriptServiceCallback* pService, BSTR serviceIdentifier, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal);
+  HRESULT Init(CScriptServiceCallback* pCallback, BSTR serviceIdentifier, BSTR resourcesDir);
   void UnInit();
 
   HRESULT FinalConstruct();
@@ -68,6 +68,7 @@ public:
 
 // IScriptServiceInstance
   STDMETHOD(get_main)(VARIANT * pRet);
+  STDMETHOD(LoadModule)(BSTR moduleID);
 
 protected:
   CScriptServiceInstance()
