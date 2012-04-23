@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "resource.h"
-
 #include "HiddenBrowserView.h"
 
 LRESULT CHiddenBrowserView::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)

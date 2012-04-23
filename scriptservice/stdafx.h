@@ -19,5 +19,7 @@
 
 using namespace ATL;
 
+#include <ActivScp.h>
+
 #import "magpie.dll" named_guids no_smart_pointers raw_interfaces_only raw_native_types no_auto_exclude
 using namespace MagpieLib;

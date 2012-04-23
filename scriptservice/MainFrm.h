@@ -3,8 +3,8 @@
 #include "HiddenBrowserView.h"
 
 class CMainFrame;
-//typedef CFrameWindowImpl<CMainFrame, CWindow, CWinTraits<WS_POPUP, WS_EX_WINDOWEDGE> > CHiddenBrowserMainFrm;
-typedef CFrameWindowImpl<CMainFrame, CWindow, CWinTraits<WS_OVERLAPPED | WS_VISIBLE, WS_EX_WINDOWEDGE> > CHiddenBrowserMainFrm;
+typedef CFrameWindowImpl<CMainFrame, CWindow, CWinTraits<WS_POPUP, WS_EX_WINDOWEDGE> > CHiddenBrowserMainFrm;
+//typedef CFrameWindowImpl<CMainFrame, CWindow, CWinTraits<WS_OVERLAPPED | WS_VISIBLE, WS_EX_WINDOWEDGE> > CHiddenBrowserMainFrm;
 
 class CMainFrame :
   public CHiddenBrowserMainFrm
@@ -20,6 +20,4 @@ public:
   END_MSG_MAP()
 
   LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-
-  CString m_initialUrl;
 };

@@ -29,6 +29,11 @@ HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR ser
   m_pScriptServiceCallback = pCallback;
   m_serviceIdentifier = serviceIdentifier;
 
+  if(m_HiddenWindow.CreateEx() == NULL)
+  {
+    return E_FAIL;
+  }
+
   HRESULT hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);
   if (FAILED(hr))
   {
@@ -40,11 +45,22 @@ HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR ser
     return hr;
   }
 
+  CComQIPtr<IHTMLWindow2> window = CComUtil::IWebBrowserToIHTMLWindow(m_HiddenWindow.m_view.m_pWebBrowser);
+  hr = m_Magpie->ScriptAddNamedItem(L"window", window, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE|SCRIPTITEM_GLOBALMEMBERS);
+  if (FAILED(hr))
+  {
+    return hr;
+  }
+
   return S_OK;
 }
 
 void CScriptServiceInstance::UnInit()
 {
+  if (m_HiddenWindow)
+  {
+    m_HiddenWindow.DestroyWindow();
+  }
   m_pScriptServiceCallback = NULL;
 }
 
@@ -56,6 +72,10 @@ HRESULT CScriptServiceInstance::FinalConstruct()
 
 void CScriptServiceInstance::FinalRelease()
 {
+  if (m_HiddenWindow)
+  {
+    m_HiddenWindow.DestroyWindow();
+  }
   m_CallbackInterfaces.Release();
   if (m_pScriptServiceCallback)
   {
@@ -73,17 +93,6 @@ STDMETHODIMP CScriptServiceInstance::ReleaseCallback()
   return m_CallbackInterfaces.Release();
 }
 
-STDMETHODIMP CScriptServiceInstance::get_main(VARIANT * pRet)
-{
-  ATLASSERT(m_Magpie);
-  if (!m_Magpie)
-  {
-    return E_UNEXPECTED;
-  } else {
-    return m_Magpie->FindExportsFor((LPWSTR)(LPCWSTR)m_MainModuleID, pRet);
-  }
-}
-
 STDMETHODIMP CScriptServiceInstance::LoadModule(BSTR moduleID)
 {
   ATLASSERT(m_Magpie);
@@ -92,5 +101,24 @@ STDMETHODIMP CScriptServiceInstance::LoadModule(BSTR moduleID)
     return E_UNEXPECTED;
   } else {
     return m_Magpie->Run((LPWSTR)moduleID);
+  }
+}
+
+HRESULT CScriptServiceInstance::MakeJsWindowMemberGlobal(BSTR memberName)
+{
+  ATLASSERT(m_Magpie);
+  if (!m_Magpie)
+  {
+    return E_UNEXPECTED;
+  }
+
+  CComPtr<IDispatch> pDisp;
+  CIDispatchHelper window = CComUtil::IWebBrowserToIHTMLWindow(m_HiddenWindow.m_view.m_pWebBrowser);
+  HRESULT hr = window.Get<IDispatch*, VT_DISPATCH>(memberName, pDisp.p);
+  if (FAILED(hr))
+  {
+    return hr;
+  } else {
+    return m_Magpie->ScriptAddNamedItem(memberName, pDisp, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE);
   }
 }

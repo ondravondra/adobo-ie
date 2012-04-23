@@ -20,6 +20,7 @@ private:
   CComBSTR                    m_serviceIdentifier;
   CString                     m_MainModuleID;
   CComPtr<IMagpieApplication> m_Magpie;
+  CMainFrame                  m_HiddenWindow;
 
   // The scripting service. Have to notify him
   // when I'm about to destroy myself
@@ -67,8 +68,8 @@ public:
   STDMETHOD(ReleaseCallback)();
 
 // IScriptServiceInstance
-  STDMETHOD(get_main)(VARIANT * pRet);
   STDMETHOD(LoadModule)(BSTR moduleID);
+  STDMETHOD(MakeJsWindowMemberGlobal)(BSTR memberName);
 
 protected:
   CScriptServiceInstance()
