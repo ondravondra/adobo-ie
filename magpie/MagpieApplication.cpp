@@ -322,14 +322,3 @@ STDMETHODIMP CMagpieApplication::ScriptAddNamedItem(const OLECHAR *name, LPDISPA
 {
   return m_ScriptEngine.AddNamedItem(name, pDisp, dwFlags);
 }
-
-STDMETHODIMP CMagpieApplication::FindExportsFor(const OLECHAR *lpszModuleID, VARIANT *pRet)
-{
-  HRESULT hr;
-  CComPtr<CMagpieModuleComObject>module;
-
-  hr = GetModule(lpszModuleID, module.p);
-  IF_FAILED_RET(hr);
-
-  return module->GetExports(pRet);
-}

@@ -102,7 +102,6 @@ public:
   STDMETHOD(Run)(const OLECHAR* lpszModuleID);
   STDMETHOD(Shutdown)();
   STDMETHOD(ScriptAddNamedItem)(const OLECHAR *name, LPDISPATCH pDisp, ULONG dwFlags);
-  STDMETHOD(FindExportsFor)(const OLECHAR *lpszModuleID, VARIANT *pRet);
 
 private:
   // -------------------------------------------------------------------------

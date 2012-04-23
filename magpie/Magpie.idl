@@ -43,11 +43,6 @@ interface IMagpieApplication : IUnknown
     "Adds a script named item into the active script."
   )]
   HRESULT ScriptAddNamedItem([in, string] const OLECHAR *name, [in] LPDISPATCH pDisp, [in] ULONG dwFlags);
-
-  [helpstring(
-    "Retrieves the exports object for the specified module."
-  )]
-  HRESULT FindExportsFor([in, string] const OLECHAR *lpszModuleID, [out, retval] VARIANT * pRet);
 };
 
 /*==========================================================================*/
