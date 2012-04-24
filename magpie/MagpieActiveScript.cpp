@@ -39,6 +39,13 @@ HRESULT CMagpieActiveScript::Shutdown()
   return S_OK;
 }
 
+HRESULT CMagpieActiveScript::GetSalsitaObject(VARIANT * result)
+{
+  CIDispatchHelper script;
+  IF_FAILED_RET(m_ScriptEngine->GetScriptDispatch(m_SalsitaApiModuleId, &script));
+  return script.GetPropertyByName(L"salsita", result);
+}
+
 HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
   IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, tabId, pSalsitaApi));
@@ -109,10 +116,14 @@ HRESULT CMagpieActiveScript::RunModule(
   CComPtr<IDispatch> pModuleExportsOb;
   IF_FAILED_RET(scriptGlobal.CreateObject(L"Object", &pModuleExportsOb));
 
+  CComVariant vtSalsita;
+  IF_FAILED_RET(GetSalsitaObject(&vtSalsita));
+
   // inject CommonJS objects
   script.SetPropertyByRef(L"require", CComVariant(pModuleRequireOb));
   script.SetPropertyByRef(L"module", CComVariant(pModule));
   script.SetPropertyByRef(L"exports", CComVariant(pModuleExportsOb));
+  script.SetPropertyByRef(L"salsita", vtSalsita);
 
   // now run the module
   m_Application.EnterModule(sModuleID);

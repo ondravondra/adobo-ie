@@ -103,5 +103,7 @@ private:
 
   CComPtr<CSalsitaApiImplComObject> m_SalsitaApiImpl;
 
+  HRESULT GetSalsitaObject(VARIANT * result);
+
   static const wchar_t * m_SalsitaApiModuleId;
 };
