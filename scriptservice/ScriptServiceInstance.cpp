@@ -45,6 +45,12 @@ HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR ser
     return hr;
   }
 
+  hr = m_Magpie->CreateSalsitaApi(-1, m_SalsitaApiServiceImpl);
+  if (FAILED(hr))
+  {
+    return hr;
+  }
+
   CComQIPtr<IHTMLWindow2> window = CComUtil::IWebBrowserToIHTMLWindow(m_HiddenWindow.m_view.m_pWebBrowser);
   hr = m_Magpie->ScriptAddNamedItem(L"window", window, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE|SCRIPTITEM_GLOBALMEMBERS);
   if (FAILED(hr))
@@ -67,7 +73,8 @@ void CScriptServiceInstance::UnInit()
 HRESULT CScriptServiceInstance::FinalConstruct()
 {
   m_pScriptServiceCallback = NULL;
-  HRESULT hr = CSalsitaApiServiceImpl::CreateObject(m_SalsitaApiImpl.p);
+  m_TabIdCounter = 0;
+  HRESULT hr = CSalsitaApiServiceImpl::CreateObject(m_SalsitaApiServiceImpl.p);
   return hr;
 }
 
@@ -96,7 +103,7 @@ STDMETHODIMP CScriptServiceInstance::ReleaseCallback()
 
 STDMETHODIMP CScriptServiceInstance::RegisterTab(INT *tabId)
 {
-  // TODO: ...
+  *tabId = ++ m_TabIdCounter;
   return S_OK;
 }
 
@@ -107,7 +114,7 @@ STDMETHODIMP CScriptServiceInstance::GetSalsitaApiService(LPUNKNOWN *pService)
     return E_POINTER;
   }
 
-  return m_SalsitaApiImpl.QueryInterface<IUnknown>(pService);
+  return m_SalsitaApiServiceImpl.QueryInterface<IUnknown>(pService);
 }
 
 STDMETHODIMP CScriptServiceInstance::LoadModule(BSTR moduleID)

@@ -78,6 +78,7 @@ protected:
   {
   }
 
-  CComPtr<CSalsitaApiServiceImplComObject> m_SalsitaApiImpl;
+  INT m_TabIdCounter;
+  CComPtr<CSalsitaApiServiceImplComObject> m_SalsitaApiServiceImpl;
 
 };
