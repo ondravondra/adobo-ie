@@ -39,9 +39,9 @@ HRESULT CMagpieActiveScript::Shutdown()
   return S_OK;
 }
 
-HRESULT CMagpieActiveScript::CreateSalsitaApi(/*IDispatch *pDispSharedState*/)
+HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
-  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p));
+  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, tabId, pSalsitaApi));
 
   CComPtr<IDispatch> pSalsitaApiImplOb(m_SalsitaApiImpl);
 

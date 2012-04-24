@@ -287,9 +287,9 @@ STDMETHODIMP CMagpieApplication::Init(
   return S_OK;
 }
 
-STDMETHODIMP CMagpieApplication::CreateSalsitaApi()
+STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
-  return m_ScriptEngine.CreateSalsitaApi();
+  return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi);
 }
 
 //----------------------------------------------------------------------------

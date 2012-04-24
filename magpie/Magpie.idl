@@ -28,7 +28,7 @@ interface IMagpieApplication : IUnknown
   )]
   HRESULT Init([in, string] const OLECHAR* lpszFolderName);
 
-  HRESULT CreateSalsitaApi();
+  HRESULT CreateSalsitaApi([in] INT tabId /* -1 for background script */, [in] LPUNKNOWN /* ISalsitaApiInternal */ pSalsitaApi);
 
   [helpstring(
     "Run-method. Pass the module ID of your main script in "
@@ -211,6 +211,22 @@ library MagpieLib
     HRESULT addRequestListener([in] LPDISPATCH listener);
     HRESULT sendRequest([in] VARIANT request, [in] LPDISPATCH requestCallback);
     HRESULT sendRequestToTab([in] INT tabId, [in] VARIANT request, [in] LPDISPATCH requestCallback);
+  }
+
+  [
+    helpstring("ISalsitaApiService interface is used to handle requests in salsita api"),
+    object,
+    uuid(2F0B0F09-A9E5-461E-B165-25C8E0CB94C2),
+    oleautomation,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface ISalsitaApiService : IUnknown
+  {
+    HRESULT connectClient([in] INT tabId);
+    HRESULT releaseClient([in] INT tabId);
+    HRESULT addRequestListener([in] INT tabId, [in] LPDISPATCH listener);
+    HRESULT sendRequest([in] INT senderTabId, [in] INT recipientTabId /* -1 for broadcast */, [in] VARIANT request, [in] LPDISPATCH requestCallback);
   }
 
 /*==========================================================================*/

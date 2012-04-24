@@ -15,7 +15,7 @@ public:
   // -------------------------------------------------------------------------
   // ctor
   CSalsitaApiImpl();
-  static HRESULT CreateObject(CSalsitaApiImplComObject *& pRet);
+  static HRESULT CreateObject(CSalsitaApiImplComObject *& pRet, INT tabId, LPUNKNOWN pSalsitaApi);
 
 public:
   // -------------------------------------------------------------------------
@@ -42,4 +42,9 @@ public:
   STDMETHOD(addRequestListener)(LPDISPATCH listener);
   STDMETHOD(sendRequest)(VARIANT request, LPDISPATCH requestCallback);
   STDMETHOD(sendRequestToTab)(INT tabId, VARIANT request, LPDISPATCH requestCallback);
+
+private:
+
+  INT m_TabId;
+  CComQIPtr<ISalsitaApiService> m_ApiService;
 };
