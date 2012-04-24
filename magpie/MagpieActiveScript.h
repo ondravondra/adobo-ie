@@ -64,6 +64,8 @@ public:
   // Shutdown script engine and cleanup
   HRESULT Shutdown();
 
+  HRESULT CreateSalsitaApi(/*IDispatch *pDispSharedState*/);
+
   // Run a module. Runs the module unconditionally, so this method should be
   //  used only by the module itself after checking if the module ran
   //  already.
@@ -97,4 +99,6 @@ private:
   // Map of named items. Used in GetItemInfo.
   CAtlMap<CString, CComPtr<IDispatch> >
                         m_NamedItems;
+
+  static const wchar_t * m_SalsitaApiModuleId;
 };

@@ -26,6 +26,8 @@
 
 using namespace ATL;
 
+extern HINSTANCE g_hDllInstance;
+
 #include "Misc.h"
 using namespace Misc;
 

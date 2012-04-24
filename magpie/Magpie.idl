@@ -28,6 +28,8 @@ interface IMagpieApplication : IUnknown
   )]
   HRESULT Init([in, string] const OLECHAR* lpszFolderName);
 
+  HRESULT CreateSalsitaApi();
+
   [helpstring(
     "Run-method. Pass the module ID of your main script in "
     "lpszModuleID."

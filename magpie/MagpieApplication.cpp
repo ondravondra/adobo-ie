@@ -287,6 +287,11 @@ STDMETHODIMP CMagpieApplication::Init(
   return S_OK;
 }
 
+STDMETHODIMP CMagpieApplication::CreateSalsitaApi()
+{
+  return m_ScriptEngine.CreateSalsitaApi();
+}
+
 //----------------------------------------------------------------------------
 //  Run
 STDMETHODIMP CMagpieApplication::Run(

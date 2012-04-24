@@ -12,6 +12,8 @@
  * class CMagpieApplication
  */
 
+const wchar_t *CMagpieActiveScript::m_SalsitaApiModuleId = L"__salsitaapi";
+
 //----------------------------------------------------------------------------
 //  CTOR
 CMagpieActiveScript::CMagpieActiveScript(CMagpieApplication & application) :
@@ -34,6 +36,41 @@ HRESULT CMagpieActiveScript::Shutdown()
 {
   UnloadScriptEngine();
   m_NamedItems.RemoveAll();
+  return S_OK;
+}
+
+HRESULT CMagpieActiveScript::CreateSalsitaApi(/*IDispatch *pDispSharedState*/)
+{
+  m_ScriptEngine->SetScriptState(SCRIPTSTATE_DISCONNECTED);
+
+  // add namespace for module
+  IF_FAILED_RET(m_ScriptEngine->AddNamedItem(m_SalsitaApiModuleId, SCRIPTITEM_CODEONLY));
+
+  // dispatch for module's namespace
+  CIDispatchHelper script;
+  IF_FAILED_RET(m_ScriptEngine->GetScriptDispatch(m_SalsitaApiModuleId, &script));
+
+  // create salsita object
+  CIDispatchHelper scriptGlobal;
+  IF_FAILED_RET(m_ScriptEngine->GetScriptDispatch(NULL, &scriptGlobal));
+  CComPtr<IDispatch> pSalsitaOb;
+  IF_FAILED_RET(scriptGlobal.CreateObject(L"Object", &pSalsitaOb));
+
+  script.SetPropertyByRef(L"salsita", CComVariant(pSalsitaOb));
+
+  CStringW salsitaScript;
+
+  Misc::LoadHtmlResource(L"salsita.js", salsitaScript);
+
+  m_Application.EnterModule(m_SalsitaApiModuleId);
+  HRESULT hr = AddScript(salsitaScript.GetBuffer(), m_SalsitaApiModuleId);
+  salsitaScript.ReleaseBuffer();
+  if (SUCCEEDED(hr))
+  {
+    m_ScriptEngine->SetScriptState(SCRIPTSTATE_CONNECTED);
+  }
+  m_Application.ExitModule();
+
   return S_OK;
 }
 
