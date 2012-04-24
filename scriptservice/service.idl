@@ -60,6 +60,10 @@ library ScriptServiceLib
   ]
   interface IScriptServiceInstance : IUnknown
   {
+    HRESULT RegisterTab([out, retval] INT *tabId);
+
+    HRESULT GetSalsitaApiService([out, retval] LPUNKNOWN /* ISalsitaApiService */ *pService);
+
     [helpstring("loads the specified module unless it has been loaded already")]
     HRESULT LoadModule([in] BSTR moduleID);
 

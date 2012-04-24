@@ -67,7 +67,8 @@ void CScriptServiceInstance::UnInit()
 HRESULT CScriptServiceInstance::FinalConstruct()
 {
   m_pScriptServiceCallback = NULL;
-  return S_OK;
+  HRESULT hr = CSalsitaApiServiceImpl::CreateObject(m_SalsitaApiImpl.p);
+  return hr;
 }
 
 void CScriptServiceInstance::FinalRelease()
@@ -91,6 +92,22 @@ STDMETHODIMP CScriptServiceInstance::SetCallback(LPUNKNOWN pUnk)
 STDMETHODIMP CScriptServiceInstance::ReleaseCallback()
 {
   return m_CallbackInterfaces.Release();
+}
+
+STDMETHODIMP CScriptServiceInstance::RegisterTab(INT *tabId)
+{
+  // TODO: ...
+  return S_OK;
+}
+
+STDMETHODIMP CScriptServiceInstance::GetSalsitaApiService(LPUNKNOWN *pService)
+{
+  if (!pService)
+  {
+    return E_POINTER;
+  }
+
+  return m_SalsitaApiImpl.QueryInterface<IUnknown>(pService);
 }
 
 STDMETHODIMP CScriptServiceInstance::LoadModule(BSTR moduleID)

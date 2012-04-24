@@ -6,6 +6,7 @@ typedef CComObject<CScriptServiceInstance> CScriptServiceInstanceComObject;
 #include "service.h"
 #include "resource.h"
 #include "MainFrm.h"
+#include "SalsitaApiServiceImpl.h"
 
 struct CScriptServiceCallback;
 
@@ -67,6 +68,8 @@ public:
   STDMETHOD(ReleaseCallback)();
 
 // IScriptServiceInstance
+  STDMETHOD(RegisterTab)(INT *tabId);
+  STDMETHOD(GetSalsitaApiService)(LPUNKNOWN *pService);
   STDMETHOD(LoadModule)(BSTR moduleID);
   STDMETHOD(MakeJsWindowMemberGlobal)(BSTR memberName);
 
@@ -74,5 +77,7 @@ protected:
   CScriptServiceInstance()
   {
   }
+
+  CComPtr<CSalsitaApiServiceImplComObject> m_SalsitaApiImpl;
 
 };
