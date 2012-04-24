@@ -29,4 +29,10 @@ namespace LIB_COMHelper
 
     return spWindow;
   }
+
+  HRESULT CComUtil::ExtractWindowMember(CComPtr<IWebBrowser2> &spBrowser, BSTR memberName, CComPtr<IDispatch> &result)
+  {
+    CIDispatchHelper window = CComUtil::IWebBrowserToIHTMLWindow(spBrowser);
+    return window.Get<CComPtr<IDispatch>, VT_DISPATCH, IDispatch *>(memberName, result);
+  }
 }

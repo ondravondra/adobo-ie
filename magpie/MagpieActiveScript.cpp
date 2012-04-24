@@ -138,8 +138,7 @@ STDMETHODIMP CMagpieActiveScript::GetItemInfo(
     CComPtr<IDispatch> disp;
     if (m_NamedItems.Lookup(pstrName, disp))
     {
-      *ppiunkItem = disp.Detach();
-      return S_OK;
+      return disp.QueryInterface<IUnknown>(ppiunkItem);
     }
   }
   return TYPE_E_ELEMENTNOTFOUND;

@@ -113,8 +113,7 @@ HRESULT CScriptServiceInstance::MakeJsWindowMemberGlobal(BSTR memberName)
   }
 
   CComPtr<IDispatch> pDisp;
-  CIDispatchHelper window = CComUtil::IWebBrowserToIHTMLWindow(m_HiddenWindow.m_view.m_pWebBrowser);
-  HRESULT hr = window.Get<IDispatch*, VT_DISPATCH>(memberName, pDisp.p);
+  HRESULT hr = CComUtil::ExtractWindowMember(m_HiddenWindow.m_view.m_pWebBrowser, memberName, pDisp);
   if (FAILED(hr))
   {
     return hr;
