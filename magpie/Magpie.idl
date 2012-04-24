@@ -197,6 +197,22 @@ library MagpieLib
     HRESULT main([out, retval] VARIANT* pVal);
   };
 
+  [
+    helpstring("ISalsitaApiInternal interface is used to implement the salsita API"),
+    object,
+    uuid(C26EC5A9-5D45-414C-8959-6EF4EC85D206),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface ISalsitaApiInternal : IDispatch
+  {
+    HRESULT getCurrentTabId([out, retval] INT* tabId);
+    HRESULT addRequestListener([in] LPDISPATCH listener);
+    HRESULT sendRequest([in] VARIANT request, [in] LPDISPATCH requestCallback);
+    HRESULT sendRequestToTab([in] INT tabId, [in] VARIANT request, [in] LPDISPATCH requestCallback);
+  }
+
 /*==========================================================================*/
   [
     helpstring(

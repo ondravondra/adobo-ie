@@ -8,7 +8,7 @@ salsita.extensions.onRequest.addListener = function (listener) {
 };
 salsita.tabs = {};
 salsita.tabs.getCurrent = function (callback) {
-  callback(_salsita_impl.getCurrentTab());
+  callback({ id: _salsita_impl.getCurrentTabId() });
 };
 salsita.tabs.sendRequest = function (tabId, request, callback) {
   _salsita_impl.sendRequestToTab(tabId, request, callback);

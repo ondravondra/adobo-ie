@@ -41,6 +41,10 @@ HRESULT CMagpieActiveScript::Shutdown()
 
 HRESULT CMagpieActiveScript::CreateSalsitaApi(/*IDispatch *pDispSharedState*/)
 {
+  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p));
+
+  CComPtr<IDispatch> pSalsitaApiImplOb(m_SalsitaApiImpl);
+
   m_ScriptEngine->SetScriptState(SCRIPTSTATE_DISCONNECTED);
 
   // add namespace for module
@@ -56,6 +60,7 @@ HRESULT CMagpieActiveScript::CreateSalsitaApi(/*IDispatch *pDispSharedState*/)
   CComPtr<IDispatch> pSalsitaOb;
   IF_FAILED_RET(scriptGlobal.CreateObject(L"Object", &pSalsitaOb));
 
+  script.SetPropertyByRef(L"_salsita_impl", CComVariant(pSalsitaApiImplOb));
   script.SetPropertyByRef(L"salsita", CComVariant(pSalsitaOb));
 
   CStringW salsitaScript;
