@@ -14,7 +14,7 @@ public:
 
   DECLARE_REGISTRY_RESOURCEID(IDR_SCRIPTSERVICE)
 
-  virtual HRESULT CreateScriptServiceInstance();
+  virtual HRESULT InitScriptServiceInstance();
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(TestFactory), CTestFactory)

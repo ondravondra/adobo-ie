@@ -25,13 +25,18 @@ public:
   {
   }
 
-  virtual HRESULT CreateScriptServiceInstance() = 0;
+  virtual HRESULT InitScriptServiceInstance() = 0;
 
   STDMETHOD(GetScriptServiceInstance)(LPUNKNOWN* ppUnk)
   {
     if (!m_ScriptServiceInstance)
     {
-      HRESULT hr = CreateScriptServiceInstance();
+      HRESULT hr = m_ScriptServiceInstance.CoCreateInstance(__uuidof(IScriptServiceInstance));
+      if (FAILED(hr))
+      {
+        return hr;
+      }
+      hr = InitScriptServiceInstance();
       if (FAILED(hr))
       {
         m_ScriptServiceInstance.Release();
