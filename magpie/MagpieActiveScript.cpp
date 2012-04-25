@@ -114,18 +114,20 @@ HRESULT CMagpieActiveScript::RunModule(
   CComPtr<IDispatch> pModuleExportsOb;
   IF_FAILED_RET(scriptGlobal.CreateObject(L"Object", &pModuleExportsOb));
 
-  CComVariant vtSalsita;
-  IF_FAILED_RET(GetSalsitaObject(&vtSalsita));
-
   // inject CommonJS objects
   script.SetPropertyByRef(L"require", CComVariant(pModuleRequireOb));
   script.SetPropertyByRef(L"module", CComVariant(pModule));
   script.SetPropertyByRef(L"exports", CComVariant(pModuleExportsOb));
-  script.SetPropertyByRef(L"salsita", vtSalsita);
+
+  CComVariant vtSalsita;
+  HRESULT hr = GetSalsitaObject(&vtSalsita);
+  if (SUCCEEDED(hr))
+  {
+    script.SetPropertyByRef(L"salsita", vtSalsita);
+  }
 
   // now run the module
   m_Application.EnterModule(sModuleID);
-  HRESULT hr = E_FAIL;
   hr = AddScriptFile(sFilename, sModuleID);
   if (SUCCEEDED(hr))
   {
