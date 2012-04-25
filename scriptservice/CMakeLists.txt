@@ -1,6 +1,6 @@
 file(GLOB_RECURSE source_files *.cpp *.h *.rgs *.idl *.rc)
 
-add_executable(scriptservice WIN32 ${source_files})
+add_library(scriptservice SHARED ${source_files})
 
 include_directories("${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)")
 
@@ -19,9 +19,9 @@ set_property(TARGET scriptservice PROPERTY LIBRARY_OUTPUT_DIRECTORY_DEBUG ${outd
 set_property(TARGET scriptservice PROPERTY ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${outdir_lib_release})
 set_property(TARGET scriptservice PROPERTY ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${outdir_lib_debug})
 
-add_custom_command(
-	TARGET scriptservice
-	POST_BUILD
-	COMMAND if $<CONFIGURATION>==Debug \"$(TargetPath)\" /regserver 
-	)
+#add_custom_command(
+#	TARGET scriptservice
+#	POST_BUILD
+#	COMMAND if $<CONFIGURATION>==Debug \"$(TargetPath)\" /regserver 
+#	)
 
