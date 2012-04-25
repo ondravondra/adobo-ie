@@ -48,6 +48,8 @@ HRESULT CMagpieActiveScript::GetSalsitaObject(VARIANT * result)
 
 HRESULT CMagpieActiveScript::CreateSalsitaApi(CString &extensionId, INT tabId, LPUNKNOWN pSalsitaApi)
 {
+  m_debugContextIdentifier.Format(_T("Tab id = %i"), tabId);
+
   IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, extensionId, tabId, pSalsitaApi));
 
   m_ScriptEngine->SetScriptState(SCRIPTSTATE_DISCONNECTED);

@@ -267,10 +267,11 @@ public:
 
     if (!m_stopShowingErrors)
     {
-      if (MessageBox(NULL, sOut.GetBuffer(), _T("OnScriptError"), MB_OKCANCEL) == IDCANCEL)
+      if (MessageBox(NULL, sOut.GetBuffer(), m_debugContextIdentifier.GetBuffer(), MB_OKCANCEL) == IDCANCEL)
       {
         m_stopShowingErrors = true;
       }
+      m_debugContextIdentifier.ReleaseBuffer();
     }
 
     ATLTRACE(sOut);
@@ -309,4 +310,6 @@ protected:
 
   DWORD m_SourceContextSeq;
   CSimpleMap<DWORD, CString>  m_scriptModuleNameMap;
+
+  CString                     m_debugContextIdentifier;
 };
