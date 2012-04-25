@@ -23,7 +23,7 @@ salsita.extension.sendRequest = function (request, callback) {
 };
 salsita.extension.onRequest = {};
 salsita.extension.onRequest.addListener = function (listener) {
-  apiImpl.addRequestListener(listener);
+  apiImpl.addEventListener('extension.onRequest', listener);
 };
 salsita.tabs = {};
 salsita.tabs.getCurrent = function (callback) {

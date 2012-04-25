@@ -41,7 +41,7 @@ public:
 public:
   STDMETHOD(get_extensionId)(VARIANT* pVal);
   STDMETHOD(get_currentTabId)(INT* tabId);
-  STDMETHOD(addRequestListener)(LPDISPATCH listener);
+  STDMETHOD(addEventListener)(BSTR eventId, LPDISPATCH listener);
   STDMETHOD(performSendRequest)(INT tabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback);
 
 private:

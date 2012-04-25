@@ -212,8 +212,8 @@ library MagpieLib
     [propget, id(2)]
     HRESULT currentTabId([out, retval] INT* tabId);
     [id(3)]
-    HRESULT addRequestListener([in] LPDISPATCH listener);
-    [id(4)]
+    HRESULT addEventListener([in, string] BSTR eventId, [in] LPDISPATCH listener);
+    [id(4), helpstring("Raises extension.onRequest in specified tabs, or all tabs if -1 is specified.")]
     HRESULT performSendRequest([in] INT tabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in, optional] VARIANT requestCallback);
   }
 
@@ -229,7 +229,7 @@ library MagpieLib
   {
     HRESULT connectClient([in] INT tabId);
     HRESULT releaseClient([in] INT tabId);
-    HRESULT addRequestListener([in] INT tabId, [in] LPDISPATCH listener);
+    HRESULT addEventListener([in, string] const OLECHAR *eventId, [in] INT tabId /* id of the current tab, -1 for background*/, [in] LPDISPATCH listener);
     HRESULT sendRequest([in] INT senderTabId, [in] INT recipientTabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in, optional] VARIANT requestCallback);
   }
 

@@ -27,7 +27,7 @@ public:
 
   STDMETHOD(connectClient)(INT tabId);
   STDMETHOD(releaseClient)(INT tabId);
-  STDMETHOD(addRequestListener)(INT tabId, LPDISPATCH listener);
+  STDMETHOD(addEventListener)(LPWSTR eventId, INT tabId, LPDISPATCH listener);
   STDMETHOD(sendRequest)(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback);
 
 private:
@@ -35,7 +35,20 @@ private:
   typedef struct {
     INT tabId;
     CIDispatchHelper listener;
-  } RequestListenerT;
+  } EventListenerT;
 
-  CAtlArray<RequestListenerT *> m_listeners; ///< all request listeners, array contains pointers because we want to manage copying and ref counting for better performance
+  /**
+   * Array of event listeners for particular event id. It contains pointers because we want to manage copying and ref counting for better performance
+   */
+  typedef CAtlArray<EventListenerT *> EventListenerArrayT;
+
+  /**
+   * Map of event listener arrays indexed by event id.
+   * Again contains pointers for optimization (this time only of local copying, no ref counts).
+   */
+  typedef CAtlMap<CString, EventListenerArrayT *> EventMapT;
+  EventMapT m_eventListeners;
+
+  EventListenerArrayT *GetListenerArray(LPWSTR eventId);
+  void RemoveListenersForTab(INT tabId, EventListenerArrayT *listenerArray);
 };

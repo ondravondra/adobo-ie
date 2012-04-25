@@ -51,13 +51,13 @@ STDMETHODIMP CSalsitaApiImpl::get_currentTabId(INT* tabId)
   return S_OK;
 }
 
-STDMETHODIMP CSalsitaApiImpl::addRequestListener(LPDISPATCH listener)
+STDMETHODIMP CSalsitaApiImpl::addEventListener(BSTR eventId, LPDISPATCH listener)
 {
   if (!listener)
   {
     return S_OK; // silently return because nobody can call null
   }
-  return m_ApiService->addRequestListener(m_TabId, listener);
+  return m_ApiService->addEventListener(eventId, m_TabId, listener);
 }
 
 STDMETHODIMP CSalsitaApiImpl::performSendRequest(INT tabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback)

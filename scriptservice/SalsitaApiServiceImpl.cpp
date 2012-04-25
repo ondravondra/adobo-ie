@@ -29,30 +29,52 @@ STDMETHODIMP CSalsitaApiServiceImpl::connectClient(INT tabId)
   return S_OK;
 }
 
-STDMETHODIMP CSalsitaApiServiceImpl::releaseClient(INT tabId)
+void CSalsitaApiServiceImpl::RemoveListenersForTab(INT tabId, CSalsitaApiServiceImpl::EventListenerArrayT *listenerArray)
 {
-  CAtlArray<RequestListenerT *> newListenerArray;
-  for (size_t i = 0; i < m_listeners.GetCount(); i ++)
+  EventListenerArrayT newListenerArray;
+  for (size_t i = 0; i < listenerArray->GetCount(); i ++)
   {
-    RequestListenerT *r = m_listeners.GetAt(i);
-    if (r->tabId != tabId)
+    EventListenerT *l = listenerArray->GetAt(i);
+    if (l->tabId != tabId)
     {
-      newListenerArray.Add(r);
+      newListenerArray.Add(l);
     } else {
-      delete r;
+      delete l;
     }
   }
-  m_listeners.RemoveAll();
-  m_listeners.InsertArrayAt(0, &newListenerArray);
+  listenerArray->RemoveAll();
+  listenerArray->InsertArrayAt(0, &newListenerArray);
+}
+
+STDMETHODIMP CSalsitaApiServiceImpl::releaseClient(INT tabId)
+{
+  POSITION p = m_eventListeners.GetStartPosition();
+  while (p)
+  {
+    EventMapT::CPair *pair = m_eventListeners.GetNext(p);
+    RemoveListenersForTab(tabId, pair->m_value);
+  }
   return S_OK;
 }
 
-STDMETHODIMP CSalsitaApiServiceImpl::addRequestListener(INT tabId, LPDISPATCH listener)
+CSalsitaApiServiceImpl::EventListenerArrayT *CSalsitaApiServiceImpl::GetListenerArray(LPWSTR eventId)
 {
-  RequestListenerT *l = new RequestListenerT();
+  EventListenerArrayT *ptr;
+  if (!m_eventListeners.Lookup(eventId, ptr))
+  {
+    ptr = new EventListenerArrayT();
+    m_eventListeners[eventId] = ptr;
+  }
+  return ptr;
+}
+
+STDMETHODIMP CSalsitaApiServiceImpl::addEventListener(LPWSTR eventId, INT tabId, LPDISPATCH listener)
+{
+  EventListenerArrayT *listeners = GetListenerArray(eventId);
+  EventListenerT *l = new EventListenerT();
   l->tabId = tabId;
   l->listener = listener;
-  m_listeners.Add(l);
+  listeners->Add(l);
   return S_OK;
 }
 
@@ -63,12 +85,13 @@ STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientT
   CComVariant varCallback = requestCallback;
   CAtlArray<CIDispatchHelper *> recipients;
 
-  for (size_t i = 0; i < m_listeners.GetCount(); i ++)
+  EventListenerArrayT *listeners = GetListenerArray(L"extension.onRequest");
+  for (size_t i = 0; i < listeners->GetCount(); i ++)
   {
-    RequestListenerT *r = m_listeners.GetAt(i);
-    if (recipientTabId == -1 || r->tabId == recipientTabId)
+    EventListenerT *l = listeners->GetAt(i);
+    if (recipientTabId == -1 || l->tabId == recipientTabId)
     {
-      recipients.Add(new CIDispatchHelper(r->listener)); // increases refcount
+      recipients.Add(new CIDispatchHelper(l->listener)); // increases refcount
     }
   }
 
