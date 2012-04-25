@@ -2,50 +2,68 @@
 
 #include "service.h"
 #include "resource.h"
-#include "ScriptServiceInstance.h"
 
-// CScriptServiceCallback
-struct CScriptServiceCallback
-{
-  virtual void OnFinalRelease(const OLECHAR* bsID) = 0;
-};
-
-class ATL_NO_VTABLE CScriptService :
-  public CScriptServiceCallback,
+template <class T, const CLSID* pclsid>
+class ATL_NO_VTABLE CScriptServiceFactory :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public CComCoClass<CScriptService, &CLSID_ScriptService>,
-  public IScriptService
+  public CComCoClass<T, pclsid>,
+  IScriptServiceFactory
 {
-private:
-  CAtlMap<CString, CScriptServiceInstanceComObject*> m_Objects;
-
 public:
-  CScriptService()
+  CScriptServiceFactory()
   {
   }
+  
+  DECLARE_CLASSFACTORY_SINGLETON(T)
+  DECLARE_NOT_AGGREGATABLE(T)
 
-  DECLARE_REGISTRY_RESOURCEID(IDR_SCRIPTSERVICE)
-  DECLARE_CLASSFACTORY_SINGLETON(CScriptService)
-
-  DECLARE_NOT_AGGREGATABLE(CScriptService)
-
-  BEGIN_COM_MAP(CScriptService)
-    COM_INTERFACE_ENTRY(IScriptService)
+  BEGIN_COM_MAP(T)
+    COM_INTERFACE_ENTRY(IScriptServiceFactory)
   END_COM_MAP()
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  virtual void OnFinalRelease(const OLECHAR* bsID);
   HRESULT FinalConstruct()
   {
     return S_OK;
   }
 
-  void FinalRelease();
+  void FinalRelease()
+  {
+  }
 
-public:
-// IGlobalObject
-  STDMETHOD(GetServiceFor)(const OLECHAR* extensionId, const OLECHAR* resourcesDir, LPUNKNOWN* ppUnk);
+  virtual HRESULT CreateScriptServiceInstance() = 0;
+
+  STDMETHOD(GetScriptServiceInstance)(LPUNKNOWN* ppUnk)
+  {
+    if (!m_ScriptServiceInstance)
+    {
+      HRESULT hr = CreateScriptServiceInstance();
+      if (FAILED(hr))
+      {
+        m_ScriptServiceInstance.Release();
+        m_ScriptServiceInstance = NULL;
+        return hr;
+      }
+    }
+    return m_ScriptServiceInstance.QueryInterface<IUnknown>(ppUnk);
+  }
+
+protected:
+  CComPtr<IScriptServiceInstance> m_ScriptServiceInstance;
 };
 
-OBJECT_ENTRY_AUTO(__uuidof(ScriptService), CScriptService)
+class ATL_NO_VTABLE CTestFactory :
+  public CScriptServiceFactory<CTestFactory, &CLSID_TestFactory>
+{
+public:
+  CTestFactory()
+  {
+  }
+
+  DECLARE_REGISTRY_RESOURCEID(IDR_SCRIPTSERVICE)
+
+  virtual HRESULT CreateScriptServiceInstance();
+};
+
+OBJECT_ENTRY_AUTO(__uuidof(TestFactory), CTestFactory)

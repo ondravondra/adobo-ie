@@ -62,6 +62,7 @@ END
 //
 
 IDR_SCRIPTSERVICE REGISTRY "ScriptService.rgs"
+IDR_SCRIPTSERVICEINSTANCE  REGISTRY "ScriptServiceInstance.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //

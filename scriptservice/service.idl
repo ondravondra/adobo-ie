@@ -3,15 +3,15 @@ import "ocidl.idl";
 
 [
   object,
-  uuid(954448CA-1894-4743-9261-BBE3C932FA26),
+  uuid(954448CA-1894-4743-9261-BBE3C932FA27),
   oleautomation,
   nonextensible,
-  helpstring("IScriptService Interface"),
+  helpstring("IScriptServiceFactory Interface"),
   pointer_default(unique)
 ]
-interface IScriptService : IUnknown
+interface IScriptServiceFactory : IUnknown
 {
-  HRESULT GetServiceFor([in, string] const OLECHAR* extensionId, [in, string] const OLECHAR* resourcesDir, [out, retval] LPUNKNOWN* ppUnk);
+  HRESULT GetScriptServiceInstance([out, retval] LPUNKNOWN* ppUnk);
 };
 
 [
@@ -46,28 +46,40 @@ library ScriptServiceLib
   ]
   interface IScriptServiceInstance : IUnknown
   {
-    [id(1), helpstring("Registers a new client tab id. Called from BHO before content scripts for particular tab are loaded.")]
+    [id(1)]
+    HRESULT Init([in, string] const OLECHAR* extensionId, [in, string] const OLECHAR* resourcesDir);
+
+    [id(2), helpstring("Registers a new client tab id. Called from BHO before content scripts for particular tab are loaded.")]
     HRESULT RegisterTab([out, retval] INT *tabId);
 
-    [id(2), helpstring("Retrieves ISalsitaApiService implementation from the service.")]
+    [id(3), helpstring("Retrieves ISalsitaApiService implementation from the service.")]
     HRESULT GetSalsitaApiService([out, retval] LPUNKNOWN /* ISalsitaApiService */ *pService);
 
-    [id(3), helpstring("Loads the specified module unless it has been loaded already.")]
+    [id(4), helpstring("Loads the specified module unless it has been loaded already.")]
     HRESULT LoadModule([in, string] const OLECHAR* moduleID);
 
-    [id(4), helpstring("Exports a property of the window object into the global scope - used fo jQuery.")]
+    [id(5), helpstring("Exports a property of the window object into the global scope - used fo jQuery.")]
     HRESULT MakeJsWindowMemberGlobal([in, string] const OLECHAR* memberName);
 
-    [id(5), helpstring("Creates an IDispatch object based on given clsid and adds it as named item to the background script engine.")]
+    [id(6), helpstring("Creates an IDispatch object based on given clsid and adds it as named item to the background script engine.")]
     HRESULT ScriptCreateNamedItem([in, string] const OLECHAR *name, [in] GUID clsId, [in] ULONG dwFlags);
   };
 
   [
-    uuid(B5ABEF92-6105-46A2-9465-EA875E7FD25F),
-    helpstring("ScriptService Class")
+    uuid(8E0DF3C3-BA52-47F7-B601-307E5CB207EF),
+    helpstring("ScriptServiceInstance Class")
   ]
-  coclass ScriptService
+  coclass ScriptServiceInstance
   {
-    [default] interface IScriptService;
+    [default] interface IScriptServiceInstance;
+  };
+
+  [
+    uuid(B5ABEF92-6105-46A2-9465-EA875E7FD25F),
+    helpstring("TestFactory Class")
+  ]
+  coclass TestFactory
+  {
+    [default] interface IScriptServiceFactory;
   };
 };
