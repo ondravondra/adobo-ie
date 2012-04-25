@@ -212,8 +212,7 @@ library MagpieLib
     [propget]
     HRESULT currentTabId([out, retval] INT* tabId);
     HRESULT addRequestListener([in] LPDISPATCH listener);
-    HRESULT sendRequest([in] VARIANT request, [in] LPDISPATCH requestCallback);
-    HRESULT sendRequestToTab([in] INT tabId, [in] VARIANT request, [in] LPDISPATCH requestCallback);
+    HRESULT performSendRequest([in] INT tabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in] LPDISPATCH requestCallback);
   }
 
   [
@@ -229,7 +228,7 @@ library MagpieLib
     HRESULT connectClient([in] INT tabId);
     HRESULT releaseClient([in] INT tabId);
     HRESULT addRequestListener([in] INT tabId, [in] LPDISPATCH listener);
-    HRESULT sendRequest([in] INT senderTabId, [in] INT recipientTabId /* -1 for broadcast */, [in] VARIANT request, [in] LPDISPATCH requestCallback);
+    HRESULT sendRequest([in] INT senderTabId, [in] INT recipientTabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in] LPDISPATCH requestCallback);
   }
 
 /*==========================================================================*/

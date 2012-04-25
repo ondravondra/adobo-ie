@@ -41,8 +41,7 @@ public:
   STDMETHOD(get_extensionId)(VARIANT* pVal);
   STDMETHOD(get_currentTabId)(INT* tabId);
   STDMETHOD(addRequestListener)(LPDISPATCH listener);
-  STDMETHOD(sendRequest)(VARIANT request, LPDISPATCH requestCallback);
-  STDMETHOD(sendRequestToTab)(INT tabId, VARIANT request, LPDISPATCH requestCallback);
+  STDMETHOD(performSendRequest)(INT tabId, VARIANT senderObject, VARIANT request, LPDISPATCH requestCallback);
 
 private:
   CString m_ExtensionId;

@@ -1,6 +1,24 @@
+function createTab()
+{
+  var tab = { id: _salsita_impl.currentTabId };
+  return tab;
+}
+
+function createSender()
+{
+  var sender = {};
+  sender.tab = createTab();
+  if (sender.tab.id == -1)
+  {
+    delete sender.tab;
+  }
+  sender.id = _salsita_impl.extensionId;
+  return sender;
+}
+
 salsita.extensions = {};
 salsita.extensions.sendRequest = function (request, callback) {
-  _salsita_impl.sendRequest(request, callback);
+  _salsita_impl.performSendRequest(-1, createSender(), request, callback);
 };
 salsita.extensions.onRequest = {}
 salsita.extensions.onRequest.addListener = function (listener) {
@@ -8,8 +26,8 @@ salsita.extensions.onRequest.addListener = function (listener) {
 };
 salsita.tabs = {};
 salsita.tabs.getCurrent = function (callback) {
-  callback({ id: _salsita_impl.getCurrentTabId() });
+  callback(createTab());
 };
 salsita.tabs.sendRequest = function (tabId, request, callback) {
-  _salsita_impl.sendRequestToTab(tabId, request, callback);
+  _salsita_impl.performSendRequest(tabId, createSender(), request, callback);
 };

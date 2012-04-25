@@ -60,12 +60,7 @@ STDMETHODIMP CSalsitaApiImpl::addRequestListener(LPDISPATCH listener)
   return m_ApiService->addRequestListener(m_TabId, listener);
 }
 
-STDMETHODIMP CSalsitaApiImpl::sendRequest(VARIANT request, LPDISPATCH requestCallback)
+STDMETHODIMP CSalsitaApiImpl::performSendRequest(INT tabId, VARIANT senderObject, VARIANT request, LPDISPATCH requestCallback)
 {
-  return m_ApiService->sendRequest(m_TabId, -1, request, requestCallback);
-}
-
-STDMETHODIMP CSalsitaApiImpl::sendRequestToTab(INT tabId, VARIANT request, LPDISPATCH requestCallback)
-{
-  return m_ApiService->sendRequest(m_TabId, tabId, request, requestCallback);
+  return m_ApiService->sendRequest(m_TabId, tabId, senderObject, request, requestCallback);
 }
