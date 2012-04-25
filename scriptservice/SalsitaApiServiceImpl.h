@@ -29,4 +29,13 @@ public:
   STDMETHOD(releaseClient)(INT tabId);
   STDMETHOD(addRequestListener)(INT tabId, LPDISPATCH listener);
   STDMETHOD(sendRequest)(INT senderTabId, INT recipientTabId, VARIANT request, LPDISPATCH requestCallback);
+
+private:
+
+  typedef struct {
+    INT tabId;
+    CIDispatchHelper listener;
+  } RequestListenerT;
+
+  CAtlArray<RequestListenerT *> m_listeners; ///< all request listeners, array contains pointers because we want to manage copying and ref counting for better performance
 };
