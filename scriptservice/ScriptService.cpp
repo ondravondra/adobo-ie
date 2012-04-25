@@ -1,41 +1,16 @@
 #include "stdafx.h"
 #include "ScriptService.h"
 
-void CScriptService::OnFinalRelease(const OLECHAR* bsID)
+HRESULT CTestFactory::CreateScriptServiceInstance()
 {
-  m_Objects.RemoveKey(bsID);
-}
+  HRESULT hr;
 
-void CScriptService::FinalRelease()
-{
-  CScriptServiceInstanceComObject* pObject;
-  CString sID;
-  POSITION pos = m_Objects.GetStartPosition();
-  while(pos)
+  hr = m_ScriptServiceInstance.CoCreateInstance(CLSID_ScriptServiceInstance);
+  if (FAILED(hr))
   {
-    m_Objects.GetNextAssoc(pos, sID, pObject);
-    pObject->UnInit();
+    return hr;
   }
-  m_Objects.RemoveAll();
-}
 
-STDMETHODIMP CScriptService::GetServiceFor(const OLECHAR* extensionId, const OLECHAR* resourcesDir, LPUNKNOWN* ppUnk)
-{
-  CScriptServiceInstanceComObject* pObject;
-  if (!m_Objects.Lookup(extensionId, pObject))
-  {
-    ATLTRACE(_T("ADD OBJECT %s\n"), extensionId);
-    HRESULT hr = CScriptServiceInstance::CreateObject(this, extensionId, resourcesDir, pObject);
-    if (FAILED(hr))
-    {
-      return hr;
-    }
-    m_Objects[extensionId] = pObject;
-  }
-  else
-  {
-    ATLTRACE(_T("FOUND OBJECT %s\n"), extensionId);
-  }
-  return pObject->QueryInterface<IUnknown>(ppUnk);
+  hr = m_ScriptServiceInstance->Init(L"myExtension", L"myDir");
+  return hr;
 }
-

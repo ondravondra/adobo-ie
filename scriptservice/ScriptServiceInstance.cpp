@@ -4,29 +4,8 @@
 #include "libcomhelper\libcomhelper.h"
 using namespace LIB_COMHelper;
 
-HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, const OLECHAR* extensionId, const OLECHAR* resourcesDir, CScriptServiceInstanceComObject *& retVal)
+STDMETHODIMP CScriptServiceInstance::Init(const OLECHAR* extensionId, const OLECHAR* resourcesDir)
 {
-  ATLASSERT(pService);
-  CScriptServiceInstanceComObject* pObject = NULL;
-  retVal = NULL;
-  HRESULT hr = CScriptServiceInstanceComObject::CreateInstance(&pObject);
-  if (FAILED(hr))
-  {
-    return hr;
-  }
-  hr = pObject->Init(pService, extensionId, resourcesDir);
-  if (FAILED(hr))
-  {
-    delete pObject;
-    return hr;
-  }
-  retVal = pObject;
-  return S_OK;
-}
-
-HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, const OLECHAR* extensionId, const OLECHAR* resourcesDir)
-{
-  m_pScriptServiceCallback = pCallback;
   m_ExtensionId = extensionId;
 
   if(m_HiddenWindow.CreateEx() == NULL)
@@ -61,18 +40,8 @@ HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, const OL
   return S_OK;
 }
 
-void CScriptServiceInstance::UnInit()
-{
-  if (m_HiddenWindow)
-  {
-    m_HiddenWindow.DestroyWindow();
-  }
-  m_pScriptServiceCallback = NULL;
-}
-
 HRESULT CScriptServiceInstance::FinalConstruct()
 {
-  m_pScriptServiceCallback = NULL;
   m_TabIdCounter = 0;
   HRESULT hr = CSalsitaApiServiceImpl::CreateObject(m_SalsitaApiServiceImpl.p);
   return hr;
@@ -83,10 +52,6 @@ void CScriptServiceInstance::FinalRelease()
   if (m_HiddenWindow)
   {
     m_HiddenWindow.DestroyWindow();
-  }
-  if (m_pScriptServiceCallback)
-  {
-    m_pScriptServiceCallback->OnFinalRelease(m_ExtensionId);
   }
 }
 
