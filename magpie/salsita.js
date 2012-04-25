@@ -16,12 +16,12 @@ function createSender()
   return sender;
 }
 
-salsita.extensions = {};
-salsita.extensions.sendRequest = function (request, callback) {
+salsita.extension = {};
+salsita.extension.sendRequest = function (request, callback) {
   _salsita_impl.performSendRequest(-1, createSender(), request, callback);
 };
-salsita.extensions.onRequest = {}
-salsita.extensions.onRequest.addListener = function (listener) {
+salsita.extension.onRequest = {}
+salsita.extension.onRequest.addListener = function (listener) {
   _salsita_impl.addRequestListener(listener);
 };
 salsita.tabs = {};
