@@ -62,7 +62,7 @@ STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientT
   CComVariant varRequest = request;
   CComVariant varCallback = requestCallback;
   CAtlArray<CIDispatchHelper *> recipients;
-  
+
   for (size_t i = 0; i < m_listeners.GetCount(); i ++)
   {
     RequestListenerT *r = m_listeners.GetAt(i);
@@ -71,7 +71,7 @@ STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientT
       recipients.Add(new CIDispatchHelper(r->listener)); // increases refcount
     }
   }
-  
+
   for (size_t i = 0; i < recipients.GetCount(); i ++)
   {
     CIDispatchHelper * r = recipients.GetAt(i);
