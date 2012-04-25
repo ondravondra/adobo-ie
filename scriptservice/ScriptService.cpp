@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ScriptService.h"
 
-void CScriptService::OnFinalRelease(BSTR bsID)
+void CScriptService::OnFinalRelease(const OLECHAR* bsID)
 {
   m_Objects.RemoveKey(bsID);
 }
@@ -19,7 +19,7 @@ void CScriptService::FinalRelease()
   m_Objects.RemoveAll();
 }
 
-STDMETHODIMP CScriptService::GetServiceFor(BSTR extensionId, BSTR resourcesDir, LPUNKNOWN* ppUnk)
+STDMETHODIMP CScriptService::GetServiceFor(const OLECHAR* extensionId, const OLECHAR* resourcesDir, LPUNKNOWN* ppUnk)
 {
   CScriptServiceInstanceComObject* pObject;
   if (!m_Objects.Lookup(extensionId, pObject))

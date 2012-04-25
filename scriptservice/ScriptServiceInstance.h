@@ -18,7 +18,7 @@ class ATL_NO_VTABLE CScriptServiceInstance :
 {
 private:
   // My id
-  CComBSTR                    m_ExtensionId;
+  CString                     m_ExtensionId;
   CString                     m_MainModuleID;
   CComPtr<IMagpieApplication> m_Magpie;
   CMainFrame                  m_HiddenWindow;
@@ -55,8 +55,8 @@ public:
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  static HRESULT CreateObject(CScriptServiceCallback* pService, BSTR extensionId, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal);
-  HRESULT Init(CScriptServiceCallback* pCallback, BSTR extensionId, BSTR resourcesDir);
+  static HRESULT CreateObject(CScriptServiceCallback* pService, const OLECHAR* extensionId, const OLECHAR* resourcesDir, CScriptServiceInstanceComObject *& retVal);
+  HRESULT Init(CScriptServiceCallback* pCallback, const OLECHAR* extensionId, const OLECHAR* resourcesDir);
   void UnInit();
 
   HRESULT FinalConstruct();
@@ -70,8 +70,8 @@ public:
 // IScriptServiceInstance
   STDMETHOD(RegisterTab)(INT *tabId);
   STDMETHOD(GetSalsitaApiService)(LPUNKNOWN *pService);
-  STDMETHOD(LoadModule)(BSTR moduleID);
-  STDMETHOD(MakeJsWindowMemberGlobal)(BSTR memberName);
+  STDMETHOD(LoadModule)(const OLECHAR* moduleID);
+  STDMETHOD(MakeJsWindowMemberGlobal)(const OLECHAR* memberName);
 
 protected:
   CScriptServiceInstance()

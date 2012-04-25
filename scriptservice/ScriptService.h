@@ -7,7 +7,7 @@
 // CScriptServiceCallback
 struct CScriptServiceCallback
 {
-  virtual void OnFinalRelease(BSTR bsID) = 0;
+  virtual void OnFinalRelease(const OLECHAR* bsID) = 0;
 };
 
 class ATL_NO_VTABLE CScriptService :
@@ -35,7 +35,7 @@ public:
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  virtual void OnFinalRelease(BSTR bsID);
+  virtual void OnFinalRelease(const OLECHAR* bsID);
   HRESULT FinalConstruct()
   {
     return S_OK;
@@ -45,7 +45,7 @@ public:
 
 public:
 // IGlobalObject
-  STDMETHOD(GetServiceFor)(BSTR extensionId, BSTR resourcesDir, LPUNKNOWN* ppUnk);
+  STDMETHOD(GetServiceFor)(const OLECHAR* extensionId, const OLECHAR* resourcesDir, LPUNKNOWN* ppUnk);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ScriptService), CScriptService)

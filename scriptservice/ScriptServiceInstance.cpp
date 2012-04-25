@@ -4,7 +4,7 @@
 #include "libcomhelper\libcomhelper.h"
 using namespace LIB_COMHelper;
 
-HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, BSTR extensionId, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal)
+HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, const OLECHAR* extensionId, const OLECHAR* resourcesDir, CScriptServiceInstanceComObject *& retVal)
 {
   ATLASSERT(pService);
   CScriptServiceInstanceComObject* pObject = NULL;
@@ -24,7 +24,7 @@ HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, B
   return S_OK;
 }
 
-HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR extensionId, BSTR resourcesDir)
+HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, const OLECHAR* extensionId, const OLECHAR* resourcesDir)
 {
   m_pScriptServiceCallback = pCallback;
   m_ExtensionId = extensionId;
@@ -117,7 +117,7 @@ STDMETHODIMP CScriptServiceInstance::GetSalsitaApiService(LPUNKNOWN *pService)
   return m_SalsitaApiServiceImpl.QueryInterface<IUnknown>(pService);
 }
 
-STDMETHODIMP CScriptServiceInstance::LoadModule(BSTR moduleID)
+STDMETHODIMP CScriptServiceInstance::LoadModule(const OLECHAR* moduleID)
 {
   ATLASSERT(m_Magpie);
   if (!m_Magpie)
@@ -128,7 +128,7 @@ STDMETHODIMP CScriptServiceInstance::LoadModule(BSTR moduleID)
   }
 }
 
-HRESULT CScriptServiceInstance::MakeJsWindowMemberGlobal(BSTR memberName)
+HRESULT CScriptServiceInstance::MakeJsWindowMemberGlobal(const OLECHAR* memberName)
 {
   ATLASSERT(m_Magpie);
   if (!m_Magpie)
@@ -137,11 +137,11 @@ HRESULT CScriptServiceInstance::MakeJsWindowMemberGlobal(BSTR memberName)
   }
 
   CComPtr<IDispatch> pDisp;
-  HRESULT hr = CComUtil::ExtractWindowMember(m_HiddenWindow.m_view.m_pWebBrowser, memberName, pDisp);
+  HRESULT hr = CComUtil::ExtractWindowMember(m_HiddenWindow.m_view.m_pWebBrowser, CComBSTR(memberName), pDisp);
   if (FAILED(hr))
   {
     return hr;
   } else {
-    return m_Magpie->ScriptAddNamedItem(memberName, pDisp, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE);
+    return m_Magpie->ScriptAddNamedItem((LPWSTR)memberName, pDisp, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE);
   }
 }

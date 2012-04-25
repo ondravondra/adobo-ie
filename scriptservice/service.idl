@@ -11,7 +11,7 @@ import "ocidl.idl";
 ]
 interface IScriptService : IUnknown
 {
-  HRESULT GetServiceFor([in] BSTR extensionId, [in] BSTR resourcesDir, [out, retval] LPUNKNOWN* ppUnk);
+  HRESULT GetServiceFor([in, string] const OLECHAR* extensionId, [in, string] const OLECHAR* resourcesDir, [out, retval] LPUNKNOWN* ppUnk);
 };
 
 [
@@ -65,10 +65,10 @@ library ScriptServiceLib
     HRESULT GetSalsitaApiService([out, retval] LPUNKNOWN /* ISalsitaApiService */ *pService);
 
     [helpstring("loads the specified module unless it has been loaded already")]
-    HRESULT LoadModule([in] BSTR moduleID);
+    HRESULT LoadModule([in, string] const OLECHAR* moduleID);
 
     [helpstring("exports a property of the window object into the global scope - used fo jQuery")]
-    HRESULT MakeJsWindowMemberGlobal([in] BSTR memberName);
+    HRESULT MakeJsWindowMemberGlobal([in, string] const OLECHAR* memberName);
   };
 
   [
