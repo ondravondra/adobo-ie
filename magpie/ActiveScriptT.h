@@ -267,7 +267,7 @@ public:
 
     if (!m_stopShowingErrors)
     {
-      if (MessageBox(NULL, sOut.GetBuffer(), _T("scriptservice"), MB_OKCANCEL) == IDCANCEL)
+      if (MessageBox(NULL, sOut.GetBuffer(), _T("OnScriptError"), MB_OKCANCEL) == IDCANCEL)
       {
         m_stopShowingErrors = true;
       }
