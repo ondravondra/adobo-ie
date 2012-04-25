@@ -84,21 +84,10 @@ void CScriptServiceInstance::FinalRelease()
   {
     m_HiddenWindow.DestroyWindow();
   }
-  m_CallbackInterfaces.Release();
   if (m_pScriptServiceCallback)
   {
     m_pScriptServiceCallback->OnFinalRelease(m_ExtensionId);
   }
-}
-
-STDMETHODIMP CScriptServiceInstance::SetCallback(LPUNKNOWN pUnk)
-{
-  return m_CallbackInterfaces.Set(pUnk);
-}
-
-STDMETHODIMP CScriptServiceInstance::ReleaseCallback()
-{
-  return m_CallbackInterfaces.Release();
 }
 
 STDMETHODIMP CScriptServiceInstance::RegisterTab(INT *tabId)

@@ -37,20 +37,6 @@ library ScriptServiceLib
   };
 
   [
-    object,
-    uuid(C89BFD36-10DA-4001-901F-6B436113A2D5),
-    oleautomation,
-    nonextensible,
-    helpstring("IScriptServiceInstanceAdmin Interface"),
-    pointer_default(unique)
-  ]
-  interface IScriptServiceInstanceAdmin : IUnknown
-  {
-    HRESULT SetCallback([in] LPUNKNOWN pUnk);
-    HRESULT ReleaseCallback();
-  };
-
-  [
   object,
   uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
   oleautomation,
