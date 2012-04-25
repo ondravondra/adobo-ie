@@ -27,7 +27,13 @@ salsita.extension.onRequest.addListener = function (listener) {
 };
 salsita.tabs = {};
 salsita.tabs.getCurrent = function (callback) {
-  callback(createTab());
+  var t = createTab();
+  if (t.id == -1)
+  {
+    callback();
+  } else {
+    callback(t);
+  }
 };
 salsita.tabs.sendRequest = function (tabId, request, callback) {
   apiImpl.performSendRequest(tabId, createSender(), request, callback);

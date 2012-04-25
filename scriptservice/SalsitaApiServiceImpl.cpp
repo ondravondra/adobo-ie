@@ -56,12 +56,11 @@ STDMETHODIMP CSalsitaApiServiceImpl::addRequestListener(INT tabId, LPDISPATCH li
   return S_OK;
 }
 
-STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, LPDISPATCH requestCallback)
+STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback)
 {
   CComVariant varSenderObject = senderObject;
   CComVariant varRequest = request;
-  CComPtr<IDispatch> pCallback = requestCallback;
-  CComVariant varCallback = pCallback;
+  CComVariant varCallback = requestCallback;
   CAtlArray<CIDispatchHelper *> recipients;
   
   for (size_t i = 0; i < m_listeners.GetCount(); i ++)
@@ -76,7 +75,7 @@ STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientT
   for (size_t i = 0; i < recipients.GetCount(); i ++)
   {
     CIDispatchHelper * r = recipients.GetAt(i);
-    CComVariant varArgs[3] = { varRequest, varSenderObject, varCallback };
+    CComVariant varArgs[3] = { varCallback, varSenderObject, varRequest };
     r->InvokeN((DISPID)0, varArgs, 3);
     delete r; // release the listener
   }

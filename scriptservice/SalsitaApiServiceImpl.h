@@ -28,7 +28,7 @@ public:
   STDMETHOD(connectClient)(INT tabId);
   STDMETHOD(releaseClient)(INT tabId);
   STDMETHOD(addRequestListener)(INT tabId, LPDISPATCH listener);
-  STDMETHOD(sendRequest)(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, LPDISPATCH requestCallback);
+  STDMETHOD(sendRequest)(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback);
 
 private:
 
