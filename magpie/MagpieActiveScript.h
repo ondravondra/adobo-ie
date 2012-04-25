@@ -65,7 +65,7 @@ public:
   // Shutdown script engine and cleanup
   HRESULT Shutdown();
 
-  HRESULT CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi);
+  HRESULT CreateSalsitaApi(CString &extensionId, INT tabId, LPUNKNOWN pSalsitaApi);
 
   // Run a module. Runs the module unconditionally, so this method should be
   //  used only by the module itself after checking if the module ran

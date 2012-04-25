@@ -4,7 +4,7 @@
 #include "libcomhelper\libcomhelper.h"
 using namespace LIB_COMHelper;
 
-HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, BSTR serviceIdentifier, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal)
+HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, BSTR extensionId, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal)
 {
   ATLASSERT(pService);
   CScriptServiceInstanceComObject* pObject = NULL;
@@ -14,7 +14,7 @@ HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, B
   {
     return hr;
   }
-  hr = pObject->Init(pService, serviceIdentifier, resourcesDir);
+  hr = pObject->Init(pService, extensionId, resourcesDir);
   if (FAILED(hr))
   {
     delete pObject;
@@ -24,10 +24,10 @@ HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, B
   return S_OK;
 }
 
-HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR serviceIdentifier, BSTR resourcesDir)
+HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR extensionId, BSTR resourcesDir)
 {
   m_pScriptServiceCallback = pCallback;
-  m_serviceIdentifier = serviceIdentifier;
+  m_ExtensionId = extensionId;
 
   if(m_HiddenWindow.CreateEx() == NULL)
   {
@@ -39,7 +39,7 @@ HRESULT CScriptServiceInstance::Init(CScriptServiceCallback* pCallback, BSTR ser
   {
     return hr;
   }
-  hr = m_Magpie->Init((LPWSTR)resourcesDir);
+  hr = m_Magpie->Init((LPWSTR)extensionId, (LPWSTR)resourcesDir);
   if (FAILED(hr))
   {
     return hr;
@@ -87,7 +87,7 @@ void CScriptServiceInstance::FinalRelease()
   m_CallbackInterfaces.Release();
   if (m_pScriptServiceCallback)
   {
-    m_pScriptServiceCallback->OnFinalRelease(m_serviceIdentifier);
+    m_pScriptServiceCallback->OnFinalRelease(m_ExtensionId);
   }
 }
 

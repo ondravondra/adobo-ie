@@ -18,7 +18,7 @@ class ATL_NO_VTABLE CScriptServiceInstance :
 {
 private:
   // My id
-  CComBSTR                    m_serviceIdentifier;
+  CComBSTR                    m_ExtensionId;
   CString                     m_MainModuleID;
   CComPtr<IMagpieApplication> m_Magpie;
   CMainFrame                  m_HiddenWindow;
@@ -55,8 +55,8 @@ public:
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  static HRESULT CreateObject(CScriptServiceCallback* pService, BSTR serviceIdentifier, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal);
-  HRESULT Init(CScriptServiceCallback* pCallback, BSTR serviceIdentifier, BSTR resourcesDir);
+  static HRESULT CreateObject(CScriptServiceCallback* pService, BSTR extensionId, BSTR resourcesDir, CScriptServiceInstanceComObject *& retVal);
+  HRESULT Init(CScriptServiceCallback* pCallback, BSTR extensionId, BSTR resourcesDir);
   void UnInit();
 
   HRESULT FinalConstruct();

@@ -256,8 +256,11 @@ void CMagpieApplication::ExitModule()
 //----------------------------------------------------------------------------
 //  Init
 STDMETHODIMP CMagpieApplication::Init(
+  const OLECHAR* extensionId,
   const OLECHAR* lpszFolderName)
 {
+  m_ExtensionId = extensionId;
+
   // basic preparation
   CString sRootPath = lpszFolderName;
   if (sRootPath.IsEmpty() || !PathIsDirectory(sRootPath))
@@ -289,7 +292,7 @@ STDMETHODIMP CMagpieApplication::Init(
 
 STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
-  return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi);
+  return m_ScriptEngine.CreateSalsitaApi(m_ExtensionId, tabId, pSalsitaApi);
 }
 
 //----------------------------------------------------------------------------

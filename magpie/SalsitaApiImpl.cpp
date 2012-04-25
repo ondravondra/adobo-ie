@@ -5,7 +5,7 @@ CSalsitaApiImpl::CSalsitaApiImpl()
 {
 }
 
-HRESULT CSalsitaApiImpl::CreateObject(CSalsitaApiImplComObject *& pRet, INT tabId, LPUNKNOWN pSalsitaApi)
+HRESULT CSalsitaApiImpl::CreateObject(CSalsitaApiImplComObject *& pRet, CString &extensionId, INT tabId, LPUNKNOWN pSalsitaApi)
 {
   if (!pSalsitaApi)
   {
@@ -15,6 +15,7 @@ HRESULT CSalsitaApiImpl::CreateObject(CSalsitaApiImplComObject *& pRet, INT tabI
   CSalsitaApiImplComObject *newObject = pRet = NULL;
   IF_FAILED_RET(CSalsitaApiImplComObject::CreateInstance(&newObject));
   newObject->AddRef();
+  newObject->m_ExtensionId = extensionId;
   newObject->m_TabId = tabId;
   newObject->m_ApiService = pSalsitaApi;
   newObject->m_ApiService->connectClient(tabId);
@@ -35,13 +36,17 @@ void CSalsitaApiImpl::FinalRelease()
   }
 }
 
-STDMETHODIMP CSalsitaApiImpl::getCurrentTabId(INT* tabId)
+STDMETHODIMP CSalsitaApiImpl::get_extensionId(VARIANT* pVal)
 {
-  if (!tabId)
-  {
-    return E_POINTER;
-  }
+  ENSURE_RETVAL(pVal);
+  pVal->vt = VT_BSTR;
+  pVal->bstrVal = m_ExtensionId.AllocSysString();
+  return S_OK;
+}
 
+STDMETHODIMP CSalsitaApiImpl::get_currentTabId(INT* tabId)
+{
+  ENSURE_RETVAL(tabId);
   *tabId = m_TabId;
   return S_OK;
 }

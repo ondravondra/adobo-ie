@@ -19,22 +19,22 @@ void CScriptService::FinalRelease()
   m_Objects.RemoveAll();
 }
 
-STDMETHODIMP CScriptService::GetServiceFor(BSTR serviceIdentifier, BSTR resourcesDir, LPUNKNOWN* ppUnk)
+STDMETHODIMP CScriptService::GetServiceFor(BSTR extensionId, BSTR resourcesDir, LPUNKNOWN* ppUnk)
 {
   CScriptServiceInstanceComObject* pObject;
-  if (!m_Objects.Lookup(serviceIdentifier, pObject))
+  if (!m_Objects.Lookup(extensionId, pObject))
   {
-    ATLTRACE(_T("ADD OBJECT %s\n"), serviceIdentifier);
-    HRESULT hr = CScriptServiceInstance::CreateObject(this, serviceIdentifier, resourcesDir, pObject);
+    ATLTRACE(_T("ADD OBJECT %s\n"), extensionId);
+    HRESULT hr = CScriptServiceInstance::CreateObject(this, extensionId, resourcesDir, pObject);
     if (FAILED(hr))
     {
       return hr;
     }
-    m_Objects[serviceIdentifier] = pObject;
+    m_Objects[extensionId] = pObject;
   }
   else
   {
-    ATLTRACE(_T("FOUND OBJECT %s\n"), serviceIdentifier);
+    ATLTRACE(_T("FOUND OBJECT %s\n"), extensionId);
   }
   return pObject->QueryInterface<IUnknown>(ppUnk);
 }

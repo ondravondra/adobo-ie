@@ -98,7 +98,7 @@ public:
 public:
   // -------------------------------------------------------------------------
   // IMagpieApplication methods. See .idl for description.
-  STDMETHOD(Init)(const OLECHAR* lpszFolderName);
+  STDMETHOD(Init)(const OLECHAR* extensionId, const OLECHAR* lpszFolderName);
   STDMETHOD(CreateSalsitaApi)(INT tabId, LPUNKNOWN pSalsitaApi);
   STDMETHOD(Run)(const OLECHAR* lpszModuleID);
   STDMETHOD(Shutdown)();
@@ -127,6 +127,8 @@ private:
 private:
   // -------------------------------------------------------------------------
   // Private members.
+
+  CString m_ExtensionId;
 
   // The root path of the application. Set by IMagpieApplication::Init
   CString m_RootPath;

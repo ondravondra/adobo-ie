@@ -46,9 +46,9 @@ HRESULT CMagpieActiveScript::GetSalsitaObject(VARIANT * result)
   return script.GetPropertyByName(L"salsita", result);
 }
 
-HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
+HRESULT CMagpieActiveScript::CreateSalsitaApi(CString &extensionId, INT tabId, LPUNKNOWN pSalsitaApi)
 {
-  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, tabId, pSalsitaApi));
+  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, extensionId, tabId, pSalsitaApi));
 
   CComPtr<IDispatch> pSalsitaApiImplOb(m_SalsitaApiImpl);
 

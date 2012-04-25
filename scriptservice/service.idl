@@ -11,7 +11,7 @@ import "ocidl.idl";
 ]
 interface IScriptService : IUnknown
 {
-  HRESULT GetServiceFor([in] BSTR serviceIdentifier, [in] BSTR resourcesDir, [out, retval] LPUNKNOWN* ppUnk);
+  HRESULT GetServiceFor([in] BSTR extensionId, [in] BSTR resourcesDir, [out, retval] LPUNKNOWN* ppUnk);
 };
 
 [

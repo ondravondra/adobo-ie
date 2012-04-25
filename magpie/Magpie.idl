@@ -26,7 +26,7 @@ interface IMagpieApplication : IUnknown
     "Init-method. Pass the root folder of the script application in "
     "lpszFolderName."
   )]
-  HRESULT Init([in, string] const OLECHAR* lpszFolderName);
+  HRESULT Init([in, string] const OLECHAR* extensionId, [in, string] const OLECHAR* lpszFolderName);
 
   HRESULT CreateSalsitaApi([in] INT tabId /* -1 for background script */, [in] LPUNKNOWN /* ISalsitaApiService */ pSalsitaApi);
 
@@ -207,7 +207,10 @@ library MagpieLib
   ]
   interface ISalsitaApiInternal : IDispatch
   {
-    HRESULT getCurrentTabId([out, retval] INT* tabId);
+    [propget]
+    HRESULT extensionId([out, retval] VARIANT* pVal);
+    [propget]
+    HRESULT currentTabId([out, retval] INT* tabId);
     HRESULT addRequestListener([in] LPDISPATCH listener);
     HRESULT sendRequest([in] VARIANT request, [in] LPDISPATCH requestCallback);
     HRESULT sendRequestToTab([in] INT tabId, [in] VARIANT request, [in] LPDISPATCH requestCallback);

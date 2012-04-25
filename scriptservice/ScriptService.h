@@ -45,7 +45,7 @@ public:
 
 public:
 // IGlobalObject
-  STDMETHOD(GetServiceFor)(BSTR serviceIdentifier, BSTR resourcesDir, LPUNKNOWN* ppUnk);
+  STDMETHOD(GetServiceFor)(BSTR extensionId, BSTR resourcesDir, LPUNKNOWN* ppUnk);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ScriptService), CScriptService)
