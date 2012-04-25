@@ -8,7 +8,6 @@ typedef CComObject<CSalsitaApiImpl> CSalsitaApiImplComObject;
 
 class ATL_NO_VTABLE CSalsitaApiImpl :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public CComCoClass<CSalsitaApiImpl, &CLSID_MagpieApplication>,
   public IDispatchImpl<ISalsitaApiInternal, &IID_ISalsitaApiInternal, &LIBID_MagpieLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
@@ -20,6 +19,7 @@ public:
 public:
   // -------------------------------------------------------------------------
   // COM standard stuff
+  DECLARE_NO_REGISTRY();
   DECLARE_NOT_AGGREGATABLE(CSalsitaApiImpl)
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -29,6 +29,7 @@ public:
   BEGIN_COM_MAP(CSalsitaApiImpl)
     // The main interface.
     COM_INTERFACE_ENTRY(ISalsitaApiInternal)
+    COM_INTERFACE_ENTRY(IDispatch)
   END_COM_MAP()
 
 public:

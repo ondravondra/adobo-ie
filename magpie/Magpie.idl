@@ -207,11 +207,13 @@ library MagpieLib
   ]
   interface ISalsitaApiInternal : IDispatch
   {
-    [propget]
+    [propget, id(1)]
     HRESULT extensionId([out, retval] VARIANT* pVal);
-    [propget]
+    [propget, id(2)]
     HRESULT currentTabId([out, retval] INT* tabId);
+    [id(3)]
     HRESULT addRequestListener([in] LPDISPATCH listener);
+    [id(4)]
     HRESULT performSendRequest([in] INT tabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in] LPDISPATCH requestCallback);
   }
 

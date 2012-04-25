@@ -1,7 +1,8 @@
+var apiImpl = _salsita_impl;
+
 function createTab()
 {
-  var tab = { id: _salsita_impl.currentTabId };
-  return tab;
+  return { id: apiImpl.currentTabId };
 }
 
 function createSender()
@@ -12,22 +13,22 @@ function createSender()
   {
     delete sender.tab;
   }
-  sender.id = _salsita_impl.extensionId;
+  sender.id = apiImpl.extensionId;
   return sender;
 }
 
 salsita.extension = {};
 salsita.extension.sendRequest = function (request, callback) {
-  _salsita_impl.performSendRequest(-1, createSender(), request, callback);
+  apiImpl.performSendRequest(-1, createSender(), request, callback);
 };
-salsita.extension.onRequest = {}
+salsita.extension.onRequest = {};
 salsita.extension.onRequest.addListener = function (listener) {
-  _salsita_impl.addRequestListener(listener);
+  apiImpl.addRequestListener(listener);
 };
 salsita.tabs = {};
 salsita.tabs.getCurrent = function (callback) {
   callback(createTab());
 };
 salsita.tabs.sendRequest = function (tabId, request, callback) {
-  _salsita_impl.performSendRequest(tabId, createSender(), request, callback);
+  apiImpl.performSendRequest(tabId, createSender(), request, callback);
 };
