@@ -234,6 +234,10 @@ public:
     return S_OK;
   }
 
+#ifdef _DEBUG
+  bool m_stopShowingErrors;
+#endif
+
   STDMETHOD(OnScriptError)(IActiveScriptError *pscripterror)
   {
 #ifdef _DEBUG
@@ -261,6 +265,14 @@ public:
     sOut.Format(_T("================================================================================\nError 0x%08x\nin %s at line %i pos %i:\n%s\n%s\n================================================================================\n"),
       inf.scode, moduleName, lLine, lChar, sErr, sDesc);
 
+    if (!m_stopShowingErrors)
+    {
+      if (MessageBox(NULL, sOut.GetBuffer(), _T("scriptservice"), MB_OKCANCEL) == IDCANCEL)
+      {
+        m_stopShowingErrors = true;
+      }
+    }
+
     ATLTRACE(sOut);
 #endif
     return S_OK;
@@ -278,6 +290,9 @@ public:
 
 protected:
   CActiveScriptT() : m_SourceContextSeq(0)
+#ifdef _DEBUG
+    , m_stopShowingErrors(false)
+#endif
   {}
 
   // -------------------------------------------------------------------------
