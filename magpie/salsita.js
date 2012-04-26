@@ -38,3 +38,15 @@ salsita.tabs.getCurrent = function (callback) {
 salsita.tabs.sendRequest = function (tabId, request, callback) {
   apiImpl.performSendRequest(tabId, createSender(), request, callback);
 };
+salsita.tabs.onCreated = {};
+salsita.tabs.onCreated.addListener = function (listener) {
+  apiImpl.addEventListener('salsita.tabs.onCreated', listener);
+};
+salsita.tabs.onActivated = {};
+salsita.tabs.onActivated.addListener = function (listener) {
+  apiImpl.addEventListener('salsita.tabs.onActivated', listener);
+};
+salsita.tabs.onRemoved = {};
+salsita.tabs.onRemoved.addListener = function (listener) {
+  apiImpl.addEventListener('salsita.tabs.onRemoved', listener);
+};
