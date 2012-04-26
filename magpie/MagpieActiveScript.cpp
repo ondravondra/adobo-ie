@@ -27,6 +27,10 @@ HRESULT CMagpieActiveScript::Init()
 {
   IF_FAILED_RET(LoadScriptEngine(CLSID_JScript));
   IF_FAILED_RET(m_ScriptEngine->SetScriptState(SCRIPTSTATE_INITIALIZED));
+  
+  // add salsitaFramework
+  IF_FAILED_RET(CSalsitaFramework::CreateObject(m_SalsitaFramework.p));
+  IF_FAILED_RET(AddNamedItem(L"salsitaFramework", m_SalsitaFramework, SCRIPTITEM_ISPERSISTENT|SCRIPTITEM_ISVISIBLE));
   return S_OK;
 }
 
