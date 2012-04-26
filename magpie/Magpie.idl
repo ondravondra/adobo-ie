@@ -233,6 +233,20 @@ library MagpieLib
     HRESULT sendRequest([in] INT senderTabId, [in] INT recipientTabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in, optional] VARIANT requestCallback);
   }
 
+  [
+    helpstring("An object implementing ISalsitaFramework interface is passed to the scripts and can be used to access framework functionality, such as creating a xmlhttp request."),
+    object,
+    uuid(E00F24EF-67F5-42C1-BEDB-4A49FC06FAB1),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface ISalsitaFramework : IDispatch
+  {
+    [id(1)]
+    HRESULT createXMLHTTPRequest([out,retval] IDispatch** ppVal);
+  }
+
 /*==========================================================================*/
   [
     helpstring(
