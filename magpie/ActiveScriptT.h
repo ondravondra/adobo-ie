@@ -118,7 +118,7 @@ public:
 
     // parse script text
     IF_FAILED_RET(m_ScriptEngineParser->ParseScriptText(
-      lpszSource, lpszModuleName, 0, 0, sourceContext, 1, SCRIPTTEXT_ISPERSISTENT, 0, 0));
+      lpszSource, lpszModuleName, 0, 0, sourceContext, 1, SCRIPTTEXT_ISPERSISTENT|SCRIPTTEXT_HOSTMANAGESSOURCE, 0, 0));
     return S_OK;
   }
 
