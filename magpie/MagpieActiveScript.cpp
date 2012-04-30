@@ -23,13 +23,13 @@ CMagpieActiveScript::CMagpieActiveScript(CMagpieApplication & application) :
 
 //----------------------------------------------------------------------------
 //  Init
-HRESULT CMagpieActiveScript::Init(CString &extensionId)
+HRESULT CMagpieActiveScript::Init(CString &extensionId, CString &appId)
 {
   m_ExtensionId = extensionId;
   IF_FAILED_RET(LoadScriptEngine(CLSID_JScript));
   IF_FAILED_RET(m_ScriptEngine->SetScriptState(SCRIPTSTATE_INITIALIZED));
 
-  IF_FAILED_RET(InitializeDebugInterface(extensionId));
+  IF_FAILED_RET(InitializeDebugInterface(appId));
   
   // add salsitaFramework
   IF_FAILED_RET(CSalsitaFramework::CreateObject(m_SalsitaFramework.p));

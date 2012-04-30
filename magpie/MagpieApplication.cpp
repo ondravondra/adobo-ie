@@ -257,7 +257,8 @@ void CMagpieApplication::ExitModule()
 //  Init
 STDMETHODIMP CMagpieApplication::Init(
   const OLECHAR* extensionId,
-  const OLECHAR* lpszFolderName)
+  const OLECHAR* lpszFolderName,
+  VARIANT extensionTabId)
 {
   m_ExtensionId = extensionId;
 
@@ -275,8 +276,16 @@ STDMETHODIMP CMagpieApplication::Init(
   // shutdown if running
   Shutdown();
 
+  CString appId;
+  if (extensionTabId.vt == VT_INT)
+  {
+    appId.Format(_T("%s - %i"), extensionId, extensionTabId.intVal);
+  } else {
+    appId = extensionId;
+  }
+
   // init script engine
-  HRESULT hr = m_ScriptEngine.Init(m_ExtensionId);
+  HRESULT hr = m_ScriptEngine.Init(m_ExtensionId, appId);
   IF_FAILED_RET(hr);
 
   // prepare CommonJS objects

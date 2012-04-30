@@ -64,7 +64,7 @@ public:
   // public methods
 
   // Init the script engine
-  HRESULT Init(CString &extensionId);
+  HRESULT Init(CString &extensionId, CString &appId);
 
   // Shutdown script engine and cleanup
   HRESULT Shutdown();
