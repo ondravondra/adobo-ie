@@ -51,10 +51,8 @@ public:
   /**
    * Registers a script file.
    */
-  HRESULT AddScriptFile(IActiveScript* scriptEngine, LPCWSTR filePath, LPCWSTR moduleName, LPCWSTR scriptText)
+  HRESULT AddScriptFile(IActiveScript* scriptEngine, LPCWSTR filePath, LPCWSTR moduleName, LPCWSTR scriptText, DWORD_PTR &sourceContext)
   {
-    DWORD_PTR sourceContext;
-
     if (!m_debugManager)
     {
       return E_FAIL;

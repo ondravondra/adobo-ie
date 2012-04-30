@@ -105,7 +105,8 @@ public:
   // lpszModuleName is the namespace for the module, in case it is NULL
   //  the script will get added to the global namespace.
   HRESULT AddScript(LPCOLESTR lpszSource,
-                    LPCOLESTR lpszModuleName = NULL)
+                    LPCOLESTR lpszModuleName,
+                    DWORD_PTR sourceContext)
   {
     ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
     if(!m_ScriptEngine || !m_ScriptEngineParser)
@@ -113,12 +114,11 @@ public:
       return E_UNEXPECTED;
     }
 
-    DWORD id = m_SourceContextSeq ++;
-    m_scriptModuleNameMap.Add(id, lpszModuleName);
+    m_scriptModuleNameMap.Add(sourceContext, lpszModuleName);
 
     // parse script text
     IF_FAILED_RET(m_ScriptEngineParser->ParseScriptText(
-      lpszSource, lpszModuleName, 0, 0, id, 1, SCRIPTTEXT_ISPERSISTENT, 0, 0));
+      lpszSource, lpszModuleName, 0, 0, sourceContext, 1, SCRIPTTEXT_ISPERSISTENT, 0, 0));
     return S_OK;
   }
 
@@ -207,9 +207,9 @@ public:
   }
 
 protected:
-  CActiveScriptT() : m_SourceContextSeq(0)
+  CActiveScriptT()
 #ifdef _DEBUG
-    , m_stopShowingErrors(false)
+  : m_stopShowingErrors(false)
 #endif
   {}
 
@@ -225,8 +225,7 @@ protected:
   // IDispatchEx for global script namespace
   CComQIPtr<IDispatchEx>		  m_ScriptGlobal;
 
-  DWORD m_SourceContextSeq;
-  CSimpleMap<DWORD, CString>  m_scriptModuleNameMap;
+  CSimpleMap<DWORD_PTR, CString>  m_scriptModuleNameMap;
 
   CString                     m_debugContextIdentifier;
 };

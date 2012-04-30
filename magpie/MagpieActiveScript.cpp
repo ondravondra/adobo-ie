@@ -150,8 +150,9 @@ HRESULT CMagpieActiveScript::AddLoadedScript(LPCOLESTR lpszSource, LPCOLESTR lps
     return E_UNEXPECTED;
   }
 
-  IF_FAILED_RET(CActiveScriptDebugT::AddScriptFile(m_ScriptEngine, lpszFileName ? lpszFileName : lpszModuleName, lpszModuleName, lpszSource));
-  return CActiveScriptT::AddScript(lpszSource, lpszModuleName);
+  DWORD_PTR sourceContext = 0;
+  IF_FAILED_RET(CActiveScriptDebugT::AddScriptFile(m_ScriptEngine, lpszFileName ? lpszFileName : lpszModuleName, lpszModuleName, lpszSource, sourceContext));
+  return CActiveScriptT::AddScript(lpszSource, lpszModuleName, sourceContext);
 }
 
 //----------------------------------------------------------------------------
