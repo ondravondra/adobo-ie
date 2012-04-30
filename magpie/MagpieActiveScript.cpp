@@ -42,6 +42,7 @@ HRESULT CMagpieActiveScript::Init(CString &extensionId)
 HRESULT CMagpieActiveScript::Shutdown()
 {
   UnloadScriptEngine();
+  UninitializeDebugInterface();
   m_NamedItems.RemoveAll();
   return S_OK;
 }
