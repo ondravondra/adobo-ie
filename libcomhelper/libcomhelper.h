@@ -91,7 +91,7 @@ namespace LIB_COMHelper
   class CComUtil {
   public:
     static CComQIPtr<IHTMLWindow2> IWebBrowserToIHTMLWindow(CComPtr<IWebBrowser2> &spBrowser);
-    static HRESULT ExtractWindowMember(CComPtr<IWebBrowser2> &spBrowser, BSTR memberName, CComPtr<IDispatch> &result);
+    static HRESULT ExtractWindowMember(CComPtr<IWebBrowser2> &spBrowser, LPCOLESTR memberName, CComPtr<IDispatch> &result);
   };
 
   ///////////////////////////////////////////////////////////

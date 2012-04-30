@@ -17,7 +17,7 @@
   ASSERT_(SUCCEEDED(_hr__)); \
   if (FAILED(_hr__)) \
     { \
-    ATLTRACE(_T("ASSERTION FAILED: 0x%08x in "), _hr); \
+    ATLTRACE(_T("ASSERTION FAILED: 0x%08x in "), _hr__); \
     ATLTRACE(__FILE__); \
     ATLTRACE(_T(" line %i\n"), __LINE__); \
     return _hr__; \
@@ -31,7 +31,7 @@
   ASSERT_(SUCCEEDED(_hr__)); \
   if (FAILED(_hr__)) \
     { \
-    ATLTRACE(_T("ASSERTION FAILED: 0x%08x in "), _hr); \
+    ATLTRACE(_T("ASSERTION FAILED: 0x%08x in "), _hr__); \
     ATLTRACE(__FILE__); \
     ATLTRACE(_T(" line %i\n"), __LINE__); \
     return _ret; \
