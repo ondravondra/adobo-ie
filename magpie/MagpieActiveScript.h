@@ -8,9 +8,9 @@
 
 #include "Magpie.h"
 
-// we want to be able to load scripts from files
-#define _USE_SCRIPTS_FROM_FILES
 #include "ActiveScriptT.h"
+#include "ActiveScriptDebugT.h"
+#include "ActiveScriptLoaderT.h"
 
 #include "SalsitaApiImpl.h"
 #include "SalsitaFramework.h"
@@ -29,7 +29,9 @@ class CMagpieModule;
  */
 class ATL_NO_VTABLE CMagpieActiveScript :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public CActiveScriptT<CMagpieActiveScript>
+  public CActiveScriptT<CMagpieActiveScript>,
+  public CActiveScriptDebugT<CMagpieActiveScript>,
+  public CActiveScriptLoaderT<CMagpieActiveScript>
 {
 public:
   // -------------------------------------------------------------------------
@@ -48,6 +50,7 @@ public:
   // COM interface map
   BEGIN_COM_MAP(CMagpieActiveScript)
     COM_INTERFACE_ENTRY(IActiveScriptSite)
+    COM_INTERFACE_ENTRY(IActiveScriptSiteDebug)
   END_COM_MAP()
 
 public:
@@ -90,6 +93,9 @@ public:
                          DWORD          dwReturnMask,
                          IUnknown   **  ppiunkItem,
                          ITypeInfo  **  ppti);
+
+protected:
+  virtual HRESULT AddLoadedScript(LPCOLESTR lpszSource, LPCOLESTR lpszFileName, LPCOLESTR lpszModuleName);
 
 private:
   // -------------------------------------------------------------------------

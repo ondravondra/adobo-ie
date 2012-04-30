@@ -28,6 +28,8 @@ HRESULT CMagpieActiveScript::Init(CString &extensionId)
   m_ExtensionId = extensionId;
   IF_FAILED_RET(LoadScriptEngine(CLSID_JScript));
   IF_FAILED_RET(m_ScriptEngine->SetScriptState(SCRIPTSTATE_INITIALIZED));
+
+  IF_FAILED_RET(InitializeDebugInterface(extensionId));
   
   // add salsitaFramework
   IF_FAILED_RET(CSalsitaFramework::CreateObject(m_SalsitaFramework.p));
@@ -75,13 +77,8 @@ HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
   script.SetPropertyByRef(L"_salsita_impl", CComVariant(m_SalsitaApiImpl));
   script.SetPropertyByRef(L"salsita", CComVariant(pSalsitaOb));
 
-  CStringW salsitaScript;
-
-  Misc::LoadHtmlResource(L"salsita.js", salsitaScript);
-
   m_Application.EnterModule(m_SalsitaApiModuleId);
-  HRESULT hr = AddScript(salsitaScript.GetBuffer(), m_SalsitaApiModuleId);
-  salsitaScript.ReleaseBuffer();
+  HRESULT hr = LoadScriptResource(g_hDllInstance, L"salsita.js", m_SalsitaApiModuleId);
   if (SUCCEEDED(hr))
   {
     m_ScriptEngine->SetScriptState(SCRIPTSTATE_CONNECTED);
@@ -135,7 +132,7 @@ HRESULT CMagpieActiveScript::RunModule(
 
   // now run the module
   m_Application.EnterModule(sModuleID);
-  hr = AddScriptFile(sFilename, sModuleID);
+  hr = LoadScriptFile(sFilename, sModuleID);
   if (SUCCEEDED(hr))
   {
     m_ScriptEngine->SetScriptState(SCRIPTSTATE_CONNECTED);
@@ -143,6 +140,18 @@ HRESULT CMagpieActiveScript::RunModule(
   m_Application.ExitModule();
 
   return S_OK;
+}
+
+HRESULT CMagpieActiveScript::AddLoadedScript(LPCOLESTR lpszSource, LPCOLESTR lpszFileName, LPCOLESTR lpszModuleName)
+{
+  ATLASSERT(m_ScriptEngine);
+  if(!m_ScriptEngine)
+  {
+    return E_UNEXPECTED;
+  }
+
+  IF_FAILED_RET(CActiveScriptDebugT::AddScriptFile(m_ScriptEngine, lpszFileName ? lpszFileName : lpszModuleName, lpszModuleName, lpszSource));
+  return CActiveScriptT::AddScript(lpszSource, lpszModuleName);
 }
 
 //----------------------------------------------------------------------------

@@ -98,9 +98,6 @@ public:
     return hr;
   }
 
-  // -------------------------------------------------------------------------
-  // Adding scripts
-
   // Add script as raw string. This is the lowlevel method.
   //  Before adding a script text make sure engine is in state
   //  SCRIPTSTATE_DISCONNECTED or SCRIPTSTATE_INITIALIZED.
@@ -124,86 +121,6 @@ public:
       lpszSource, lpszModuleName, 0, 0, id, 1, SCRIPTTEXT_ISPERSISTENT, 0, 0));
     return S_OK;
   }
-
-  // Add script stored in a resource in RT_HTML-type resouces.
-  // The script text has to be UTF-16, so nSrcCodePage is used for conversion.
-  HRESULT AddScriptResource(HINSTANCE hInstance,
-                            LPCWSTR   nResourceID,
-                            LPCOLESTR lpszModuleName = NULL,
-                            UINT      nSrcCodePage = CP_ACP)
-  {
-    ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
-    if(!m_ScriptEngine || !m_ScriptEngineParser)
-    {
-      return E_UNEXPECTED;
-    }
-
-    ATLTRACE(_T("ADD SCRIPT %s\n"), nResourceID);
-
-    HRSRC hRes = FindResource(
-      hInstance, nResourceID, MAKEINTRESOURCE(RT_HTML));
-    if (hRes)
-    {
-      DWORD dwSize = SizeofResource(hInstance, hRes);
-      HGLOBAL hResLoad = LoadResource(hInstance, hRes);
-      if (hResLoad)
-      {
-        LPVOID lpResLock = LockResource(hResLoad);
-        if (lpResLock)
-        {
-          LPSTR lps = (LPSTR)new BYTE[dwSize + 1];
-          if (!lps)
-            return E_OUTOFMEMORY;
-          memcpy(lps, lpResLock, dwSize);
-          lps[dwSize] = 0;
-          HRESULT hr = AddScript(
-            CA2WEX<4096>(lps, nSrcCodePage), lpszModuleName);
-          delete [] lps;
-          return hr;
-        }
-      }
-    }
-    return HRESULT_FROM_WIN32(::GetLastError());
-  }
-
-#ifdef _USE_SCRIPTS_FROM_FILES
-  // Reads a script text from a file. Requires atlfile.h.
-  HRESULT AddScriptFile(LPCOLESTR lpszFileName,
-                        LPCOLESTR lpszModuleName = NULL,
-                        UINT      nSrcCodePage = CP_ACP)
-  {
-    ATLASSERT(m_ScriptEngine && m_ScriptEngineParser);
-    if(!m_ScriptEngine || !m_ScriptEngineParser)
-    {
-      return E_UNEXPECTED;
-    }
-
-    CAtlFile f;
-
-    IF_FAILED_RET(f.Create(
-      lpszFileName, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING));
-
-    ULONGLONG nLen = 0;
-    HRESULT hr = E_FAIL;
-
-    IF_FAILED_RET(f.GetSize(nLen));
-    // limit script size to 4GB
-    if (nLen > 0x00000000ffffffff)
-      return E_OUTOFMEMORY;
-
-    DWORD dwLen = (DWORD)(nLen & 0x00000000ffffffff);
-    CStringA sImpl;
-    LPVOID lpv = sImpl.GetBuffer(dwLen);
-    if (!lpv)
-      return E_OUTOFMEMORY;
-    hr = f.Read(lpv, dwLen);
-    sImpl.ReleaseBuffer(dwLen);
-    f.Close();
-    IF_FAILED_RET(hr);
-
-    return AddScript(CA2WEX<4096>(sImpl, nSrcCodePage), lpszModuleName);
-  }
-#endif
 
   // -------------------------------------------------------------------------
   // IActiveScriptSite implementation
