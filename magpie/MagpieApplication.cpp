@@ -276,7 +276,7 @@ STDMETHODIMP CMagpieApplication::Init(
   Shutdown();
 
   // init script engine
-  HRESULT hr = m_ScriptEngine.Init();
+  HRESULT hr = m_ScriptEngine.Init(m_ExtensionId);
   IF_FAILED_RET(hr);
 
   // prepare CommonJS objects
@@ -292,7 +292,7 @@ STDMETHODIMP CMagpieApplication::Init(
 
 STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
-  return m_ScriptEngine.CreateSalsitaApi(m_ExtensionId, tabId, pSalsitaApi);
+  return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi);
 }
 
 //----------------------------------------------------------------------------

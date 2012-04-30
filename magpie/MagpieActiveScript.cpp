@@ -23,8 +23,9 @@ CMagpieActiveScript::CMagpieActiveScript(CMagpieApplication & application) :
 
 //----------------------------------------------------------------------------
 //  Init
-HRESULT CMagpieActiveScript::Init()
+HRESULT CMagpieActiveScript::Init(CString &extensionId)
 {
+  m_ExtensionId = extensionId;
   IF_FAILED_RET(LoadScriptEngine(CLSID_JScript));
   IF_FAILED_RET(m_ScriptEngine->SetScriptState(SCRIPTSTATE_INITIALIZED));
   
@@ -50,11 +51,11 @@ HRESULT CMagpieActiveScript::GetSalsitaObject(VARIANT * result)
   return script.GetPropertyByName(L"salsita", result);
 }
 
-HRESULT CMagpieActiveScript::CreateSalsitaApi(CString &extensionId, INT tabId, LPUNKNOWN pSalsitaApi)
+HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
   m_debugContextIdentifier.Format(_T("Tab id = %i"), tabId);
 
-  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, extensionId, tabId, pSalsitaApi));
+  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, m_ExtensionId, tabId, pSalsitaApi));
 
   m_ScriptEngine->SetScriptState(SCRIPTSTATE_DISCONNECTED);
 
