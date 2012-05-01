@@ -117,24 +117,6 @@ STDMETHODIMP CScriptServiceInstance::LoadModule(const OLECHAR* moduleID)
   }
 }
 
-STDMETHODIMP CScriptServiceInstance::MakeJsWindowMemberGlobal(const OLECHAR* memberName)
-{
-  ATLASSERT(m_Magpie);
-  if (!m_Magpie)
-  {
-    return E_UNEXPECTED;
-  }
-
-  CComPtr<IDispatch> pDisp;
-  HRESULT hr = CComUtil::ExtractWindowMember(m_HiddenWindow.m_view.m_pWebBrowser, CComBSTR(memberName), pDisp);
-  if (FAILED(hr))
-  {
-    return hr;
-  } else {
-    return m_Magpie->ScriptAddNamedItem((LPWSTR)memberName, pDisp, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE);
-  }
-}
-
 STDMETHODIMP CScriptServiceInstance::ScriptCreateNamedItem(const OLECHAR *name, GUID clsId, ULONG dwFlags)
 {
   ATLASSERT(m_Magpie);

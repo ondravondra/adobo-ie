@@ -48,7 +48,6 @@ public:
   STDMETHOD(RegisterTab)(INT *tabId);
   STDMETHOD(GetSalsitaApiService)(LPUNKNOWN *pService);
   STDMETHOD(LoadModule)(const OLECHAR* moduleID);
-  STDMETHOD(MakeJsWindowMemberGlobal)(const OLECHAR* memberName);
   STDMETHOD(ScriptCreateNamedItem)(const OLECHAR *name, GUID clsId, ULONG dwFlags);
 
 protected:
