@@ -13,6 +13,10 @@
 // must be declared somewhere in a .cpp file
 extern CLSID CLSID_JScript;
 
+#ifdef _DEBUG
+//#define _SHOW_ERRORS_IN_MSGBOX // define to show message box in OnScriptError
+#endif
+
 /*============================================================================
  * template CActiveScriptT
  * Implements IActiveScriptSite.
@@ -151,7 +155,7 @@ public:
     return S_OK;
   }
 
-#ifdef _DEBUG
+#ifdef _SHOW_ERRORS_IN_MSGBOX
   bool m_stopShowingErrors;
 #endif
 
@@ -182,6 +186,7 @@ public:
     sOut.Format(_T("================================================================================\nError 0x%08x\nin %s at line %i pos %i:\n%s\n%s\n================================================================================\n"),
       inf.scode, moduleName, lLine, lChar, sErr, sDesc);
 
+#ifdef _SHOW_ERRORS_IN_MSGBOX
     if (!m_stopShowingErrors)
     {
       if (MessageBox(NULL, sOut.GetBuffer(), m_debugContextIdentifier.GetBuffer(), MB_OKCANCEL) == IDCANCEL)
@@ -190,6 +195,7 @@ public:
       }
       m_debugContextIdentifier.ReleaseBuffer();
     }
+#endif
 
     ATLTRACE(sOut);
 #endif
@@ -208,7 +214,7 @@ public:
 
 protected:
   CActiveScriptT()
-#ifdef _DEBUG
+#ifdef _SHOW_ERRORS_IN_MSGBOX
   : m_stopShowingErrors(false)
 #endif
   {}
