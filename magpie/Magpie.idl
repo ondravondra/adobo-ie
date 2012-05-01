@@ -236,7 +236,9 @@ library MagpieLib
   }
 
   [
-    helpstring("An object implementing ISalsitaFramework interface is passed to the scripts and can be used to access framework functionality, such as creating a xmlhttp request."),
+    helpstring("An object implementing ISalsitaFramework interface is passed to the scripts. "
+      "It can be used to access framework functionality, such as creating a xmlhttp request. "
+      "This interface is separate from ISalsitaApiInternal because it is not dependent on a background service."),
     object,
     uuid(E00F24EF-67F5-42C1-BEDB-4A49FC06FAB1),
     dual,
@@ -247,6 +249,8 @@ library MagpieLib
   {
     [id(1)]
     HRESULT createXMLHTTPRequest([out,retval] IDispatch** ppVal);
+    [id(2)]
+    HRESULT makeGlobalSymbol([in] LPDISPATCH pVal, [in, string] BSTR globalName);
   }
 
 /*==========================================================================*/

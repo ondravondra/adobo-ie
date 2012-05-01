@@ -17,7 +17,7 @@ const wchar_t *CMagpieActiveScript::m_SalsitaApiModuleId = L"__salsitaapi";
 //----------------------------------------------------------------------------
 //  CTOR
 CMagpieActiveScript::CMagpieActiveScript(CMagpieApplication & application) :
-  m_Application(application)
+  m_Application(application), m_SalsitaFramework(*this)
 {
 }
 
@@ -33,8 +33,10 @@ HRESULT CMagpieActiveScript::Init(CString &extensionId, CString &appId)
   IF_FAILED_RET(m_ScriptEngine->SetScriptState(SCRIPTSTATE_INITIALIZED));
 
   // add salsitaFramework
-  IF_FAILED_RET(CSalsitaFramework::CreateObject(m_SalsitaFramework.p));
-  IF_FAILED_RET(AddNamedItem(L"salsitaFramework", m_SalsitaFramework, SCRIPTITEM_ISPERSISTENT|SCRIPTITEM_ISVISIBLE));
+  IDispatch *pSalsitaFramework;
+  IF_FAILED_RET(m_SalsitaFramework.QueryInterface(IID_IDispatch, (void **)&pSalsitaFramework));
+  IF_FAILED_RET(AddNamedItem(L"salsitaFramework", pSalsitaFramework, SCRIPTITEM_ISPERSISTENT|SCRIPTITEM_ISVISIBLE));
+  pSalsitaFramework->Release();
   return S_OK;
 }
 

@@ -8,6 +8,8 @@
 
 #include "Magpie.h"
 
+#include "atlextensions.h"
+
 #include "ActiveScriptT.h"
 #include "ActiveScriptDebugT.h"
 #include "ActiveScriptLoaderT.h"
@@ -111,7 +113,8 @@ private:
                         m_NamedItems;
 
   CComPtr<CSalsitaApiImplComObject> m_SalsitaApiImpl;
-  CComPtr<CSalsitaFrameworkComObject> m_SalsitaFramework;
+  CComObjectStackRefCtorArg<CSalsitaFramework, CMagpieActiveScript>
+          m_SalsitaFramework;
 
   HRESULT GetSalsitaObject(VARIANT * result);
 

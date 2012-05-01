@@ -3,8 +3,7 @@
 #include "resource.h"
 #include "Magpie.h"
 
-class CSalsitaFramework;
-typedef CComObject<CSalsitaFramework> CSalsitaFrameworkComObject;
+class CMagpieActiveScript;
 
 class ATL_NO_VTABLE CSalsitaFramework :
   public CComObjectRootEx<CComSingleThreadModel>,
@@ -13,8 +12,7 @@ class ATL_NO_VTABLE CSalsitaFramework :
 public:
   // -------------------------------------------------------------------------
   // ctor
-  CSalsitaFramework();
-  static HRESULT CreateObject(CSalsitaFrameworkComObject *& pRet);
+  CSalsitaFramework(CMagpieActiveScript & magpieScript);
 
 public:
   // -------------------------------------------------------------------------
@@ -39,7 +37,10 @@ public:
 
 public:
   STDMETHOD(createXMLHTTPRequest)(IDispatch** ppVal);
+  STDMETHOD(makeGlobalSymbol)(LPDISPATCH pVal, BSTR globalName);
 
 private:
-  HRESULT AddCustomInternetSecurity(CComPtr<IXMLHttpRequest> pRequest);
+  CMagpieActiveScript & m_MagpieActiveScript;
+
+  HRESULT AddCustomInternetSecurity(CComPtr<IXMLHttpRequest> pRequest); 
 };

@@ -1,18 +1,10 @@
 #include "stdafx.h"
 #include "SalsitaFramework.h"
 #include "CustomInternetSecurityImpl.h"
+#include "MagpieActiveScript.h"
 
-CSalsitaFramework::CSalsitaFramework()
+CSalsitaFramework::CSalsitaFramework(CMagpieActiveScript & magpieScript) : m_MagpieActiveScript(magpieScript)
 {
-}
-
-HRESULT CSalsitaFramework::CreateObject(CSalsitaFrameworkComObject *& pRet)
-{
-  CSalsitaFrameworkComObject *newObject = pRet = NULL;
-  IF_FAILED_RET(CSalsitaFrameworkComObject::CreateInstance(&newObject));
-  newObject->AddRef();
-  pRet = newObject;
-  return S_OK;
 }
 
 HRESULT CSalsitaFramework::FinalConstruct()
@@ -59,4 +51,14 @@ STDMETHODIMP CSalsitaFramework::createXMLHTTPRequest(IDispatch** ppVal)
   } else {
     return S_OK;
   }
+}
+
+STDMETHODIMP CSalsitaFramework::makeGlobalSymbol(LPDISPATCH pVal, BSTR globalName)
+{
+  if (!pVal)
+  {
+    return E_INVALIDARG;
+  }
+
+  return m_MagpieActiveScript.AddNamedItem(globalName, pVal, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE);
 }
