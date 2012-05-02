@@ -58,14 +58,7 @@ library ScriptServiceLib
     [id(4), helpstring("Loads the specified module unless it has been loaded already.")]
     HRESULT LoadModule([in, string] const OLECHAR* moduleID);
 
-<<<<<<< HEAD
     [id(5), helpstring("Creates an IDispatch object based on given clsid and adds it as named item to the background script engine.")]
-=======
-    [id(5), helpstring("Exports a property of the window object into the global scope - used fo jQuery.")]
-    HRESULT MakeJsWindowMemberGlobal([in, string] const OLECHAR* memberName);
-
-    [id(6), helpstring("Creates an IDispatch object based on given clsid and adds it as named item to the background script engine.")]
->>>>>>> implemented the ScriptServiceFactory
     HRESULT ScriptCreateNamedItem([in, string] const OLECHAR *name, [in] GUID clsId, [in] ULONG dwFlags);
   };
 
