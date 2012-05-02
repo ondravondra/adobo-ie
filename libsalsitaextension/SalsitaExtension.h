@@ -41,7 +41,7 @@ protected:
   /**
    * Returns CLSID of the background script service factory for this extension.
    */
-  virtual const IID *GetBackgroundScriptServiceFactory() const = 0;
+  virtual const IID *GetBackgroundScriptServiceFactoryCLSID() const = 0;
 
   /**
    * Retrieves path to the directory containing web resources and stores it in m_ResourcesDir.
@@ -255,7 +255,7 @@ protected:
 
     m_BackgroundScriptFailed = true;
 
-    hr = m_ScriptServiceFactory.CoCreateInstance(*GetBackgroundScriptServiceFactory());
+    hr = m_ScriptServiceFactory.CoCreateInstance(*GetBackgroundScriptServiceFactoryCLSID());
     if (FAILED(hr))
     {
       return hr;
