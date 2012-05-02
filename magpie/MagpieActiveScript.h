@@ -113,8 +113,7 @@ private:
                         m_NamedItems;
 
   CComPtr<CSalsitaApiImplComObject> m_SalsitaApiImpl;
-  CComObjectStackRefCtorArg<CSalsitaFramework, CMagpieActiveScript>
-          m_SalsitaFramework;
+  CComPtr<CSalsitaFrameworkComObject> m_SalsitaFramework;
 
   HRESULT GetSalsitaObject(VARIANT * result);
 
