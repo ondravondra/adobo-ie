@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "libcomhelper.h"
+#include "include\libcomhelper.h"
 
 namespace LIB_COMHelper
 {

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ScriptServiceInstance.h"
 #include "ScriptService.h"
-#include "libcomhelper\libcomhelper.h"
+#include "libcomhelper\include\libcomhelper.h"
 using namespace LIB_COMHelper;
 
 HRESULT CScriptServiceInstance::CreateObject(CScriptServiceCallback* pService, const OLECHAR* extensionId, const OLECHAR* resourcesDir, CScriptServiceInstanceComObject *& retVal)

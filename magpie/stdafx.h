@@ -31,7 +31,7 @@ extern HINSTANCE g_hDllInstance;
 #include "Misc.h"
 using namespace Misc;
 
-#include "libcomhelper\libcomhelper.h"
+#include "libcomhelper\include\libcomhelper.h"
 using namespace LIB_COMHelper;
 
-#include "libcomhelper\errorchecking.h"
+#include "libcomhelper\include\errorchecking.h"
