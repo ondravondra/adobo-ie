@@ -44,7 +44,7 @@ void CSalsitaExtensionHelper::ResourcesDirGetDebugPath(const wchar_t *preprocess
 
   std::wstring canonicalized;
   canonicalized.resize(MAX_PATH+1);
-  PathCanonicalizeW((LPWSTR)result.c_str(), canonicalized.c_str());
+  PathCanonicalizeW((LPWSTR)canonicalized.c_str(), result.c_str());
   result.assign(canonicalized.c_str());
   ResourcesDirNormalize(result);
 }
