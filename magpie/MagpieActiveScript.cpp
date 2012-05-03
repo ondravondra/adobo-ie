@@ -63,7 +63,9 @@ HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
   m_debugContextIdentifier.Format(_T("Tab id = %i"), tabId);
 
-  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, m_ExtensionId, tabId, pSalsitaApi));
+  IF_FAILED_RET(CSalsitaApiImpl::CreateObject(m_SalsitaApiImpl.p, tabId, pSalsitaApi));
+  m_SalsitaApiImpl->m_ExtensionId = m_ExtensionId;
+  m_SalsitaApiImpl->m_RootPath = m_Application.GetRootPath();
 
   m_ScriptEngine->SetScriptState(SCRIPTSTATE_DISCONNECTED);
 

@@ -217,6 +217,8 @@ library MagpieLib
     HRESULT addEventListener([in, string] BSTR eventId, [in] LPDISPATCH listener);
     [id(4), helpstring("Raises extension.onRequest in specified tabs, or all tabs if -1 is specified.")]
     HRESULT performSendRequest([in] INT tabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in, optional] VARIANT requestCallback);
+    [id(5)]
+    HRESULT getResourceUrl([in, string] BSTR relativeUrl, [out, retval] VARIANT* pVal);
   }
 
   [
