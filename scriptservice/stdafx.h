@@ -19,6 +19,7 @@
 
 using namespace ATL;
 
+#include <exdispid.h>
 #include <ActivScp.h>
 
 #include "libcomhelper\include\libcomhelper.h"

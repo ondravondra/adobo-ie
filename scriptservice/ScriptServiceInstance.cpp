@@ -4,12 +4,16 @@ using namespace LIB_COMHelper;
 
 STDMETHODIMP CScriptServiceInstance::Init(const OLECHAR* extensionId, const OLECHAR* resourcesDir)
 {
-  m_ExtensionId = extensionId;
-
-  if(m_HiddenWindow.CreateEx() == NULL)
+  if (!m_HiddenWindow.m_view.m_browserNavigated)
   {
-    return E_FAIL;
+    /**
+     * We must ensure that no initialization is done before the hidden browser navigates to a page (about:blank).
+     * Otherwise jQuery and other js code would fail because there would be no document.documentElement.
+     */
+    return S_FALSE;
   }
+
+  m_ExtensionId = extensionId;
 
   HRESULT hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);
   if (FAILED(hr))
@@ -41,6 +45,11 @@ STDMETHODIMP CScriptServiceInstance::Init(const OLECHAR* extensionId, const OLEC
 HRESULT CScriptServiceInstance::FinalConstruct()
 {
   m_TabIdCounter = 0;
+  if (m_HiddenWindow.CreateEx() == NULL)
+  {
+    return E_FAIL;
+  }
+
   HRESULT hr = CSalsitaApiServiceImpl::CreateObject(m_SalsitaApiServiceImpl.p);
   return hr;
 }

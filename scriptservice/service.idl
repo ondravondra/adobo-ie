@@ -33,7 +33,9 @@ library ScriptServiceLib
   ]
   interface IScriptServiceInstance : IUnknown
   {
-    [id(1)]
+    [id(1), helpstring(
+      "Initializes the instance. Can return S_FALSE if the internal hidden browser document is not ready yet."
+      "If it returns S_FALSE then the instance is not initialized and at least one another call to Init must be done later.")]
     HRESULT Init([in, string] const OLECHAR* extensionId, [in, string] const OLECHAR* resourcesDir);
 
     [id(2), helpstring("Returns IMagpieApplication so the script engine can be initialized.")]
