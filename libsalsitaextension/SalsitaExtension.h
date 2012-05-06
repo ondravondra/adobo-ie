@@ -255,7 +255,14 @@ protected:
 
     m_BackgroundScriptFailed = true;
 
-    hr = m_ScriptServiceFactory.CoCreateInstance(*GetBackgroundScriptServiceFactoryCLSID());
+    CComPtr<IUnknown> pFactoryObject;
+    hr = pFactoryObject.CoCreateInstance(*GetBackgroundScriptServiceFactoryCLSID());
+    if (FAILED(hr))
+    {
+      return hr;
+    }
+
+    hr = pFactoryObject.QueryInterface<IScriptServiceFactory>(&m_ScriptServiceFactory.p);
     if (FAILED(hr))
     {
       return hr;

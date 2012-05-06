@@ -31,7 +31,7 @@ public:
   {
     if (!m_ScriptServiceInstance)
     {
-      HRESULT hr = m_ScriptServiceInstance.CoCreateInstance(__uuidof(IScriptServiceInstance));
+      HRESULT hr = m_ScriptServiceInstance.CoCreateInstance(ScriptServiceLib::CLSID_ScriptServiceInstance);
       if (FAILED(hr))
       {
         return hr;
