@@ -2,19 +2,6 @@ import "oaidl.idl";
 import "ocidl.idl";
 
 [
-  object,
-  uuid(954448CA-1894-4743-9261-BBE3C932FA27),
-  oleautomation,
-  nonextensible,
-  helpstring("IScriptServiceFactory Interface"),
-  pointer_default(unique)
-]
-interface IScriptServiceFactory : IUnknown
-{
-  HRESULT GetScriptServiceInstance([out, retval] LPUNKNOWN* ppUnk);
-};
-
-[
   uuid(2B2B8941-29D3-4F81-BB1C-381AA74C0E0D),
   version(1.0),
   helpstring("ScriptService 1.0 Type Library")
@@ -72,11 +59,15 @@ library ScriptServiceLib
   };
 
   [
-    uuid(B5ABEF92-6105-46A2-9465-EA875E7FD25F),
-    helpstring("TestFactory Class")
+    object,
+    uuid(954448CA-1894-4743-9261-BBE3C932FA27),
+    oleautomation,
+    nonextensible,
+    helpstring("IScriptServiceFactory Interface"),
+    pointer_default(unique)
   ]
-  coclass TestFactory
+  interface IScriptServiceFactory : IUnknown
   {
-    [default] interface IScriptServiceFactory;
+    HRESULT GetScriptServiceInstance([out, retval] LPUNKNOWN* ppUnk);
   };
 };

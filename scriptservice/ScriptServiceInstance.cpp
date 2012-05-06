@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ScriptServiceInstance.h"
-#include "ScriptService.h"
 using namespace LIB_COMHelper;
 
 STDMETHODIMP CScriptServiceInstance::Init(const OLECHAR* extensionId, const OLECHAR* resourcesDir)

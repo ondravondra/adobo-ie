@@ -11,5 +11,6 @@ set(dependecy_list_debug ${dependecy_list_debug} "${adobo_DLL_DIR_DEBUG}/${magpi
 set(dependecy_list_release ${dependecy_list_release} "${adobo_DLL_DIR_RELEASE}/${magpie_DLL}")
 
 set(scriptservice_DLL "scriptservice.dll")
+set(scriptservice_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/scriptservice/include)
 set(dependecy_list_debug ${dependecy_list_debug} "${adobo_DLL_DIR_DEBUG}/${scriptservice_DLL}")
 set(dependecy_list_release ${dependecy_list_release} "${adobo_DLL_DIR_RELEASE}/${scriptservice_DLL}")
