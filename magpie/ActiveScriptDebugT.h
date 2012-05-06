@@ -37,15 +37,18 @@ public:
 
   void UninitializeDebugInterface()
   {
+    m_debugDocHelpers.RemoveAll();
     if (m_appAdded)
     {
       m_debugManager->RemoveApplication(m_appCookie);
       m_appAdded = FALSE;
     }
-
-    m_debugDocHelpers.RemoveAll();
+    if (m_debugApp)
+    {
+      m_debugApp->Close();
+      m_debugApp = NULL;
+    }
     m_debugManager = NULL;
-    m_debugApp = NULL;
   }
 
   /**

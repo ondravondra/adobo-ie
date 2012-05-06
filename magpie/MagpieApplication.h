@@ -95,6 +95,8 @@ public:
   CMagpieActiveScript & GetScriptEngine()
                         {return m_ScriptEngine;}
 
+  const CString & GetRootPath() { return m_RootPath; }
+
 public:
   // -------------------------------------------------------------------------
   // IMagpieApplication methods. See .idl for description.

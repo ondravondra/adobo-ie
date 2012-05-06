@@ -5,6 +5,9 @@
 
 class CMagpieActiveScript;
 
+class CSalsitaFramework;
+typedef CComObject<CSalsitaFramework> CSalsitaFrameworkComObject;
+
 class ATL_NO_VTABLE CSalsitaFramework :
   public CComObjectRootEx<CComSingleThreadModel>,
   public IDispatchImpl<ISalsitaFramework, &IID_ISalsitaFramework, &LIBID_MagpieLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
@@ -12,7 +15,8 @@ class ATL_NO_VTABLE CSalsitaFramework :
 public:
   // -------------------------------------------------------------------------
   // ctor
-  CSalsitaFramework(CMagpieActiveScript & magpieScript);
+  CSalsitaFramework();
+  static HRESULT CreateObject(CSalsitaFrameworkComObject *& pRet, CMagpieActiveScript *magpieActiveScript);
 
 public:
   // -------------------------------------------------------------------------
@@ -35,12 +39,14 @@ public:
   HRESULT FinalConstruct();
   void FinalRelease();
 
+  void Shutdown();
+
 public:
   STDMETHOD(createXMLHTTPRequest)(IDispatch** ppVal);
   STDMETHOD(makeGlobalSymbol)(LPDISPATCH pVal, BSTR globalName);
 
 private:
-  CMagpieActiveScript & m_MagpieActiveScript;
+  CMagpieActiveScript *m_MagpieActiveScript;
 
   HRESULT AddCustomInternetSecurity(CComPtr<IXMLHttpRequest> pRequest); 
 };

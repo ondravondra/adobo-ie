@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "SalsitaApiImpl.h"
 
-CSalsitaApiImpl::CSalsitaApiImpl()
+CSalsitaApiImpl::CSalsitaApiImpl() : m_TabId(0)
 {
 }
 
-HRESULT CSalsitaApiImpl::CreateObject(CSalsitaApiImplComObject *& pRet, CString &extensionId, INT tabId, LPUNKNOWN pSalsitaApi)
+HRESULT CSalsitaApiImpl::CreateObject(CSalsitaApiImplComObject *& pRet, INT tabId, LPUNKNOWN pSalsitaApi)
 {
   if (!pSalsitaApi)
   {
@@ -15,7 +15,6 @@ HRESULT CSalsitaApiImpl::CreateObject(CSalsitaApiImplComObject *& pRet, CString 
   CSalsitaApiImplComObject *newObject = pRet = NULL;
   IF_FAILED_RET(CSalsitaApiImplComObject::CreateInstance(&newObject));
   newObject->AddRef();
-  newObject->m_ExtensionId = extensionId;
   newObject->m_TabId = tabId;
   newObject->m_ApiService = pSalsitaApi;
   newObject->m_ApiService->connectClient(tabId);
@@ -63,4 +62,29 @@ STDMETHODIMP CSalsitaApiImpl::addEventListener(BSTR eventId, LPDISPATCH listener
 STDMETHODIMP CSalsitaApiImpl::performSendRequest(INT tabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback)
 {
   return m_ApiService->sendRequest(m_TabId, tabId, senderObject, request, requestCallback);
+}
+
+STDMETHODIMP CSalsitaApiImpl::getResourceUrl(BSTR relativeUrl, VARIANT* pVal)
+{
+  ENSURE_RETVAL(pVal);
+  if (!relativeUrl)
+  {
+    return E_FAIL;
+  }
+
+  bool rootEndsWithBs = (m_RootPath.Right(1).Compare(_T("\\")) == 0);
+  const wchar_t *relUrl = (rootEndsWithBs && ((*relativeUrl) == '/')) ? (&relativeUrl[1]) : relativeUrl;
+
+  CString strPath = m_RootPath + relUrl;
+  strPath.Replace(L'/', L'\\');
+
+  TCHAR canonicalized[MAX_PATH + 1];
+  PathCanonicalize(canonicalized, strPath);
+
+  CString result = _T("file:///");
+  result.Append(strPath);
+
+  pVal->vt = VT_BSTR;
+  pVal->bstrVal = result.AllocSysString();
+  return S_OK;
 }

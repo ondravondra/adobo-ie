@@ -3,8 +3,28 @@
 #include "CustomInternetSecurityImpl.h"
 #include "MagpieActiveScript.h"
 
-CSalsitaFramework::CSalsitaFramework(CMagpieActiveScript & magpieScript) : m_MagpieActiveScript(magpieScript)
+CSalsitaFramework::CSalsitaFramework() : m_MagpieActiveScript(NULL)
 {
+}
+
+HRESULT CSalsitaFramework::CreateObject(CSalsitaFrameworkComObject *& pRet, CMagpieActiveScript *magpieActiveScript)
+{
+  if (!magpieActiveScript)
+  {
+    return E_INVALIDARG;
+  }
+
+  CSalsitaFrameworkComObject *newObject = pRet = NULL;
+  IF_FAILED_RET(CSalsitaFrameworkComObject::CreateInstance(&newObject));
+  newObject->AddRef();
+  newObject->m_MagpieActiveScript = magpieActiveScript;
+  pRet = newObject;
+  return S_OK;
+}
+
+void CSalsitaFramework::Shutdown()
+{
+  m_MagpieActiveScript = NULL;
 }
 
 HRESULT CSalsitaFramework::FinalConstruct()
@@ -60,5 +80,10 @@ STDMETHODIMP CSalsitaFramework::makeGlobalSymbol(LPDISPATCH pVal, BSTR globalNam
     return E_INVALIDARG;
   }
 
-  return m_MagpieActiveScript.AddNamedItem(globalName, pVal, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE);
+  if (!m_MagpieActiveScript)
+  {
+    return S_FALSE; // don't cause script to throw an exception, it is going to be terminated anyway because shutdown was called
+  } else {
+    return m_MagpieActiveScript->AddNamedItem(globalName, pVal, SCRIPTITEM_ISSOURCE|SCRIPTITEM_ISVISIBLE);
+  }
 }

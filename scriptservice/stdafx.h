@@ -21,7 +21,7 @@ using namespace ATL;
 
 #include <ActivScp.h>
 
-#include "libcomhelper\libcomhelper.h"
+#include "libcomhelper\include\libcomhelper.h"
 using namespace LIB_COMHelper;
 
 #import "magpie.dll" named_guids no_smart_pointers raw_interfaces_only raw_native_types no_auto_exclude

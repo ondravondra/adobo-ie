@@ -25,6 +25,10 @@ salsita.extension.onRequest = {};
 salsita.extension.onRequest.addListener = function (listener) {
   apiImpl.addEventListener('extension.onRequest', listener);
 };
+salsita.extension.getURL = function (url) {
+  return apiImpl.getResourceUrl(url);
+};
+
 salsita.tabs = {};
 salsita.tabs.getCurrent = function (callback) {
   var t = createTab();
