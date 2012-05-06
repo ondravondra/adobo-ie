@@ -269,11 +269,13 @@ protected:
     }
 
     CComPtr<IUnknown> instance;
-    hr = m_ScriptServiceFactory->GetScriptServiceInstance(&instance.p);
-    if (FAILED(hr))
-    {
-      return hr;
-    }
+    do {
+      hr = m_ScriptServiceFactory->GetScriptServiceInstance(&instance.p);
+      if (FAILED(hr))
+      {
+        return hr;
+      }
+    } while (hr == S_FALSE); ///< we must wait until server initialization is done
 
     hr = instance.QueryInterface<IScriptServiceInstance>(&m_ScriptServiceInstance.p);
     if (FAILED(hr))

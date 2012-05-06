@@ -37,11 +37,13 @@ private:
     }
 
     HRESULT hr = m_ScriptServiceInstance->Init((LPWSTR)GetExtensionId(), (LPWSTR)resourcesDir.c_str());
-    if (FAILED(hr))
+    if (FAILED(hr) || (hr == S_FALSE))
     {
       return hr;
     }
     
+    m_ScriptServiceInstanceIsInitialized = true;
+
     CComPtr<IUnknown> app;
     hr = m_ScriptServiceInstance->GetApplication(&app.p);
     if (FAILED(hr))
@@ -64,28 +66,41 @@ public:
   {
     if (!m_ScriptServiceInstance)
     {
+      m_ScriptServiceInstanceIsInitialized = false;
       HRESULT hr = m_ScriptServiceInstance.CoCreateInstance(ScriptServiceLib::CLSID_ScriptServiceInstance);
       if (FAILED(hr))
       {
         return hr;
       }
-      hr = InitScriptServiceInstance();
+    }
+
+    if (!m_ScriptServiceInstanceIsInitialized)
+    {
+      HRESULT hr = InitScriptServiceInstance();
       if (FAILED(hr))
       {
         m_ScriptServiceInstance.Release();
         m_ScriptServiceInstance = NULL;
         return hr;
       }
+      if (hr == S_FALSE)
+      {
+        // Init returned S_FALSE, we must call it again
+        *ppUnk = NULL;
+        return hr;
+      }
     }
+
     return m_ScriptServiceInstance.QueryInterface<IUnknown>(ppUnk);
   }
 
 protected:
-  CScriptServiceFactory()
+  CScriptServiceFactory() : m_ScriptServiceInstanceIsInitialized(false)
   {
   }
 
   CComPtr<IScriptServiceInstance> m_ScriptServiceInstance;
+  bool m_ScriptServiceInstanceIsInitialized; ///< true iff m_ScriptServiceInstance::Init returned S_OK
   
   /**
    * Performs loading of modules into a newly created script service instance.
