@@ -41,11 +41,11 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", VER_COMPANY
-            VALUE "FileDescription", "Background Script Service"
+            VALUE "FileDescription", "Background Script Service Library"
             VALUE "FileVersion", VER_NUMBER_STRING
-            VALUE "InternalName", "scriptservice.exe"
+            VALUE "InternalName", "scriptservice.dll"
             VALUE "LegalCopyright", VER_COPYRIGHT
-            VALUE "OriginalFilename", "scriptservice.exe"
+            VALUE "OriginalFilename", "scriptservice.dll"
             VALUE "ProductName", VER_PRODUCT
             VALUE "ProductVersion", VER_NUMBER_STRING
         END

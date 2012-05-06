@@ -1,21 +1,11 @@
 HKCR
 {
-	Salsita.ScriptService.1 = s 'ScriptService Class'
+	NoRemove AppID
 	{
-		CLSID = s '{B5ABEF92-6105-46A2-9465-EA875E7FD25F}'
-	}
-	Salsita.ScriptService = s 'ScriptService Class'
-	{
-		CLSID = s '{B5ABEF92-6105-46A2-9465-EA875E7FD25F}'
-		CurVer = s 'Salsita.ScriptService.1'
-	}
-	NoRemove CLSID
-	{
-		ForceRemove {B5ABEF92-6105-46A2-9465-EA875E7FD25F} = s 'ScriptService Class'
+		'%APPID%' = s 'ScriptService'
+		'scriptservice.dll'
 		{
-			ProgID = s 'Salsita.ScriptService.1'
-			VersionIndependentProgID = s 'Salsita.ScriptService'
-			LocalServer32 = s '%MODULE%'
+			val AppID = s '%APPID%'
 		}
 	}
 }
