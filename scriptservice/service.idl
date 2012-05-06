@@ -36,17 +36,14 @@ library ScriptServiceLib
     [id(1)]
     HRESULT Init([in, string] const OLECHAR* extensionId, [in, string] const OLECHAR* resourcesDir);
 
-    [id(2), helpstring("Registers a new client tab id. Called from BHO before content scripts for particular tab are loaded.")]
+    [id(2), helpstring("Returns IMagpieApplication so the script engine can be initialized.")]
+    HRESULT GetApplication([out, retval] LPUNKNOWN /* IMagpieApplication */ *pApplication);
+
+    [id(3), helpstring("Registers a new client tab id. Called from BHO before content scripts for particular tab are loaded.")]
     HRESULT RegisterTab([out, retval] INT *tabId);
 
-    [id(3), helpstring("Retrieves ISalsitaApiService implementation from the service.")]
+    [id(4), helpstring("Retrieves ISalsitaApiService implementation from the service.")]
     HRESULT GetSalsitaApiService([out, retval] LPUNKNOWN /* ISalsitaApiService */ *pService);
-
-    [id(4), helpstring("Loads the specified module unless it has been loaded already.")]
-    HRESULT LoadModule([in, string] const OLECHAR* moduleID);
-
-    [id(5), helpstring("Creates an IDispatch object based on given clsid and adds it as named item to the background script engine.")]
-    HRESULT ScriptCreateNamedItem([in, string] const OLECHAR *name, [in] GUID clsId, [in] ULONG dwFlags);
   };
 
   [

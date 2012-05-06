@@ -35,10 +35,9 @@ public:
 
 public:
   STDMETHOD(Init)(const OLECHAR* extensionId, const OLECHAR* resourcesDir);
+  STDMETHOD(GetApplication)(LPUNKNOWN *pApplication);
   STDMETHOD(RegisterTab)(INT *tabId);
   STDMETHOD(GetSalsitaApiService)(LPUNKNOWN *pService);
-  STDMETHOD(LoadModule)(const OLECHAR* moduleID);
-  STDMETHOD(ScriptCreateNamedItem)(const OLECHAR *name, GUID clsId, ULONG dwFlags);
 
 protected:
   CScriptServiceInstance()

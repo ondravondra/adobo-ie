@@ -53,6 +53,16 @@ void CScriptServiceInstance::FinalRelease()
   }
 }
 
+STDMETHODIMP CScriptServiceInstance::GetApplication(LPUNKNOWN *pApplication)
+{
+  if (!pApplication)
+  {
+    return E_POINTER;
+  }
+
+  return m_Magpie.QueryInterface<IUnknown>(pApplication);
+}
+
 STDMETHODIMP CScriptServiceInstance::RegisterTab(INT *tabId)
 {
   *tabId = ++ m_TabIdCounter;
@@ -67,33 +77,4 @@ STDMETHODIMP CScriptServiceInstance::GetSalsitaApiService(LPUNKNOWN *pService)
   }
 
   return m_SalsitaApiServiceImpl.QueryInterface<IUnknown>(pService);
-}
-
-STDMETHODIMP CScriptServiceInstance::LoadModule(const OLECHAR* moduleID)
-{
-  ATLASSERT(m_Magpie);
-  if (!m_Magpie)
-  {
-    return E_UNEXPECTED;
-  } else {
-    return m_Magpie->Run((LPWSTR)moduleID);
-  }
-}
-
-STDMETHODIMP CScriptServiceInstance::ScriptCreateNamedItem(const OLECHAR *name, GUID clsId, ULONG dwFlags)
-{
-  ATLASSERT(m_Magpie);
-  if (!m_Magpie)
-  {
-    return E_UNEXPECTED;
-  }
-
-  CComPtr<IDispatch> pDisp;
-  HRESULT hr = pDisp.CoCreateInstance(clsId);
-  if (FAILED(hr))
-  {
-    return hr;
-  } else {
-    return m_Magpie->ScriptAddNamedItem((LPWSTR)name, pDisp, dwFlags);
-  }
 }
