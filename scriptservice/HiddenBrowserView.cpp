@@ -28,7 +28,11 @@ LRESULT CHiddenBrowserView::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
 
 LRESULT CHiddenBrowserView::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
-  m_pWebBrowser.Release();
+  if (m_pWebBrowser)
+  {
+    DispEventUnadvise(m_pWebBrowser, &DIID_DWebBrowserEvents2);
+    m_pWebBrowser.Release();
+  }
   return 0;
 }
 
