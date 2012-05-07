@@ -198,7 +198,7 @@ protected:
 
     CComPtr<IUnknown> instance;
     do {
-      //instance.Release();
+      instance.Release();
       hr = m_ScriptServiceFactory->GetScriptServiceInstance(&instance.p);
       if (FAILED(hr))
       {
