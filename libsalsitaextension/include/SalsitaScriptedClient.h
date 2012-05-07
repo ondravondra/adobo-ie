@@ -11,7 +11,7 @@ protected:
 
   CComPtr<IMagpieApplication> m_Magpie;
 
-  CComPtr<IScriptService> m_ScriptService;
+  CComPtr<IScriptServiceFactory> m_ScriptServiceFactory;
   CComPtr<IScriptServiceInstance> m_ScriptServiceInstance;
   bool m_BackgroundScriptStarted, m_BackgroundScriptFailed;
 
@@ -36,6 +36,11 @@ protected:
   }
 
   /**
+   * Returns CLSID of the background script service factory for this extension.
+   */
+  virtual const IID *GetBackgroundScriptServiceFactoryCLSID() const = 0;
+
+  /**
    * Retrieves path to the directory containing web resources and stores it in m_ResourcesDir.
    * Example implementation:
    {
@@ -51,15 +56,9 @@ protected:
 
   /**
    * Executes content scripts.
-   * Gets called inside ReloadContentScriptOnNavigation once a magpie instance is created and initialized.
+   * Gets called inside ReloadContentScript once a magpie instance is created and initialized.
    */
   virtual HRESULT ExecuteContentScript() = 0;
-
-  /**
-   * Executes background script.
-   * Called inside RunBackgroundScript.
-   */
-  virtual HRESULT ExecuteBackgroundScript() = 0;
 
   /**
    * Returns IHTMLWindow2 which will be passed to the content script as "window".
@@ -184,26 +183,30 @@ protected:
 
     m_BackgroundScriptFailed = true;
 
-    hr = m_ScriptService.CoCreateInstance(CLSID_ScriptService);
+    CComPtr<IUnknown> pFactoryObject;
+    hr = pFactoryObject.CoCreateInstance(*GetBackgroundScriptServiceFactoryCLSID());
+    if (FAILED(hr))
+    {
+      return hr;
+    }
+
+    hr = pFactoryObject.QueryInterface<IScriptServiceFactory>(&m_ScriptServiceFactory.p);
     if (FAILED(hr))
     {
       return hr;
     }
 
     CComPtr<IUnknown> instance;
-    hr = m_ScriptService->GetServiceFor(CComBSTR(GetExtensionId()), CComBSTR(m_ResourcesDir.c_str()), &instance.p);
-    if (FAILED(hr))
-    {
-      return hr;
-    }
+    do {
+      instance.Release();
+      hr = m_ScriptServiceFactory->GetScriptServiceInstance(&instance.p);
+      if (FAILED(hr))
+      {
+        return hr;
+      }
+    } while (hr == S_FALSE); ///< we must wait until server initialization is done
 
     hr = instance.QueryInterface<IScriptServiceInstance>(&m_ScriptServiceInstance.p);
-    if (FAILED(hr))
-    {
-      return hr;
-    }
-
-    hr = ExecuteBackgroundScript();
     if (FAILED(hr))
     {
       return hr;
@@ -225,7 +228,7 @@ protected:
     DestroyMagpieInstance();
 
     m_ScriptServiceInstance.Release();
-    m_ScriptService.Release();
+    m_ScriptServiceFactory.Release();
   }
 };
 
