@@ -8,10 +8,9 @@ set_target_properties(libsalsitaextension PROPERTIES STATIC_LIBRARY_FLAGS "/NODE
 
 include_directories(include "../libcomhelper/include")
 
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /I${outdir_bin_release}")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /I${outdir_bin_debug}")
-
-add_dependencies(libsalsitaextension libcomhelper magpie scriptservice)
+# all code which uses magpie and scriptservice interfaces is templated and not being compiled into the library
+# therefore dependencies are not needed
+add_dependencies(libsalsitaextension libcomhelper)
 
 set_property(TARGET libsalsitaextension PROPERTY ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${outdir_lib_release})
 set_property(TARGET libsalsitaextension PROPERTY ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${outdir_lib_debug})

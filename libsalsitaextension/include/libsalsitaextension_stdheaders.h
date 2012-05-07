@@ -16,12 +16,6 @@
 
 using namespace ATL;
 
-#import "magpie.dll" named_guids raw_interfaces_only raw_native_types no_smart_pointers
-using namespace MagpieLib;
-
 #include "libcomhelper.h"
 using namespace LIB_COMHelper;
 #include "errorchecking.h"
-
-#import "scriptservice.exe" named_guids no_smart_pointers raw_interfaces_only raw_native_types no_auto_exclude
-using namespace ScriptServiceLib;
