@@ -6,6 +6,7 @@
 
 template <class TFactoryImpl, const CLSID* pclsid>
 class ATL_NO_VTABLE CScriptServiceFactory :
+  public IScriptServiceFactoryReleaseCallback,
   public CComObjectRootEx<CComSingleThreadModel>,
   public CComCoClass<TFactoryImpl, pclsid>,
   public IScriptServiceFactory
@@ -27,6 +28,14 @@ public:
 
   void FinalRelease()
   {
+    if (m_ScriptServiceInstance)
+    {
+      // we got destroyed before m_ScriptServiceInstance
+      // remove the callback from it
+      // it will get deleted automatically
+      m_ScriptServiceInstance->UnInit();
+      m_ScriptServiceInstance = NULL;
+    }
   }
 
   typedef CComObject<CScriptServiceInstanceClient<TFactoryImpl>> CScriptServiceInstanceClientComObject;
@@ -73,7 +82,7 @@ private:
       return hr;
     }
 
-    hr = CScriptServiceInstanceClient<TFactoryImpl>::CreateObject(pServiceInstance.p, m_ScriptServiceInstance);
+    hr = CScriptServiceInstanceClient<TFactoryImpl>::CreateObject(pServiceInstance.p, this, m_ScriptServiceInstance);
     return hr;
   }
 
@@ -109,6 +118,14 @@ public:
     }
 
     return m_ScriptServiceInstance->QueryInterface<IUnknown>(ppUnk);
+  }
+
+public:
+  virtual void OnFinalRelease()
+  {
+    // m_ScriptServiceInstance got deleted (all clients disconnected)
+    // remove the reference
+    m_ScriptServiceInstance = NULL;
   }
 
 protected:

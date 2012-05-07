@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * Used to guard the reference to CScriptServiceInstanceClient
+ */
+struct IScriptServiceFactoryReleaseCallback
+{
+  virtual void OnFinalRelease() = 0;
+};
+
 template <class TScriptServiceFactory>
 class ATL_NO_VTABLE CScriptServiceInstanceClient :
   public CComObjectRootEx<CComSingleThreadModel>,
@@ -19,14 +27,21 @@ class ATL_NO_VTABLE CScriptServiceInstanceClient :
     return S_OK;
   }
 
+  IScriptServiceFactoryReleaseCallback *m_releaseCallback;
+
   void FinalRelease()
   {
+    if (m_releaseCallback)
+    {
+      m_releaseCallback->OnFinalRelease();
+      m_releaseCallback = NULL;
+    }
   }
 
   CComPtr<IScriptServiceInstance> m_ScriptServiceInstance;
 
 public:
-  static HRESULT CreateObject(IScriptServiceInstance* wrappedInstance, CComObject<CScriptServiceInstanceClient> *& retVal)
+  static HRESULT CreateObject(IScriptServiceInstance* wrappedInstance, IScriptServiceFactoryReleaseCallback* callback, CComObject<CScriptServiceInstanceClient> *& retVal)
   {
     ATLASSERT(wrappedInstance);
     CComObject<CScriptServiceInstanceClient>* pObject = NULL;
@@ -37,6 +52,7 @@ public:
       return hr;
     }
     pObject->m_ScriptServiceInstance = wrappedInstance;
+    pObject->m_releaseCallback = callback;
     retVal = pObject;
     return S_OK;
   }
@@ -44,6 +60,11 @@ public:
   inline CComPtr<IScriptServiceInstance> GetScriptServiceInstance()
   {
     return m_ScriptServiceInstance;
+  }
+
+  void UnInit()
+  {
+    m_ScriptServiceInstance = NULL;
   }
 
 public:
