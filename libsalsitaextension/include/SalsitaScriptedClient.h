@@ -41,18 +41,18 @@ protected:
   virtual const IID *GetBackgroundScriptServiceFactoryCLSID() const = 0;
 
   /**
-   * Retrieves path to the directory containing web resources and stores it in m_ResourcesDir.
+   * Retrieves path to the directory containing web resources.
    * Example implementation:
    {
 #ifdef _DEBUG
-     CSalsitaExtensionHelper::ResourcesDirGetDebugPath(_WSTR(RES_DIR_DEBUG_PATH), m_ResourcesDir);
+     CSalsitaExtensionHelper::ResourcesDirGetDebugPath(_WSTR(RES_DIR_DEBUG_PATH), result);
      return true;
 #else
-     return CSalsitaExtensionHelper::ResourcesDirReadFromRegistry(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Company\\Extension", L"resourcesDir", m_ResourcesDir);
+     return CSalsitaExtensionHelper::ResourcesDirReadFromRegistry(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Company\\Extension", L"resourcesDir", result);
 #endif
    }
    */
-  virtual bool ResolveResourcesDir() = 0;
+  virtual bool ResolveResourcesDir(std::wstring &result) = 0;
 
   /**
    * Executes content scripts.
@@ -198,7 +198,7 @@ protected:
 
     CComPtr<IUnknown> instance;
     do {
-      instance.Release();
+      //instance.Release();
       hr = m_ScriptServiceFactory->GetScriptServiceInstance(&instance.p);
       if (FAILED(hr))
       {

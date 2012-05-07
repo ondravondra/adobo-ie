@@ -33,7 +33,7 @@ protected:
   {
     ATLASSERT(m_spUnkSite);
 
-    if (!ResolveResourcesDir())
+    if (!ResolveResourcesDir(m_ResourcesDir))
     {
       return E_FAIL;
     }

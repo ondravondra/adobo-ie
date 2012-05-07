@@ -135,7 +135,7 @@ protected:
 
   virtual HRESULT InternalSetSite()
   {
-    if (!ResolveResourcesDir())
+    if (!ResolveResourcesDir(m_ResourcesDir))
     {
       return E_FAIL;
     }
