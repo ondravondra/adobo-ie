@@ -32,20 +32,4 @@
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
 
-#include <atlbase.h>
-#include <atlstr.h>
-#include <atlapp.h>
-
-#include <atlcom.h>
-#include <atltypes.h>
-#include <atlwin.h>
-#include <atlframe.h>
-#include <atlctl.h>
-#include <atlcoll.h>
-#include <atlfile.h>
-
-#include <shlguid.h>
-#include <shlobj.h>
-#include <exdispid.h>
-
-using namespace ATL;
+#include "libsalsitaextension_stdheaders.h"

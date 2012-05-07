@@ -1,0 +1,21 @@
+/**
+ * Include this file in your stdafx.h to get all the headers you need for a basic extension.
+ */
+#pragma once
+
+#include <atlbase.h>
+#include <atlstr.h>
+#include <atlcom.h>
+
+#include <shlguid.h>
+#include <shlobj.h>
+#include <exdispid.h>
+#include <Mshtml.h>
+
+#include <ActivScp.h>
+
+using namespace ATL;
+
+#include "libcomhelper.h"
+using namespace LIB_COMHelper;
+#include "errorchecking.h"

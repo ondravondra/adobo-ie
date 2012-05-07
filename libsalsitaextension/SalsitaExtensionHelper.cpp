@@ -48,3 +48,12 @@ void CSalsitaExtensionHelper::ResourcesDirGetDebugPath(const wchar_t *preprocess
   result.assign(canonicalized.c_str());
   ResourcesDirNormalize(result);
 }
+
+void CSalsitaExtensionHelper::ResourcesDirMakeUrl(const wchar_t *resourcesDir, const wchar_t *relativeUrl, std::wstring &pageUrl)
+{
+  pageUrl.assign(L"file:///");
+  pageUrl.append(resourcesDir);
+  ResourcesDirNormalize(pageUrl);
+  pageUrl.append(relativeUrl);
+  std::replace(pageUrl.begin(), pageUrl.end(), L'\\', L'/');
+}
