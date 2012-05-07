@@ -12,7 +12,7 @@ protected:
   CComPtr<IMagpieApplication> m_Magpie;
 
   CComPtr<IScriptServiceFactory> m_ScriptServiceFactory;
-  CComPtr<IScriptServiceInstance> m_ScriptServiceInstance;
+  CComPtr<IScriptServiceInstanceClient> m_ScriptServiceInstance;
   bool m_BackgroundScriptStarted, m_BackgroundScriptFailed;
 
   INT m_TabId;
@@ -206,7 +206,7 @@ protected:
       }
     } while (hr == S_FALSE); ///< we must wait until server initialization is done
 
-    hr = instance.QueryInterface<IScriptServiceInstance>(&m_ScriptServiceInstance.p);
+    hr = instance.QueryInterface<IScriptServiceInstanceClient>(&m_ScriptServiceInstance.p);
     if (FAILED(hr))
     {
       return hr;

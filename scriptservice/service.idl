@@ -24,12 +24,12 @@ library ScriptServiceLib
   };
 
   [
-  object,
-  uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
-  oleautomation,
-  nonextensible,
-  helpstring("IScriptServiceInstance Interface"),
-  pointer_default(unique)
+    object,
+    uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
+    oleautomation,
+    nonextensible,
+    helpstring("IScriptServiceInstance Interface"),
+    pointer_default(unique)
   ]
   interface IScriptServiceInstance : IUnknown
   {
@@ -59,6 +59,23 @@ library ScriptServiceLib
 
   [
     object,
+    uuid(E569F09A-55AA-49B9-90EA-BE0B6AA487E1),
+    oleautomation,
+    nonextensible,
+    helpstring("Client interface to script service client"),
+    pointer_default(unique)
+  ]
+  interface IScriptServiceInstanceClient : IUnknown
+  {
+    [id(1)]
+    HRESULT RegisterTab([out, retval] INT *tabId);
+
+    [id(2)]
+    HRESULT GetSalsitaApiService([out, retval] LPUNKNOWN /* ISalsitaApiService */ *pService);
+  };
+
+  [
+    object,
     uuid(954448CA-1894-4743-9261-BBE3C932FA27),
     oleautomation,
     nonextensible,
@@ -67,6 +84,6 @@ library ScriptServiceLib
   ]
   interface IScriptServiceFactory : IUnknown
   {
-    HRESULT GetScriptServiceInstance([out, retval] LPUNKNOWN* ppUnk);
+    HRESULT GetScriptServiceInstance([out, retval] LPUNKNOWN* /* IScriptServiceInstanceClient */ ppUnk);
   };
 };

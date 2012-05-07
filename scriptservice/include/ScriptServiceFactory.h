@@ -2,17 +2,19 @@
 
 #include <string>
 
-template <class T, const CLSID* pclsid>
+#include "ScriptServiceInstanceClient.h"
+
+template <class TFactoryImpl, const CLSID* pclsid>
 class ATL_NO_VTABLE CScriptServiceFactory :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public CComCoClass<T, pclsid>,
-  IScriptServiceFactory
+  public CComCoClass<TFactoryImpl, pclsid>,
+  public IScriptServiceFactory
 {
 public:
-  DECLARE_CLASSFACTORY_SINGLETON(T)
-  DECLARE_NOT_AGGREGATABLE(T)
+  DECLARE_CLASSFACTORY_SINGLETON(TFactoryImpl)
+  DECLARE_NOT_AGGREGATABLE(TFactoryImpl)
 
-  BEGIN_COM_MAP(T)
+  BEGIN_COM_MAP(TFactoryImpl)
     COM_INTERFACE_ENTRY(IScriptServiceFactory)
   END_COM_MAP()
 
@@ -27,8 +29,10 @@ public:
   {
   }
 
+  typedef CComObject<CScriptServiceInstanceClient<TFactoryImpl>> CScriptServiceInstanceClientComObject;
+
 private:
-  HRESULT InitScriptServiceInstance()
+  HRESULT InitScriptServiceInstance(CComPtr<IScriptServiceInstance> pInstance)
   {
     std::wstring resourcesDir;
     if (!ResolveResourcesDir(resourcesDir))
@@ -36,16 +40,14 @@ private:
       return E_FAIL;
     }
 
-    HRESULT hr = m_ScriptServiceInstance->Init((LPWSTR)GetExtensionId(), (LPWSTR)resourcesDir.c_str());
+    HRESULT hr = pInstance->Init((LPWSTR)GetExtensionId(), (LPWSTR)resourcesDir.c_str());
     if (FAILED(hr) || (hr == S_FALSE))
     {
       return hr;
     }
-    
-    m_ScriptServiceInstanceIsInitialized = true;
 
     CComPtr<IUnknown> app;
-    hr = m_ScriptServiceInstance->GetApplication(&app.p);
+    hr = pInstance->GetApplication(&app.p);
     if (FAILED(hr))
     {
       return hr;
@@ -61,13 +63,26 @@ private:
     return SetupScriptServiceInstance(mpapp);
   }
 
+  HRESULT CreateNewScriptServiceInstance()
+  {
+    m_ScriptServiceInstanceIsInitialized = false;
+    CComPtr<IScriptServiceInstance> pServiceInstance;
+    HRESULT hr = pServiceInstance.CoCreateInstance(ScriptServiceLib::CLSID_ScriptServiceInstance);
+    if (FAILED(hr))
+    {
+      return hr;
+    }
+
+    hr = CScriptServiceInstanceClient<TFactoryImpl>::CreateObject(pServiceInstance.p, m_ScriptServiceInstance);
+    return hr;
+  }
+
 public:
   STDMETHOD(GetScriptServiceInstance)(LPUNKNOWN* ppUnk)
   {
     if (!m_ScriptServiceInstance)
     {
-      m_ScriptServiceInstanceIsInitialized = false;
-      HRESULT hr = m_ScriptServiceInstance.CoCreateInstance(ScriptServiceLib::CLSID_ScriptServiceInstance);
+      HRESULT hr = CreateNewScriptServiceInstance();
       if (FAILED(hr))
       {
         return hr;
@@ -76,31 +91,33 @@ public:
 
     if (!m_ScriptServiceInstanceIsInitialized)
     {
-      HRESULT hr = InitScriptServiceInstance();
+      HRESULT hr = InitScriptServiceInstance(m_ScriptServiceInstance->GetScriptServiceInstance());
       if (FAILED(hr))
       {
-        m_ScriptServiceInstance.Release();
+        delete m_ScriptServiceInstance;
         m_ScriptServiceInstance = NULL;
         return hr;
       }
-      if (hr == S_FALSE)
+      if (hr == S_FALSE) // Init returned S_FALSE, client must call us again
       {
-        // Init returned S_FALSE, we must call it again
+        m_ScriptServiceInstanceIsInitialized = false;
         *ppUnk = NULL;
         return hr;
+      } else {
+        m_ScriptServiceInstanceIsInitialized = true;
       }
     }
 
-    return m_ScriptServiceInstance.QueryInterface<IUnknown>(ppUnk);
+    return m_ScriptServiceInstance->QueryInterface<IUnknown>(ppUnk);
   }
 
 protected:
-  CScriptServiceFactory() : m_ScriptServiceInstanceIsInitialized(false)
+  CScriptServiceFactory() : m_ScriptServiceInstanceIsInitialized(false), m_ScriptServiceInstance(NULL)
   {
   }
 
-  CComPtr<IScriptServiceInstance> m_ScriptServiceInstance;
-  bool m_ScriptServiceInstanceIsInitialized; ///< true iff m_ScriptServiceInstance::Init returned S_OK
+  CScriptServiceInstanceClientComObject *m_ScriptServiceInstance;
+  bool m_ScriptServiceInstanceIsInitialized;
   
   /**
    * Performs loading of modules into a newly created script service instance.
