@@ -71,10 +71,7 @@ protected:
       m_WebBrowser.Release();
     }
 
-    DestroyMagpieInstance();
-
-    m_ScriptServiceInstance.Release();
-    m_ScriptService.Release();
+    CleanupScriptedClient();
 
     return S_OK;
   }

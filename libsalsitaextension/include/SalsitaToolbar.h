@@ -164,6 +164,9 @@ protected:
     {
       m_HtmlWindow.DestroyWindow();
     }
+
+    CleanupScriptedClient();
+
     return S_OK;
   }
 

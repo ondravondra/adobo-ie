@@ -219,6 +219,14 @@ protected:
     m_BackgroundScriptFailed = false;
     return S_OK;
   }
+
+  void CleanupScriptedClient()
+  {
+    DestroyMagpieInstance();
+
+    m_ScriptServiceInstance.Release();
+    m_ScriptService.Release();
+  }
 };
 
 template <class Timpl>
