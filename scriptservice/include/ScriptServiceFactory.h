@@ -153,4 +153,12 @@ protected:
    * For example implementation see similar method in libsalsitaextension.
    */
   virtual bool ResolveResourcesDir(std::wstring &result) const = 0;
+
+  /**
+   * Returns HMODULE handle of the com exe server process containing the factory.
+   */
+  virtual HMODULE GetServerModule() const
+  {
+    return GetModuleHandle(NULL);
+  }
 };

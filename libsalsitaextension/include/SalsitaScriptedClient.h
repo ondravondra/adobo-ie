@@ -22,6 +22,11 @@ protected:
   }
 
   /**
+   * Returns HMODULE handle of the dll library containing the extension.
+   */
+  virtual HMODULE GetLibraryModule() const = 0;
+
+  /**
    * Returns an extension identifier which will be passed to magpie.
    */
   virtual const wchar_t *GetExtensionId() const = 0;
