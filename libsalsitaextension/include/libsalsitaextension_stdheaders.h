@@ -19,3 +19,8 @@ using namespace ATL;
 #include "libcomhelper.h"
 using namespace LIB_COMHelper;
 #include "errorchecking.h"
+
+#pragma comment(linker, "/include:_library_version_libsalsitaextension")
+extern "C" {
+  extern const wchar_t *library_version_libsalsitaextension;
+}
