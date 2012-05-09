@@ -14,4 +14,23 @@
         tlbid = "{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
 
     </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="IScriptServiceInstanceClient"
+        iid="{E569F09A-55AA-49B9-90EA-BE0B6AA487E1}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00000000-0000-0000-C000-000000000046}"
+        tlbid = "{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
+
+    </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="IScriptServiceFactory"
+        iid="{954448CA-1894-4743-9261-BBE3C932FA27}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00000000-0000-0000-C000-000000000046}"
+        tlbid = "{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
+
+    </comInterfaceExternalProxyStub>
+
 </assembly>

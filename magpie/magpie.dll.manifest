@@ -14,4 +14,13 @@
         tlbid = "{E043C840-CD76-4F58-920D-DF37C1A404DD}">
 
     </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="ISalsitaApiService"
+        iid="{2F0B0F09-A9E5-461E-B165-25C8E0CB94C2}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00000000-0000-0000-C000-000000000046}"
+        tlbid = "{E043C840-CD76-4F58-920D-DF37C1A404DD}">
+
+    </comInterfaceExternalProxyStub>
 </assembly>
