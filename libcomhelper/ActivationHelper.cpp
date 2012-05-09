@@ -6,6 +6,7 @@ namespace LIB_COMHelper {
 CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requiredDllName, const wchar_t *manifestResourceName) :
   contextHandle(INVALID_HANDLE_VALUE), cookie(0), error(0)
 {
+#ifdef USE_ACTIVATION_MANIFESTS // see root CMakeLists.txt for explanation
   if (!GetModuleFileNameW(callerModule, path, MAX_PATH))
   {
     error = GetLastError();
@@ -42,10 +43,12 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   {
     error = GetLastError();
   }
+#endif
 }
 
 CActivationHelper::~CActivationHelper()
 {
+#ifdef USE_ACTIVATION_MANIFESTS
   if (!error)
   {
     ::DeactivateActCtx(0, cookie);
@@ -55,6 +58,7 @@ CActivationHelper::~CActivationHelper()
   {
     ::ReleaseActCtx(contextHandle);
   }
+#endif
 }
 
 }// namespace LIB_COMHelper

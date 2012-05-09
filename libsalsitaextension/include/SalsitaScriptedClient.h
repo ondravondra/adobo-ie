@@ -2,10 +2,7 @@
 
 #include <string>
 #include "SalsitaExtensionHelper.h"
-
-#ifdef USE_ACTIVATION_MANIFESTS
 #include "ActivationHelper.h"
-#endif
 
 template <class Timpl>
 class CSalsitaScriptedClient
@@ -79,9 +76,7 @@ protected:
   {
     HRESULT hr;
 
-#ifdef USE_ACTIVATION_MANIFESTS
-    CActivationHelper actHelper(GetLibraryModule(), L"magpie.dll");
-#endif
+    CActivationHelper actHelper(GetLibraryModule(), L"magpie.dll"); ///< need to access MagpieApplication class and interfaces from magpie.dll
 
     // create a m_Magpie instance
     hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);
@@ -195,6 +190,8 @@ protected:
     }
 
     m_BackgroundScriptFailed = true;
+
+    CActivationHelper actHelper(GetLibraryModule(), L"scriptservice.dll"); ///< need to access interfaces from scriptservice.dll
 
     CComPtr<IUnknown> pFactoryObject;
     hr = pFactoryObject.CoCreateInstance(*GetBackgroundScriptServiceFactoryCLSID());

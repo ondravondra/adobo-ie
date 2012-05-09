@@ -26,6 +26,9 @@ if(version_build)
 	add_definitions("-DVER_NUMBER_BUILD=${version_build}")
 endif(version_build)
 
+# USE_ACTIVATION_MANIFESTS enables pushing manifests into the activation context using CreateActCtx calls
+# this is used to be able to load adobo shared com libraries without the need for their global registration
+# this way each IE extension can have its own copy of adobo and be independent on others installed on end user's OS
 add_definitions("-DUSE_ACTIVATION_MANIFESTS")
 
 add_subdirectory(libcomhelper)
