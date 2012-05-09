@@ -85,24 +85,21 @@ public:
 
     if (m_spUnkSite)
     {
-      return InternalSetSite();
+      HRESULT hr = InternalSetSite();
+      ATLASSERT(hr == S_OK);
     }
     else
     {
-      return InternalReleaseSite();
+      HRESULT hr = InternalReleaseSite();
+      ATLASSERT(hr == S_OK);
     }
+    return S_OK;
   }
 
 private:
 
   HRESULT RunToolbarPage()
   {
-    HRESULT hr = RunBackgroundScript();
-    if (FAILED(hr))
-    {
-      return hr;
-    }
-
     GetToolbarPage(m_PageUrl);
 
     m_HtmlWindow.Create(m_hWndParent, CWindow::rcDefault, L"about:blank",
@@ -127,6 +124,7 @@ private:
     CComQIPtr<IWebBrowser2> caller = pDisp;
     if (caller && caller.IsEqualObject(m_HtmlWindow.m_pWebBrowser))
     {
+      RunBackgroundScript();
       ReloadContentScript();
     }
   }

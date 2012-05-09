@@ -105,11 +105,13 @@ public:
 
     if (m_spUnkSite)
     {
-      InternalSetSite();
+      HRESULT hr = InternalSetSite();
+      ATLASSERT(hr == S_OK);
     }
     else
     {
-      InternalReleaseSite();
+      HRESULT hr = InternalReleaseSite();
+      ATLASSERT(hr == S_OK);
     }
     return S_OK;
   }
