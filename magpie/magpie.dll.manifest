@@ -23,4 +23,49 @@
         tlbid = "{E043C840-CD76-4F58-920D-DF37C1A404DD}">
 
     </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="IMagpieConsole"
+        iid="{405F6C54-6E87-49b9-B3FB-7F9E56AE8CEE}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00020400-0000-0000-C000-000000000046}"
+        tlbid="{E043C840-CD76-4F58-920D-DF37C1A404DD}">
+
+    </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="IMagpieModule"
+        iid="{38742A79-0D30-4fda-B088-0AB045E0110B}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00020400-0000-0000-C000-000000000046}"
+        tlbid="{E043C840-CD76-4F58-920D-DF37C1A404DD}">
+
+    </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="IMagpieRequire"
+        iid="{20D05B88-9974-4d09-B45F-5D8B8FC3C782}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00020400-0000-0000-C000-000000000046}"
+        tlbid="{E043C840-CD76-4F58-920D-DF37C1A404DD}">
+
+    </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="ISalsitaApiInternal"
+        iid="{C26EC5A9-5D45-414C-8959-6EF4EC85D206}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00020400-0000-0000-C000-000000000046}"
+        tlbid="{E043C840-CD76-4F58-920D-DF37C1A404DD}">
+
+    </comInterfaceExternalProxyStub>
+
+    <comInterfaceExternalProxyStub
+        name="ISalsitaFramework"
+        iid="{E00F24EF-67F5-42C1-BEDB-4A49FC06FAB1}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00020400-0000-0000-C000-000000000046}"
+        tlbid="{E043C840-CD76-4F58-920D-DF37C1A404DD}">
+
+    </comInterfaceExternalProxyStub>
 </assembly>
