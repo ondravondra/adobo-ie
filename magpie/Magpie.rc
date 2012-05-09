@@ -148,9 +148,6 @@ END
 
 salsita.js HTML "salsita.js"
 
-#ifdef USE_ACTIVATION_MANIFESTS
-activation.manifest RT_MANIFEST "magpie.dll.manifest"
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED

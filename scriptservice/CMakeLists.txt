@@ -19,9 +19,10 @@ set_property(TARGET scriptservice PROPERTY LIBRARY_OUTPUT_DIRECTORY_DEBUG ${outd
 set_property(TARGET scriptservice PROPERTY ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${outdir_lib_release})
 set_property(TARGET scriptservice PROPERTY ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${outdir_lib_debug})
 
+file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" src_dir)
 add_custom_command(
 	TARGET scriptservice
 	POST_BUILD
+	COMMAND mt.exe -manifest \"${src_dir}/scriptservice.dll.manifest\" -outputresource:\"$(TargetPath)\;\#2\"
 	COMMAND if $<CONFIGURATION>==Debug regsvr32.exe /s \"$(TargetPath)\"
 	)
-

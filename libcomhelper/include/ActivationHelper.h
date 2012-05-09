@@ -20,7 +20,7 @@ public:
    * Loads the manifest from the dll's resource identified by its name.
    * The dll is expected to be located in the same directory as the caller whose module handle gets passed to the ctor.
    */
-  CActivationHelper(HMODULE callerModule, const wchar_t *requiredDllName, const wchar_t *manifestResourceName = L"activation.manifest");
+  CActivationHelper(HMODULE callerModule, const wchar_t *requiredDllName);
   ~CActivationHelper();
   inline DWORD GetErrorCode() { return error; }
 

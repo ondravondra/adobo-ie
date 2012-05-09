@@ -3,7 +3,7 @@
 
 namespace LIB_COMHelper {
 
-CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requiredDllName, const wchar_t *manifestResourceName) :
+CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requiredDllName) :
   contextHandle(INVALID_HANDLE_VALUE), cookie(0), error(0)
 {
 #ifdef USE_ACTIVATION_MANIFESTS // see root CMakeLists.txt for explanation
@@ -29,7 +29,7 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   memset(&actCtx, 0, sizeof(actCtx));
   actCtx.cbSize = sizeof(actCtx);
   actCtx.lpSource = path;
-  actCtx.lpResourceName = manifestResourceName;
+  actCtx.lpResourceName = MAKEINTRESOURCE(2);
   actCtx.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
 
   contextHandle = ::CreateActCtx(&actCtx);
