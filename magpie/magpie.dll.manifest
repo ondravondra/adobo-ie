@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <file name="magpie.dll" hashalg="SHA1">
+        <comClass clsid="{42F2CA19-AAA6-4CC1-99DA-AC4E0D89F508}"
+                  threadingModel="Apartment" />
+        <typelib tlbid="{E043C840-CD76-4F58-920D-DF37C1A404DD}" version="1.0" helpdir="" />
+    </file>
+
+    <comInterfaceExternalProxyStub
+        name="IMagpieApplication"
+        iid="{684092D4-C67B-4456-8BC8-86FA9E7F16F6}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00000000-0000-0000-C000-000000000046}"
+        tlbid = "{E043C840-CD76-4F58-920D-DF37C1A404DD}">
+
+    </comInterfaceExternalProxyStub>
+</assembly>

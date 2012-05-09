@@ -1,4 +1,4 @@
-file(GLOB_RECURSE source_files *.cpp *.h *.def *.rgs *.idl *.rc *.js)
+file(GLOB_RECURSE source_files *.cpp *.h *.def *.rgs *.idl *.rc *.manifest *.js)
 set(generated_files "${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)/magpie_i.c")
 
 add_library(magpie SHARED ${source_files} ${generated_files})

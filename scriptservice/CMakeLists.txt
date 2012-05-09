@@ -1,4 +1,4 @@
-file(GLOB_RECURSE source_files *.cpp *.h *.def *.rgs *.idl *.rc)
+file(GLOB_RECURSE source_files *.cpp *.h *.def *.rgs *.idl *.rc *.manifest)
 
 add_library(scriptservice SHARED ${source_files})
 

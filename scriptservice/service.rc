@@ -78,3 +78,7 @@ END
 /////////////////////////////////////////////////////////////////////////////
 
 1 TYPELIB "service.tlb"
+
+#ifdef USE_ACTIVATION_MANIFESTS
+activation.manifest RT_MANIFEST "scriptservice.dll.manifest"
+#endif

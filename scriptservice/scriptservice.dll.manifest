@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <file name="scriptservice.dll" hashalg="SHA1">
+        <comClass clsid="{8E0DF3C3-BA52-47F7-B601-307E5CB207EF}"
+                  threadingModel="Apartment" />
+        <typelib tlbid="{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}" version="1.0" helpdir="" />
+    </file>
+
+    <comInterfaceExternalProxyStub
+        name="IScriptServiceInstance"
+        iid="{8875B2E2-0AB1-4BF0-A82A-8538DBB5535B}"
+        proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+        baseInterface="{00000000-0000-0000-C000-000000000046}"
+        tlbid = "{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
+
+    </comInterfaceExternalProxyStub>
+</assembly>

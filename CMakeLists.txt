@@ -26,6 +26,8 @@ if(version_build)
 	add_definitions("-DVER_NUMBER_BUILD=${version_build}")
 endif(version_build)
 
+add_definitions("-DUSE_ACTIVATION_MANIFESTS")
+
 add_subdirectory(libcomhelper)
 add_subdirectory(magpie)
 add_subdirectory(scriptservice)
