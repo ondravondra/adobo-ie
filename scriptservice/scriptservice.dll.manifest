@@ -2,7 +2,11 @@
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
     <file name="scriptservice.dll" hashalg="SHA1">
         <comClass clsid="{8E0DF3C3-BA52-47F7-B601-307E5CB207EF}"
-                  threadingModel="Apartment" />
+                  threadingModel="Apartment"
+                  progid="Salsita.ScriptServiceInstance"
+                  tlbid="{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}"
+                  />
+
         <typelib tlbid="{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}" version="1.0" helpdir="" />
     </file>
 
@@ -11,7 +15,7 @@
         iid="{8875B2E2-0AB1-4BF0-A82A-8538DBB5535B}"
         proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
         baseInterface="{00000000-0000-0000-C000-000000000046}"
-        tlbid = "{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
+        tlbid="{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
 
     </comInterfaceExternalProxyStub>
 
@@ -20,7 +24,7 @@
         iid="{E569F09A-55AA-49B9-90EA-BE0B6AA487E1}"
         proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
         baseInterface="{00000000-0000-0000-C000-000000000046}"
-        tlbid = "{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
+        tlbid="{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
 
     </comInterfaceExternalProxyStub>
 
@@ -29,7 +33,7 @@
         iid="{954448CA-1894-4743-9261-BBE3C932FA27}"
         proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
         baseInterface="{00000000-0000-0000-C000-000000000046}"
-        tlbid = "{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
+        tlbid="{2B2B8941-29D3-4F81-BB1C-381AA74C0E0D}">
 
     </comInterfaceExternalProxyStub>
 
