@@ -8,6 +8,13 @@ struct IScriptServiceFactoryReleaseCallback
   virtual void OnFinalRelease() = 0;
 };
 
+/**
+ * The purpose of this class is to detect when all IE clients shut down and terminate the server.
+ * Instance of the class is created by CScriptServiceFactory but no reference to it is ever added by the com server.
+ * Only clients (IE instances) add to the reference count so when the last client shuts down this object is released.
+ * When this happens the only reference to IScriptServiceInstance gets released too along with its script engine.
+ * The com server detects this automatically and shuts down.
+ */
 template <class TScriptServiceFactory>
 class ATL_NO_VTABLE CScriptServiceInstanceClient :
   public CComObjectRootEx<CComSingleThreadModel>,
