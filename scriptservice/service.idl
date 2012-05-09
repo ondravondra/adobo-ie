@@ -12,19 +12,6 @@ library ScriptServiceLib
 
   [
     object,
-    uuid(1CF497CD-54CE-4800-8160-3E684BBC8E55),
-    oleautomation,
-    nonextensible,
-    helpstring("IScriptServiceScriptSource Interface"),
-    pointer_default(unique)
-  ]
-  interface IScriptServiceScriptSource : IUnknown
-  {
-    HRESULT GetScriptFor([in] BSTR bsID, [out, retval] BSTR* pbsRet);
-  };
-
-  [
-    object,
     uuid(8875B2E2-0AB1-4BF0-A82A-8538DBB5535B),
     oleautomation,
     nonextensible,
