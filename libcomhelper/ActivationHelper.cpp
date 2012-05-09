@@ -10,7 +10,7 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   if (!GetModuleFileNameW(callerModule, path, MAX_PATH))
   {
     error = GetLastError();
-    return;
+    goto leaveCtor;
   }
 
   wchar_t * lastSlash = wcsrchr(path, L'\\');
@@ -22,7 +22,7 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   if (wcscat_s(path, requiredDllName) != 0)
   {
     error = -1;
-    return;
+    goto leaveCtor;
   }
 
   ACTCTXW actCtx;
@@ -36,13 +36,17 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   if (contextHandle == INVALID_HANDLE_VALUE)
   {
     error = GetLastError();
-    return;
+    goto leaveCtor;
   }
 
   if (!::ActivateActCtx(contextHandle, &cookie))
   {
     error = GetLastError();
+    goto leaveCtor;
   }
+
+leaveCtor:
+  ATLASSERT(error == ERROR_SUCCESS);
 #endif
 }
 
