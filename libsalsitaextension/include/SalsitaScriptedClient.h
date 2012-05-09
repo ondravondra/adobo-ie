@@ -3,6 +3,10 @@
 #include <string>
 #include "SalsitaExtensionHelper.h"
 
+#ifdef USE_ACTIVATION_MANIFESTS
+#include "ActivationHelper.h"
+#endif
+
 template <class Timpl>
 class CSalsitaScriptedClient
 {
@@ -74,6 +78,10 @@ protected:
   virtual HRESULT CreateMagpieInstance()
   {
     HRESULT hr;
+
+#ifdef USE_ACTIVATION_MANIFESTS
+    CActivationHelper actHelper(GetLibraryModule(), L"magpie.dll");
+#endif
 
     // create a m_Magpie instance
     hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);

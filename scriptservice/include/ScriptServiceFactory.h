@@ -1,8 +1,11 @@
 #pragma once
 
 #include <string>
-
 #include "ScriptServiceInstanceClient.h"
+
+#ifdef USE_ACTIVATION_MANIFESTS
+#include "ActivationHelper.h"
+#endif
 
 template <class TFactoryImpl, const CLSID* pclsid>
 class ATL_NO_VTABLE CScriptServiceFactory :
@@ -74,6 +77,10 @@ private:
 
   HRESULT CreateNewScriptServiceInstance()
   {
+#ifdef USE_ACTIVATION_MANIFESTS
+    CActivationHelper actHelper(GetServerModule(), L"scriptservice.dll");
+#endif
+
     m_ScriptServiceInstanceIsInitialized = false;
     CComPtr<IScriptServiceInstance> pServiceInstance;
     HRESULT hr = pServiceInstance.CoCreateInstance(ScriptServiceLib::CLSID_ScriptServiceInstance);
