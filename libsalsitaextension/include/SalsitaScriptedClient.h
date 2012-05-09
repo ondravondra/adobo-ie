@@ -13,11 +13,11 @@ protected:
 
   CComPtr<IScriptServiceFactory> m_ScriptServiceFactory;
   CComPtr<IScriptServiceInstanceClient> m_ScriptServiceInstance;
-  bool m_BackgroundScriptStarted, m_BackgroundScriptFailed;
+  bool m_BackgroundScriptConnected, m_BackgroundScriptFailed;
 
   INT m_TabId;
 
-  CSalsitaScriptedClient() : m_BackgroundScriptStarted(false), m_BackgroundScriptFailed(false)
+  CSalsitaScriptedClient() : m_BackgroundScriptConnected(false), m_BackgroundScriptFailed(false)
   {
   }
 
@@ -83,7 +83,7 @@ protected:
     }
 
     VARIANT vtTabId;
-    if (m_BackgroundScriptStarted)
+    if (m_BackgroundScriptConnected)
     {
       vtTabId.intVal = m_TabId;
       vtTabId.vt = VT_INT;
@@ -141,7 +141,7 @@ protected:
       return hr;
     }
 
-    if (m_BackgroundScriptStarted)
+    if (m_BackgroundScriptConnected)
     {
       // Some extensions can run without background scripts.
       // If they do, however, then the content script cannot use the salsita api as there is no event handling mechanism available.
@@ -172,7 +172,7 @@ protected:
     return hr;
   }
 
-  HRESULT RunBackgroundScript()
+  HRESULT ConnectToBackgroundScript()
   {
     HRESULT hr;
 
@@ -181,7 +181,7 @@ protected:
       return E_FAIL;
     }
 
-    if (m_BackgroundScriptStarted)
+    if (m_BackgroundScriptConnected)
     {
       return S_OK;
     }
@@ -223,7 +223,7 @@ protected:
       return hr;
     }
 
-    m_BackgroundScriptStarted = true;
+    m_BackgroundScriptConnected = true;
     m_BackgroundScriptFailed = false;
     return S_OK;
   }
