@@ -6,7 +6,7 @@
  * This class provides methods for loading scripts from various sources.
  * Loaded scripts are added to whatever script engine the implementor chooses using a virtual method.
  */
-template<class Timpl> class CActiveScriptLoaderT 
+template<class Timpl> class CActiveScriptLoaderT
 {
 protected:
   virtual HRESULT AddLoadedScript(LPCOLESTR lpszSource, LPCOLESTR lpszFileName, LPCOLESTR lpszModuleName) = 0;

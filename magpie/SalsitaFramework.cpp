@@ -49,7 +49,7 @@ HRESULT CSalsitaFramework::AddCustomInternetSecurity(CComPtr<IXMLHttpRequest> pR
   IF_FAILED_RET(pSecurityImpl->QueryInterface(&pUnkSecurity));
   IF_FAILED_RET(pRequest->QueryInterface(&pObjWithSite));
   IF_FAILED_RET(pObjWithSite->SetSite(pUnkSecurity));
-  
+
   return S_OK;
 }
 

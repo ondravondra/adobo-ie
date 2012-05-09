@@ -50,7 +50,7 @@ CActivationHelper::~CActivationHelper()
   {
     ::DeactivateActCtx(0, cookie);
   }
-  
+
   if (contextHandle != INVALID_HANDLE_VALUE)
   {
     ::ReleaseActCtx(contextHandle);

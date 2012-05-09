@@ -135,7 +135,7 @@ protected:
 
   CScriptServiceInstanceClientComObject *m_ScriptServiceInstance;
   bool m_ScriptServiceInstanceIsInitialized;
-  
+
   /**
    * Performs loading of modules into a newly created script service instance.
    * The instance has already been successfuly initialized using the Init method.

@@ -48,5 +48,5 @@ public:
 private:
   CMagpieActiveScript *m_MagpieActiveScript;
 
-  HRESULT AddCustomInternetSecurity(CComPtr<IXMLHttpRequest> pRequest); 
+  HRESULT AddCustomInternetSecurity(CComPtr<IXMLHttpRequest> pRequest);
 };
