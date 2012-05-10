@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
     <file name="magpie.dll" hashalg="SHA1">
         <comClass clsid="{42F2CA19-AAA6-4CC1-99DA-AC4E0D89F508}"
                   threadingModel="Apartment"

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
     <file name="scriptservice.dll" hashalg="SHA1">
         <comClass clsid="{8E0DF3C3-BA52-47F7-B601-307E5CB207EF}"
                   threadingModel="Apartment"
