@@ -48,7 +48,7 @@ salsita.tabs.onCreated.addListener = function (listener) {
 };
 salsita.tabs.onActivated = {};
 salsita.tabs.onActivated.addListener = function (listener) {
-  apiImpl.addEventListener('tabs.onActivated', listener);
+  apiImpl.addEventListener('tabs.onActivated', function (_tabId) { debugger; listener({ tabId: _tabId }); });
 };
 salsita.tabs.onRemoved = {};
 salsita.tabs.onRemoved.addListener = function (listener) {
