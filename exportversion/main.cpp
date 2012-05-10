@@ -46,6 +46,14 @@ void WriteScriptServiceIdent()
   f.close();
 }
 
+void WriteAdoboVersionHeader()
+{
+  ofstream f;
+  f.open("adoboversion.h");
+  f << "#define ADOBO_VERSION \"" << manifestVersion << "\"" << endl;
+  f.close();
+}
+
 int main(int argc, const char ** argv)
 {
   if (argc < 2)
@@ -60,4 +68,23 @@ int main(int argc, const char ** argv)
 
   WriteMagpieIdent();
   WriteScriptServiceIdent();
+
+  char path[MAX_PATH + 1];
+  if (!GetModuleFileName(NULL, path, MAX_PATH))
+  {
+    return -1;
+  }
+
+  char * lastSlash = strrchr(path, '\\');
+  if (lastSlash)
+  {
+    *lastSlash = 0;
+  }
+
+  if (!SetCurrentDirectory(path))
+  {
+    return -1;
+  }
+
+  WriteAdoboVersionHeader();
 }

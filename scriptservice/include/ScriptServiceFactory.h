@@ -2,7 +2,14 @@
 
 #include <string>
 #include "ScriptServiceInstanceClient.h"
-#include "ActivationHelper.h"
+
+#include "adoboversion.h"
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='scriptservice' version='" ADOBO_VERSION "' \
+language='*'\"")
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='magpie' version='" ADOBO_VERSION "' \
+language='*'\"")
 
 template <class TFactoryImpl, const CLSID* pclsid>
 class ATL_NO_VTABLE CScriptServiceFactory :
@@ -74,8 +81,6 @@ private:
 
   HRESULT CreateNewScriptServiceInstance()
   {
-    CActivationHelper actHelper(GetServerModule(), L"scriptservice.dll"); ///< need to access ScriptServiceInstance class
-
     m_ScriptServiceInstanceIsInitialized = false;
     CComPtr<IScriptServiceInstance> pServiceInstance;
     HRESULT hr = pServiceInstance.CoCreateInstance(ScriptServiceLib::CLSID_ScriptServiceInstance);

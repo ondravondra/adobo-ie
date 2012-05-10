@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "ScriptServiceInstance.h"
-#include "libcomhelper/include/ActivationHelper.h"
-extern HINSTANCE g_hDllInstance;
 
 STDMETHODIMP CScriptServiceInstance::Init(const OLECHAR* extensionId, const OLECHAR* resourcesDir)
 {
@@ -15,8 +13,6 @@ STDMETHODIMP CScriptServiceInstance::Init(const OLECHAR* extensionId, const OLEC
   }
 
   m_ExtensionId = extensionId;
-
-  CActivationHelper actHelper(g_hDllInstance, L"magpie.dll"); ///< need to access MagpieApplication class and interfaces from magpie.dll
 
   HRESULT hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);
   if (FAILED(hr))
