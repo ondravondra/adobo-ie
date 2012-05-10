@@ -97,6 +97,16 @@ protected:
     return ReloadContentScript();
   }
 
+  // invoked from BrowserWindowStateChanged event handler
+  // TODO: handle this automatically
+  void ProcessBrowserWindowStateChanged(ULONG dwFlags, ULONG dwValidFlagsMask)
+  {
+    if ((dwValidFlagsMask & OLECMDIDF_WINDOWSTATE_USERVISIBLE) && (dwFlags & OLECMDIDF_WINDOWSTATE_USERVISIBLE))
+    {
+      m_Magpie->RaiseTabActivatedEvent();
+    }
+  }
+
 public:
   // IObjectWithSite
   STDMETHODIMP SetSite(IUnknown *pUnkSite)
