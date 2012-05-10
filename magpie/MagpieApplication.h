@@ -105,6 +105,7 @@ public:
   STDMETHOD(Run)(const OLECHAR* lpszModuleID);
   STDMETHOD(Shutdown)();
   STDMETHOD(ScriptAddNamedItem)(const OLECHAR *name, LPDISPATCH pDisp, ULONG dwFlags);
+  STDMETHOD(RaiseTabActivatedEvent)();
 
 private:
   // -------------------------------------------------------------------------
@@ -146,6 +147,11 @@ private:
   // A map of loaded modules. Key is the module ID.
   CAtlMap<CString, CComPtr<CMagpieModuleComObject> >
           m_Modules;
+
+  INT m_TabId;
+
+  // salsita api service is needed for raising events from the bho such as when a tab gets activated
+  CComQIPtr<ISalsitaApiService> m_SalsitaApiService;
 
   // Helper, pointing to the basic console. Used for aggregating
   //  the console interface.
