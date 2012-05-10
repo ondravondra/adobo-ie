@@ -4,6 +4,14 @@
 #include "SalsitaExtensionHelper.h"
 #include "ActivationHelper.h"
 
+#include "adoboversion.h"
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='scriptservice' version='" ADOBO_VERSION "' \
+language='*'\"")
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='magpie' version='" ADOBO_VERSION "' \
+language='*'\"")
+
 template <class Timpl>
 class CSalsitaScriptedClient
 {
@@ -76,8 +84,6 @@ protected:
   {
     HRESULT hr;
 
-    CActivationHelper actHelper(GetLibraryModule(), L"magpie.dll"); ///< need to access MagpieApplication class and interfaces from magpie.dll
-
     // create a m_Magpie instance
     hr = m_Magpie.CoCreateInstance(CLSID_MagpieApplication);
     if (FAILED(hr))
@@ -137,6 +143,8 @@ protected:
     DestroyMagpieInstance();
 
     HRESULT hr;
+
+    CActivationHelper actHelper(GetLibraryModule(), L"magpie.dll");
 
     hr = CreateMagpieInstance();
     if (FAILED(hr))
