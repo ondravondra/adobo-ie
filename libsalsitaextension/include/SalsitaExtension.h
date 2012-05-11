@@ -101,7 +101,7 @@ protected:
   // TODO: handle this automatically
   void ProcessBrowserWindowStateChanged(ULONG dwFlags, ULONG dwValidFlagsMask)
   {
-    if ((dwValidFlagsMask & OLECMDIDF_WINDOWSTATE_USERVISIBLE) && (dwFlags & OLECMDIDF_WINDOWSTATE_USERVISIBLE))
+    if (m_Magpie && (dwValidFlagsMask & OLECMDIDF_WINDOWSTATE_USERVISIBLE) && (dwFlags & OLECMDIDF_WINDOWSTATE_USERVISIBLE))
     {
       m_Magpie->RaiseTabActivatedEvent();
     }
