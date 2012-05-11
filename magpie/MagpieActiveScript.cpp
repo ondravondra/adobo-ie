@@ -17,7 +17,8 @@ const wchar_t *CMagpieActiveScript::m_SalsitaApiModuleId = L"__salsitaapi";
 //----------------------------------------------------------------------------
 //  CTOR
 CMagpieActiveScript::CMagpieActiveScript(CMagpieApplication & application) :
-  m_Application(application)
+  m_Application(application),
+  m_replacementSourceContextCnt(0)
 {
 }
 
@@ -159,7 +160,12 @@ HRESULT CMagpieActiveScript::AddLoadedScript(LPCOLESTR lpszSource, LPCOLESTR lps
   }
 
   DWORD_PTR sourceContext = 0;
-  IF_FAILED_RET(CActiveScriptDebugT::AddScriptFile(m_ScriptEngine, lpszFileName ? lpszFileName : lpszModuleName, lpszModuleName, lpszSource, sourceContext));
+  HRESULT hr = CActiveScriptDebugT::AddScriptFile(m_ScriptEngine, lpszFileName ? lpszFileName : lpszModuleName, lpszModuleName, lpszSource, sourceContext);
+  IF_FAILED_RET(hr);
+  if (hr == S_FALSE)
+  {
+    sourceContext = ++ m_replacementSourceContextCnt;
+  }
   return CActiveScriptT::AddScript(lpszSource, lpszModuleName, sourceContext);
 }
 

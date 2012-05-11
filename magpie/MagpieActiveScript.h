@@ -118,4 +118,6 @@ private:
   HRESULT GetSalsitaObject(VARIANT * result);
 
   static const wchar_t * m_SalsitaApiModuleId;
+
+  DWORD_PTR m_replacementSourceContextCnt; ///< this is used to generate source context ids if the debug interface is not available
 };
