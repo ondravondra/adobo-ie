@@ -76,6 +76,11 @@ protected:
     return S_OK;
   }
 
+  virtual void GetBrowserSite(CComPtr<IUnknown> &site)
+  {
+    site = m_spUnkSite;
+  }
+
   BOOL IsFrame(IDispatch* pDisp)
   {
     ATLASSERT(m_WebBrowser);

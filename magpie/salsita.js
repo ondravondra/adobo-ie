@@ -54,3 +54,9 @@ salsita.tabs.onRemoved = {};
 salsita.tabs.onRemoved.addListener = function (listener) {
   apiImpl.addEventListener('tabs.onRemoved', listener);
 };
+
+// content script api
+
+if (typeof _salsita_content_impl !== "undefined") {
+  salsita.content = _salsita_content_impl;
+}

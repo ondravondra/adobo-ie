@@ -33,6 +33,8 @@ public:
   void FinalRelease();
 
 public:
+  STDMETHOD(openNewTab)(BSTR url, BOOL setActive);
+  STDMETHOD(navigateTo)(BSTR url);
 
 private:
   HRESULT Init(LPUNKNOWN pClientSite);

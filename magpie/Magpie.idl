@@ -267,8 +267,11 @@ library MagpieLib
   ]
   interface ISalsitaContentApi : IDispatch
   {
-    /*[id(1)]
-    HRESULT*/
+    [id(1)]
+    HRESULT openNewTab([in, string] BSTR url, [in] BOOL setActive);
+
+    [id(2)]
+    HRESULT navigateTo([in, string] BSTR url);
   }
 
   [

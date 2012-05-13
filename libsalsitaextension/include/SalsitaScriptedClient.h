@@ -71,6 +71,11 @@ protected:
    */
   virtual HRESULT GetWindowForScript(CComQIPtr<IHTMLWindow2> &window) = 0;
 
+  /**
+   * Returns the site of the BHO/toolbar which the implementor receives in the SetSite method.
+   */
+  virtual void GetBrowserSite(CComPtr<IUnknown> &site) = 0;
+
   virtual HRESULT CreateMagpieInstance()
   {
     HRESULT hr;
@@ -121,7 +126,23 @@ protected:
       return hr;
     }
 
-    hr = m_Magpie->CreateSalsitaApi(m_TabId, pApiSrvUnk);
+    CComPtr<IUnknown> site;
+    GetBrowserSite(site);
+
+    if (site)
+    {
+      CComPtr<IDispatch> pSalsitaContentApi;
+      hr = m_Magpie->CreateSalsitaContentApiImplementation(site, &pSalsitaContentApi.p);
+      if (FAILED(hr))
+      {
+        return hr;
+      }
+
+      hr = m_Magpie->CreateSalsitaApi(m_TabId, pApiSrvUnk, CComVariant(pSalsitaContentApi.p));
+    } else {
+      hr = m_Magpie->CreateSalsitaApi(m_TabId, pApiSrvUnk);
+    }
+
     if (FAILED(hr))
     {
       return hr;

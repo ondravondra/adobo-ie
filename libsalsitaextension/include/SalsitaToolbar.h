@@ -96,6 +96,11 @@ public:
     return S_OK;
   }
 
+  virtual void GetBrowserSite(CComPtr<IUnknown> &site)
+  {
+    site = m_spUnkSite;
+  }
+
 private:
 
   HRESULT RunToolbarPage()

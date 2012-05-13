@@ -7,6 +7,7 @@
 #include "stdafx.h"
 #include "MagpieApplication.h"
 #include "DispExIdManager.h"
+#include "SalsitaContentApi.h"
 
 /*============================================================================
  * class CMagpieApplication
@@ -303,8 +304,7 @@ STDMETHODIMP CMagpieApplication::Init(
 STDMETHODIMP CMagpieApplication::CreateSalsitaContentApiImplementation(LPUNKNOWN pClientSite, LPDISPATCH *pContentApi)
 {
   ENSURE_RETVAL(pContentApi);
-  // TODO: ...
-  return S_OK;
+  return CSalsitaContentApi::Create(*pContentApi, pClientSite);
 }
 
 STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi, VARIANT pContentApi)
