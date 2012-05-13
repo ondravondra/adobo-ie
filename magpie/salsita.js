@@ -69,6 +69,8 @@ salsita.tabs.onRemoved.addListener = function (listener) {
 if (typeof _salsita_content_impl !== "undefined") {
   var contentApiImpl = _salsita_content_impl;
 
+  salsita.content = {};
+
   salsita.content.openNewTab = function (p) {
     return contentApiImpl.openNewTab(p.url, getParam(p, 'active', true));
   };
