@@ -300,7 +300,14 @@ STDMETHODIMP CMagpieApplication::Init(
   return S_OK;
 }
 
-STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
+STDMETHODIMP CMagpieApplication::CreateSalsitaContentApiImplementation(LPUNKNOWN pClientSite, LPDISPATCH *pContentApi)
+{
+  ENSURE_RETVAL(pContentApi);
+  // TODO: ...
+  return S_OK;
+}
+
+STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi, VARIANT pContentApi)
 {
   if (!pSalsitaApi)
   {
@@ -313,7 +320,7 @@ STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaA
   {
     return E_INVALIDARG;
   }
-  return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi);
+  return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi, pContentApi);
 }
 
 //----------------------------------------------------------------------------

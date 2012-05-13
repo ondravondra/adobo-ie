@@ -101,7 +101,8 @@ public:
   // -------------------------------------------------------------------------
   // IMagpieApplication methods. See .idl for description.
   STDMETHOD(Init)(const OLECHAR* extensionId, const OLECHAR* lpszFolderName, VARIANT extensionTabId);
-  STDMETHOD(CreateSalsitaApi)(INT tabId, LPUNKNOWN pSalsitaApi);
+  STDMETHOD(CreateSalsitaContentApiImplementation)(LPUNKNOWN pClientSite, LPDISPATCH *pContentApi);
+  STDMETHOD(CreateSalsitaApi)(INT tabId, LPUNKNOWN pSalsitaApi, VARIANT pContentApi);
   STDMETHOD(Run)(const OLECHAR* lpszModuleID);
   STDMETHOD(Shutdown)();
   STDMETHOD(ScriptAddNamedItem)(const OLECHAR *name, LPDISPATCH pDisp, ULONG dwFlags);

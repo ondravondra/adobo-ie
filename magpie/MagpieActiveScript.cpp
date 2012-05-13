@@ -60,7 +60,7 @@ HRESULT CMagpieActiveScript::GetSalsitaObject(VARIANT * result)
   return script.GetPropertyByName(L"salsita", result);
 }
 
-HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
+HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi, VARIANT pContentApi)
 {
   m_debugContextIdentifier.Format(_T("Tab id = %i"), tabId);
 
@@ -85,6 +85,12 @@ HRESULT CMagpieActiveScript::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 
   script.SetPropertyByRef(L"_salsita_impl", CComVariant(m_SalsitaApiImpl));
   script.SetPropertyByRef(L"salsita", CComVariant(pSalsitaOb));
+
+  if (pContentApi.vt == VT_DISPATCH)
+  {
+    m_SalsitaContentApi = pContentApi.pdispVal;
+    script.SetPropertyByRef(L"_salsita_content_impl", CComVariant(m_SalsitaContentApi));
+  }
 
   m_Application.EnterModule(m_SalsitaApiModuleId);
   HRESULT hr = LoadScriptResource(g_hDllInstance, L"salsita.js", m_SalsitaApiModuleId);
