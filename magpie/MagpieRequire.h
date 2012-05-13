@@ -22,8 +22,7 @@ typedef CComObject<CMagpieRequire>  CMagpieRequireComObject;
  */
 class ATL_NO_VTABLE CMagpieRequire :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public IDispatchImpl<IMagpieRequire, &IID_IMagpieRequire, &LIBID_MagpieLib,
-                      /*wMajor =*/ 1, /*wMinor =*/ 0>
+  public IDispatchImpl<IMagpieRequire, &IID_IMagpieRequire, &LIBID_MagpieLib, IDISP_MAGPIE_LIBVERSION>
 {
 public:
   // -------------------------------------------------------------------------

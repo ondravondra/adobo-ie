@@ -10,7 +10,7 @@ typedef CComObject<CSalsitaFramework> CSalsitaFrameworkComObject;
 
 class ATL_NO_VTABLE CSalsitaFramework :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public IDispatchImpl<ISalsitaFramework, &IID_ISalsitaFramework, &LIBID_MagpieLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+  public IDispatchImpl<ISalsitaFramework, &IID_ISalsitaFramework, &LIBID_MagpieLib, IDISP_MAGPIE_LIBVERSION>
 {
 public:
   // -------------------------------------------------------------------------
