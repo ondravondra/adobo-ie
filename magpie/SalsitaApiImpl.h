@@ -8,7 +8,7 @@ typedef CComObject<CSalsitaApiImpl> CSalsitaApiImplComObject;
 
 class ATL_NO_VTABLE CSalsitaApiImpl :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public IDispatchImpl<ISalsitaApiInternal, &IID_ISalsitaApiInternal, &LIBID_MagpieLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+  public IDispatchImpl<ISalsitaApiInternal, &IID_ISalsitaApiInternal, &LIBID_MagpieLib, IDISP_MAGPIE_LIBVERSION>
 {
 public:
   // -------------------------------------------------------------------------

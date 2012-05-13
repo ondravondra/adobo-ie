@@ -35,3 +35,6 @@ using namespace Misc;
 using namespace LIB_COMHelper;
 
 #include "libcomhelper\include\errorchecking.h"
+
+// see msdn for IDispatchImpl, this constant makes it possible to lookup typeinfo in the dll instead of requiring registry entries
+#define IDISP_MAGPIE_LIBVERSION 0xFFFF, 0xFFFF

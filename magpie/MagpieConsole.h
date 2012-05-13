@@ -22,8 +22,7 @@ class CMagpieApplication;
  */
 class ATL_NO_VTABLE CMagpieConsole :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public IDispatchImpl<IMagpieConsole, &IID_IMagpieConsole, &LIBID_MagpieLib,
-                       /*wMajor =*/ 1, /*wMinor =*/ 0>,
+  public IDispatchImpl<IMagpieConsole, &IID_IMagpieConsole, &LIBID_MagpieLib, IDISP_MAGPIE_LIBVERSION>,
   public IConnectionPointContainerImpl<CMagpieConsole>,
   public CProxy_IMagpieLoggerEvents<CMagpieConsole>
 {
