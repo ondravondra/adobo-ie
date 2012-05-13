@@ -1,5 +1,14 @@
 var apiImpl = _salsita_impl;
 
+function getParam(obj, name, defVal)
+{
+  if (name in obj) {
+    return obj[name];
+  } else {
+    return defVal;
+  }
+}
+
 function createTab()
 {
   return { id: apiImpl.currentTabId };
@@ -58,5 +67,23 @@ salsita.tabs.onRemoved.addListener = function (listener) {
 // content script api
 
 if (typeof _salsita_content_impl !== "undefined") {
-  salsita.content = _salsita_content_impl;
+  var contentApiImpl = _salsita_content_impl;
+
+  salsita.content.openNewTab = function (p) {
+    return contentApiImpl.openNewTab(p.url, getParam(p, 'active', true));
+  };
+
+  salsita.content.navigateTo = function (p) {
+    return contentApiImpl.navigateTo(p.url);
+  };
+
+  salsita.content.openPopupWindow = function (p, callback) {
+    return contentApiImpl.openPopupWindow(
+      p.url,
+      getParam(p, 'left', -1),
+      getParam(p, 'top', -1),
+      getParam(p, 'width', -1),
+      getParam(p, 'height', -1),
+      callback);
+  };
 }

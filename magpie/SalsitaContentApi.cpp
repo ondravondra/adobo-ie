@@ -72,3 +72,10 @@ STDMETHODIMP CSalsitaContentApi::navigateTo(BSTR url)
   CComVariant vtUrl(url);
   return m_WebBrowser->Navigate2(&vtUrl, NULL, NULL, NULL, NULL);
 }
+
+STDMETHODIMP CSalsitaContentApi::openPopupWindow(BSTR url, INT left, INT top, INT width, INT height, VARIANT onReady, INT *popupId)
+{
+  ENSURE_RETVAL(popupId);
+
+  return S_OK;
+}

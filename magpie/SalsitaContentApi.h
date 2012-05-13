@@ -35,6 +35,7 @@ public:
 public:
   STDMETHOD(openNewTab)(BSTR url, BOOL setActive);
   STDMETHOD(navigateTo)(BSTR url);
+  STDMETHOD(openPopupWindow)(BSTR url, INT left, INT top, INT width, INT height, VARIANT onReady, INT *popupId);
 
 private:
   HRESULT Init(LPUNKNOWN pClientSite);
