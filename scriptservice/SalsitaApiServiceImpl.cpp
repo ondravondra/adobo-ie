@@ -78,14 +78,11 @@ STDMETHODIMP CSalsitaApiServiceImpl::addEventListener(LPWSTR eventId, INT tabId,
   return S_OK;
 }
 
-STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback)
+HRESULT CSalsitaApiServiceImpl::CallListeners(LPWSTR eventId, INT recipientTabId, VARIANT *pvarParams, int nParams)
 {
-  CComVariant varSenderObject = senderObject;
-  CComVariant varRequest = request;
-  CComVariant varCallback = requestCallback;
   CAtlArray<CIDispatchHelper *> recipients;
 
-  EventListenerArrayT *listeners = GetListenerArray(L"extension.onRequest");
+  EventListenerArrayT *listeners = GetListenerArray(eventId);
   for (size_t i = 0; i < listeners->GetCount(); i ++)
   {
     EventListenerT *l = listeners->GetAt(i);
@@ -98,10 +95,27 @@ STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientT
   for (size_t i = 0; i < recipients.GetCount(); i ++)
   {
     CIDispatchHelper * r = recipients.GetAt(i);
-    CComVariant varArgs[3] = { varCallback, varSenderObject, varRequest };
-    r->InvokeN((DISPID)0, varArgs, 3);
+    r->InvokeN((DISPID)0, pvarParams, nParams);
     delete r; // release the listener
   }
 
   return S_OK;
+}
+
+STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback)
+{
+  CComVariant varSenderObject = senderObject;
+  CComVariant varRequest = request;
+  CComVariant varCallback = requestCallback;
+
+  CComVariant varArgs[3] = { varCallback, varSenderObject, varRequest };
+  return CallListeners(L"extension.onRequest", recipientTabId, varArgs, _countof(varArgs));
+}
+
+STDMETHODIMP CSalsitaApiServiceImpl::tabActivated(INT tabId)
+{
+  CComVariant varTabId(tabId, VT_INT);
+
+  CComVariant varArgs[1] = { varTabId };
+  return CallListeners(L"tabs.onActivated", -1, varArgs, _countof(varArgs));
 }

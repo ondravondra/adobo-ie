@@ -124,8 +124,11 @@ private:
     CComQIPtr<IWebBrowser2> caller = pDisp;
     if (caller && caller.IsEqualObject(m_HtmlWindow.m_pWebBrowser))
     {
-      ConnectToBackgroundScript();
-      ReloadContentScript();
+      HRESULT hr;
+      hr = ConnectToBackgroundScript();
+      ATLASSERT(SUCCEEDED(hr));
+      hr = ReloadContentScript();
+      ATLASSERT(SUCCEEDED(hr));
     }
   }
 

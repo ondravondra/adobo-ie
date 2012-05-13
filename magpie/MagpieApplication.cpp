@@ -17,7 +17,8 @@
 CMagpieApplication::CMagpieApplication() :
   m_Console(*this),
   m_ScriptEngine(*this),
-  m_ConsolePtr(NULL)
+  m_ConsolePtr(NULL),
+  m_TabId(-2)
 {
 }
 
@@ -301,6 +302,17 @@ STDMETHODIMP CMagpieApplication::Init(
 
 STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
 {
+  if (!pSalsitaApi)
+  {
+    return E_POINTER;
+  }
+  m_TabId = tabId;
+  m_SalsitaApiService.Release();
+  m_SalsitaApiService = pSalsitaApi;
+  if (!m_SalsitaApiService)
+  {
+    return E_INVALIDARG;
+  }
   return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi);
 }
 
@@ -322,6 +334,8 @@ STDMETHODIMP CMagpieApplication::Run(
 //  Shutdown
 STDMETHODIMP CMagpieApplication::Shutdown()
 {
+  // release the api service if we are holding it
+  m_SalsitaApiService.Release();
   // script engine first...
   m_ScriptEngine.Shutdown();
   // ...then modules...
@@ -338,4 +352,13 @@ STDMETHODIMP CMagpieApplication::Shutdown()
 STDMETHODIMP CMagpieApplication::ScriptAddNamedItem(const OLECHAR *name, LPDISPATCH pDisp, ULONG dwFlags)
 {
   return m_ScriptEngine.AddNamedItem(name, pDisp, dwFlags);
+}
+
+STDMETHODIMP CMagpieApplication::RaiseTabActivatedEvent()
+{
+  if (!m_SalsitaApiService)
+  {
+    return E_UNEXPECTED;
+  }
+  return m_SalsitaApiService->tabActivated(m_TabId);
 }

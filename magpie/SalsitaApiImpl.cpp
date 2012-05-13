@@ -17,6 +17,11 @@ HRESULT CSalsitaApiImpl::CreateObject(CSalsitaApiImplComObject *& pRet, INT tabI
   newObject->AddRef();
   newObject->m_TabId = tabId;
   newObject->m_ApiService = pSalsitaApi;
+  if (!newObject->m_ApiService)
+  {
+    delete newObject;
+    return E_INVALIDARG;
+  }
   newObject->m_ApiService->connectClient(tabId);
   pRet = newObject;
   return S_OK;

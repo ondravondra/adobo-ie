@@ -24,8 +24,11 @@ public:
 
   HRESULT InitializeDebugInterface(LPCOLESTR appId)
   {
-    IF_FAILED_RET(CoCreateInstance(CLSID_ProcessDebugManager, NULL, CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER,
-      IID_IProcessDebugManager, (void**)&m_debugManager));
+    if (FAILED(CoCreateInstance(CLSID_ProcessDebugManager, NULL, CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER,
+      IID_IProcessDebugManager, (void**)&m_debugManager)))
+    {
+      return S_FALSE; ///< on some PCs it is not available
+    }
 
     IF_FAILED_RET(m_debugManager->CreateApplication(&m_debugApp));
     IF_FAILED_RET(m_debugApp->SetName(appId));
@@ -37,6 +40,10 @@ public:
 
   void UninitializeDebugInterface()
   {
+    if (!m_debugManager)
+    {
+      return; ///< init failed
+    }
     m_debugDocHelpers.RemoveAll();
     if (m_appAdded)
     {
@@ -58,7 +65,7 @@ public:
   {
     if (!m_debugManager)
     {
-      return E_FAIL;
+      return S_FALSE; ///< init failed
     }
 
     CComPtr<IDebugDocumentHelper> debugDocHelper;
