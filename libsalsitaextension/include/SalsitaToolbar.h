@@ -28,7 +28,7 @@ public:
   END_COM_MAP()
 
   BEGIN_SINK_MAP(Timpl)
-    SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_NAVIGATECOMPLETE2, OnNavigateComplete2)
+    SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE, OnDocumentComplete)
   END_SINK_MAP()
 
 private:
@@ -124,7 +124,7 @@ private:
     return m_HtmlWindow.m_pWebBrowser->Navigate(CComBSTR(m_PageUrl.c_str()), NULL, NULL, NULL, NULL);
   }
 
-  STDMETHOD_(void, OnNavigateComplete2)(IDispatch *pDisp, VARIANT *URL)
+  STDMETHOD_(void, OnDocumentComplete)(LPDISPATCH pDisp, VARIANT *pURL)
   {
     CComQIPtr<IWebBrowser2> caller = pDisp;
     if (caller && caller.IsEqualObject(m_HtmlWindow.m_pWebBrowser))
