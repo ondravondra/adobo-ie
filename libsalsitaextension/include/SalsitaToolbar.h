@@ -13,7 +13,7 @@ class ATL_NO_VTABLE CSalsitaToolbar :
   public IDeskBand,
   public IInputObject,
   public IDispEventImpl<1, Timpl, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 0>,
-  public CSalsitaToolbarBrowserCustomization<Timpl>
+  public CSalsitaToolbarBrowserCustomization<Timpl> // TODO: no longer needed
 {
 public:
   DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -33,7 +33,7 @@ public:
 
 private:
   HWND m_hWndParent;
-  CHtmlToolbarWindow m_HtmlWindow;
+  CComObject<CHtmlToolbarWindow> *m_HtmlWindow;
   DWORD m_WebBrowserEventsCookie;
   std::wstring m_PageUrl;
 
@@ -58,7 +58,7 @@ protected:
   // CSalsitaScriptedClient
   virtual HRESULT GetWindowForScript(CComQIPtr<IHTMLWindow2> &window)
   {
-    window = CComUtil::IWebBrowserToIHTMLWindow(m_HtmlWindow.m_pWebBrowser);
+    window = CComUtil::IWebBrowserToIHTMLWindow(m_HtmlWindow->m_pWebBrowser);
     if (!window)
     {
       return E_FAIL;
@@ -70,11 +70,22 @@ protected:
 public:
   HRESULT FinalConstruct()
   {
-    return S_OK;
+    HRESULT hr = CComObject<CHtmlToolbarWindow>::CreateInstance(&m_HtmlWindow);
+    if (FAILED(hr))
+    {
+      return hr;
+    }
+    m_HtmlWindow->AddRef();
+    return hr;
   }
 
   void FinalRelease()
   {
+    if (m_HtmlWindow)
+    {
+      m_HtmlWindow->Release();
+      m_HtmlWindow = NULL;
+    }
   }
 
   // IObjectWithSite
@@ -107,27 +118,26 @@ private:
   {
     GetToolbarPage(m_PageUrl);
 
-    m_HtmlWindow.Create(m_hWndParent, CWindow::rcDefault, L"about:blank",
+    m_HtmlWindow->Create(m_hWndParent, CWindow::rcDefault, L"about:blank",
         WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_HSCROLL | WS_VSCROLL, WS_EX_CLIENTEDGE);
 
-    if (!m_HtmlWindow.m_pWebBrowser)
+    if (!m_HtmlWindow->m_pWebBrowser)
     {
       return E_FAIL;
     }
 
-    m_HtmlWindow.SetExternalUIHandler((IDocHostUIHandlerDispatch *)this);
-
-    AtlAdvise(m_HtmlWindow.m_pWebBrowser,
+    // TODO: move this to the CHtmlToolbarWindow classs
+    AtlAdvise(m_HtmlWindow->m_pWebBrowser,
       (IUnknown*)(IDispEventImpl<1, Timpl, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 0>*)this,
       DIID_DWebBrowserEvents2, &m_WebBrowserEventsCookie);
 
-    return m_HtmlWindow.m_pWebBrowser->Navigate(CComBSTR(m_PageUrl.c_str()), NULL, NULL, NULL, NULL);
+    return m_HtmlWindow->m_pWebBrowser->Navigate(CComBSTR(m_PageUrl.c_str()), NULL, NULL, NULL, NULL);
   }
 
   STDMETHOD_(void, OnDocumentComplete)(LPDISPATCH pDisp, VARIANT *pURL)
   {
     CComQIPtr<IWebBrowser2> caller = pDisp;
-    if (caller && caller.IsEqualObject(m_HtmlWindow.m_pWebBrowser))
+    if (caller && caller.IsEqualObject(m_HtmlWindow->m_pWebBrowser))
     {
       HRESULT hr;
       hr = ConnectToBackgroundScript();
@@ -166,9 +176,9 @@ protected:
 
   virtual HRESULT InternalReleaseSite()
   {
-    if (m_HtmlWindow.IsWindow())
+    if (m_HtmlWindow->IsWindow())
     {
-      m_HtmlWindow.DestroyWindow();
+      m_HtmlWindow->DestroyWindow();
     }
 
     CleanupScriptedClient();
@@ -243,7 +253,7 @@ public:
       return E_POINTER;
     }
 
-    *phwnd = m_HtmlWindow.m_hWnd;
+    *phwnd = m_HtmlWindow->m_hWnd;
     return S_OK;
   }
 
@@ -266,7 +276,7 @@ public:
 
   STDMETHOD(ShowDW)(BOOL fShow)
   {
-    m_HtmlWindow.ShowWindow(fShow ? SW_SHOW : SW_HIDE);
+    m_HtmlWindow->ShowWindow(fShow ? SW_SHOW : SW_HIDE);
     return S_OK;
   }
 
@@ -274,7 +284,7 @@ public:
 public:
   STDMETHOD(HasFocusIO)(void)
   {
-    return m_HtmlWindow.m_hWnd == ::GetFocus() ? S_OK : S_FALSE;
+    return m_HtmlWindow->m_hWnd == ::GetFocus() ? S_OK : S_FALSE;
   }
 
   STDMETHOD(TranslateAcceleratorIO)(LPMSG lpMsg)
@@ -286,7 +296,7 @@ public:
   {
     if (fActivate)
     {
-      m_HtmlWindow.SetFocus();
+      m_HtmlWindow->SetFocus();
     }
     return S_OK;
   }

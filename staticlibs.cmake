@@ -23,3 +23,12 @@ add_library(libsalsitaextension STATIC IMPORTED)
 set_property(TARGET libsalsitaextension PROPERTY IMPORTED_LOCATION_DEBUG "${libsalsitaextension_LIB_DIR_DEBUG}/${libsalsitaextension_LIB}")
 set_property(TARGET libsalsitaextension PROPERTY IMPORTED_LOCATION_RELEASE "${libsalsitaextension_LIB_DIR_RELEASE}/${libsalsitaextension_LIB}")
 
+set(libhtmlpanel_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/libhtmlpanel/include)
+set(libhtmlpanel_LIB "libhtmlpanel.lib")
+set(libhtmlpanel_LIB_DIR_DEBUG "${CMAKE_CURRENT_LIST_DIR}/_lib/${outdir_cfg_debug}")
+set(libhtmlpanel_LIB_DIR_RELEASE "${CMAKE_CURRENT_LIST_DIR}/_lib/${outdir_cfg_release}")
+
+add_library(libhtmlpanel STATIC IMPORTED)
+
+set_property(TARGET libhtmlpanel PROPERTY IMPORTED_LOCATION_DEBUG "${libhtmlpanel_LIB_DIR_DEBUG}/${libhtmlpanel_LIB}")
+set_property(TARGET libhtmlpanel PROPERTY IMPORTED_LOCATION_RELEASE "${libhtmlpanel_LIB_DIR_RELEASE}/${libhtmlpanel_LIB}")
