@@ -104,7 +104,14 @@ STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top,
     rect.bottom = top + height;
   }
 
-  if (wnd->Create(NULL, &rect, urlVal ? urlVal : _T("about:blank"), WS_POPUP, WS_EX_TOPMOST) == NULL)
+  HWND parent = NULL;
+  LONG_PTR parentLongHwnd;
+  if (SUCCEEDED(m_WebBrowser->get_HWND(&parentLongHwnd)))
+  {
+    parent = (HWND)parentLongHwnd;
+  }
+
+  if (wnd->Create(parent, &rect, urlVal ? urlVal : _T("about:blank"), WS_POPUP, 0) == NULL)
   {
     *popupId = 0;
     delete wnd;
