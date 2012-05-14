@@ -274,9 +274,9 @@ library MagpieLib
     HRESULT navigateTo([in, string] BSTR url);
 
     [id(3)]
-    HRESULT openPopupWindow([in, string] BSTR url,
+    HRESULT openPopupWindow([in] VARIANT url,
       [in] INT left, [in] INT top, [in] INT width, [in] INT height,
-      [in, optional] VARIANT onReady /* callback({ id : INT, window : IHTMLWindow2 }) */,
+      [in, optional] VARIANT onReady /* callback(INT id, IHTMLWindow2 window) */,
       [out, retval] INT *popupId);
   }
 

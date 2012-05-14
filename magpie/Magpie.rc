@@ -127,6 +127,7 @@ IDR_MAGPIE              REGISTRY                "Magpie.rgs"
 STRINGTABLE
 BEGIN
     IDS_PROJNAME            "Magpie"
+    IDS_POPUPWND            ""
 END
 
 #endif    // English (U.S.) resources

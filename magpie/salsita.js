@@ -81,11 +81,11 @@ if (typeof _salsita_content_impl !== "undefined") {
 
   salsita.content.openPopupWindow = function (p, callback) {
     return contentApiImpl.openPopupWindow(
-      p.url,
+      getParam(p, 'url', null),
       getParam(p, 'left', -1),
       getParam(p, 'top', -1),
       getParam(p, 'width', -1),
       getParam(p, 'height', -1),
-      callback);
+      function(id, wnd) { callback({id: id, window: wnd }); });
   };
 }

@@ -2,6 +2,7 @@
 
 #include "resource.h"
 #include "Magpie.h"
+#include "PopupBrowserWindow.h"
 
 class ATL_NO_VTABLE CSalsitaContentApi :
   public CComObjectRootEx<CComSingleThreadModel>,
@@ -35,10 +36,13 @@ public:
 public:
   STDMETHOD(openNewTab)(BSTR url, BOOL setActive);
   STDMETHOD(navigateTo)(BSTR url);
-  STDMETHOD(openPopupWindow)(BSTR url, INT left, INT top, INT width, INT height, VARIANT onReady, INT *popupId);
+  STDMETHOD(openPopupWindow)(VARIANT url, INT left, INT top, INT width, INT height, VARIANT onReady, INT *popupId);
 
 private:
   HRESULT Init(LPUNKNOWN pClientSite);
 
   CComPtr<IWebBrowser2> m_WebBrowser;
+
+  CAtlMap<INT, CPopupBrowserWindow *> m_Popups;
+  INT m_PopupIndexSeq;
 };
