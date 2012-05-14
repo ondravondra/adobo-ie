@@ -2,11 +2,11 @@
 
 #include "resource.h"
 
-class CPopupBrowserWindow;
-typedef CFrameWindowImpl<CPopupBrowserWindow, CWindow, CWinTraits<WS_POPUP, WS_EX_TOOLWINDOW> > CPopupBrowserFrame;
+class CPopupBrowser;
+typedef CWindowImpl<CPopupBrowser, CAxWindow> CPopupBrowserAxWindow;
 
 class CPopupBrowser :
-  public CWindowImpl<CPopupBrowser, CAxWindow>,
+  public CPopupBrowserAxWindow,
   public IDispEventImpl<1, CPopupBrowser, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 0>
 {
 public:
@@ -33,24 +33,4 @@ private:
   INT m_Id;
   CIDispatchHelper m_OnReady;
   bool m_OnReadyInvoked;
-};
-
-class CPopupBrowserWindow: public CPopupBrowserFrame
-{
-public:
-  DECLARE_FRAME_WND_CLASS(NULL, IDS_POPUPWND)
-
-  CPopupBrowserWindow(INT id, const OLECHAR *url, IDispatch *onReady);
-
-  CPopupBrowser m_view;
-
-  BEGIN_MSG_MAP(CPopupBrowserWindow)
-    MESSAGE_HANDLER(WM_CREATE, OnCreate)
-    CHAIN_MSG_MAP(CPopupBrowserFrame)
-  END_MSG_MAP()
-
-  LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-
-private:
-  CString m_Url;
 };

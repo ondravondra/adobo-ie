@@ -43,6 +43,6 @@ private:
 
   CComPtr<IWebBrowser2> m_WebBrowser;
 
-  CAtlMap<INT, CPopupBrowserWindow *> m_Popups;
+  CAtlMap<INT, CPopupBrowser *> m_Popups;
   INT m_PopupIndexSeq;
 };

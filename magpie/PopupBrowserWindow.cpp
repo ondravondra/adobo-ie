@@ -1,22 +1,6 @@
 #include "stdafx.h"
 #include "PopupBrowserWindow.h"
 
-CPopupBrowserWindow::CPopupBrowserWindow(INT id, const OLECHAR *url, IDispatch *onReady) : m_view(id, onReady)
-{
-  if (url)
-  {
-    m_Url = url;
-  }
-}
-
-LRESULT CPopupBrowserWindow::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
-{
-  LPCTSTR url = m_Url.GetBuffer();
-  m_view.Create(m_hWnd, rcDefault, (url && (*url)) ? url : _T("about:blank"), WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_HSCROLL | WS_VSCROLL, WS_EX_CLIENTEDGE);
-  m_Url.ReleaseBuffer();
-  return 0;
-}
-
 CPopupBrowser::CPopupBrowser(INT id, IDispatch *onReady)
 {
   m_Id = id;

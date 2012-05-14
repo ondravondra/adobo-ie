@@ -90,14 +90,28 @@ STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top,
     urlVal = url.bstrVal;
   }
 
-  //TODO: coordinates
-  CPopupBrowserWindow *wnd = new CPopupBrowserWindow(id, urlVal, ready.p);
-  if (wnd->CreateEx() == NULL)
+  CPopupBrowser *wnd = new CPopupBrowser(id, ready.p);
+  RECT rect;
+
+  if (left == -1 || top == -1 || width == -1 || height == -1) // all or nothing, ATL is stupid
+  {
+    rect.left = rect.top = CW_USEDEFAULT, CW_USEDEFAULT;
+    rect.right = rect.bottom = 0;
+  } else {
+    rect.left = left;
+    rect.right = left + width;
+    rect.top = top;
+    rect.bottom = top + height;
+  }
+
+  if (wnd->Create(NULL, &rect, urlVal ? urlVal : _T("about:blank"), WS_POPUP, WS_EX_TOPMOST) == NULL)
   {
     *popupId = 0;
     delete wnd;
     return E_FAIL;
   }
+
+  wnd->ShowWindow(SW_SHOW);
 
   m_Popups[id] = wnd;
   *popupId = id;
