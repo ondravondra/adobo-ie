@@ -1,6 +1,5 @@
 #pragma once
 
-#include "SalsitaToolbarBrowserCustomization.h"
 #include "SalsitaScriptedClient.h"
 #include "HtmlToolbarWindow.h"
 
@@ -12,8 +11,7 @@ class ATL_NO_VTABLE CSalsitaToolbar :
   public IObjectWithSiteImpl<Timpl>,
   public IDeskBand,
   public IInputObject,
-  public IDispEventImpl<1, Timpl, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 0>,
-  public CSalsitaToolbarBrowserCustomization<Timpl> // TODO: no longer needed
+  public SalsitaToolbarCallback
 {
 public:
   DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -24,21 +22,15 @@ public:
     COM_INTERFACE_ENTRY(IOleWindow)
     COM_INTERFACE_ENTRY_IID(IID_IDockingWindow, IDockingWindow)
     COM_INTERFACE_ENTRY(IInputObject)
-    COM_INTERFACE_ENTRY(IDocHostUIHandlerDispatch)
   END_COM_MAP()
-
-  BEGIN_SINK_MAP(Timpl)
-    SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE, OnDocumentComplete)
-  END_SINK_MAP()
 
 private:
   HWND m_hWndParent;
   CComObject<CHtmlToolbarWindow> *m_HtmlWindow;
-  DWORD m_WebBrowserEventsCookie;
   std::wstring m_PageUrl;
 
 protected:
-  CSalsitaToolbar() : m_dwBandID(0), m_dwViewMode(0), m_hWndParent(NULL), m_WebBrowserEventsCookie(0)
+  CSalsitaToolbar() : m_dwBandID(0), m_dwViewMode(0), m_hWndParent(NULL)
   {
   }
 
@@ -76,6 +68,7 @@ public:
       return hr;
     }
     m_HtmlWindow->AddRef();
+    m_HtmlWindow->m_toolbarCallback = dynamic_cast<SalsitaToolbarCallback *>(this);
     return hr;
   }
 
@@ -83,6 +76,7 @@ public:
   {
     if (m_HtmlWindow)
     {
+      m_HtmlWindow->m_toolbarCallback = NULL;
       m_HtmlWindow->Release();
       m_HtmlWindow = NULL;
     }
@@ -126,25 +120,16 @@ private:
       return E_FAIL;
     }
 
-    // TODO: move this to the CHtmlToolbarWindow classs
-    AtlAdvise(m_HtmlWindow->m_pWebBrowser,
-      (IUnknown*)(IDispEventImpl<1, Timpl, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 0>*)this,
-      DIID_DWebBrowserEvents2, &m_WebBrowserEventsCookie);
-
     return m_HtmlWindow->m_pWebBrowser->Navigate(CComBSTR(m_PageUrl.c_str()), NULL, NULL, NULL, NULL);
   }
 
-  STDMETHOD_(void, OnDocumentComplete)(LPDISPATCH pDisp, VARIANT *pURL)
+  virtual void ToolbarWindowReady(VARIANT *pURL)
   {
-    CComQIPtr<IWebBrowser2> caller = pDisp;
-    if (caller && caller.IsEqualObject(m_HtmlWindow->m_pWebBrowser))
-    {
-      HRESULT hr;
-      hr = ConnectToBackgroundScript();
-      ATLASSERT(SUCCEEDED(hr));
-      hr = ReloadContentScript();
-      ATLASSERT(SUCCEEDED(hr));
-    }
+    HRESULT hr;
+    hr = ConnectToBackgroundScript();
+    ATLASSERT(SUCCEEDED(hr));
+    hr = ReloadContentScript();
+    ATLASSERT(SUCCEEDED(hr));
   }
 
 protected:
