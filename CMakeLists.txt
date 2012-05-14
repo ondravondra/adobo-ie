@@ -27,6 +27,7 @@ if(version_build)
 endif(version_build)
 
 add_subdirectory(libcomhelper)
+add_subdirectory(libsalsitaextension)
+add_subdirectory(libhtmlpanel)
 add_subdirectory(magpie)
 add_subdirectory(scriptservice)
-add_subdirectory(libsalsitaextension)
