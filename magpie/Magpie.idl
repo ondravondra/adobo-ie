@@ -278,6 +278,12 @@ library MagpieLib
       [in] INT left, [in] INT top, [in] INT width, [in] INT height,
       [in, optional] VARIANT onReady /* callback(INT id, IHTMLWindow2 window) */,
       [out, retval] INT *popupId);
+
+    [id(4)]
+    HRESULT closePopupWindow([in] INT popupId);
+
+    [id(5)]
+    HRESULT closeAllPopupWindows();
   }
 
   [

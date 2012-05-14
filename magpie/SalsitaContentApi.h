@@ -37,12 +37,17 @@ public:
   STDMETHOD(openNewTab)(BSTR url, BOOL setActive);
   STDMETHOD(navigateTo)(BSTR url);
   STDMETHOD(openPopupWindow)(VARIANT url, INT left, INT top, INT width, INT height, VARIANT onReady, INT *popupId);
+  STDMETHOD(closePopupWindow)(INT popupId);
+  STDMETHOD(closeAllPopupWindows)();
 
 private:
   HRESULT Init(LPUNKNOWN pClientSite);
 
   CComPtr<IWebBrowser2> m_WebBrowser;
 
-  CAtlMap<INT, CPopupBrowser *> m_Popups;
+  void DoClosePopupWindow(CPopupBrowser *browser);
+
+  typedef CAtlMap<INT, CPopupBrowser *> m_PopupMapT;
+  m_PopupMapT m_Popups;
   INT m_PopupIndexSeq;
 };

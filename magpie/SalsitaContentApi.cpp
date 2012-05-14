@@ -117,3 +117,46 @@ STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top,
   *popupId = id;
   return S_OK;
 }
+
+void CSalsitaContentApi::DoClosePopupWindow(CPopupBrowser *browser)
+{
+  if (!browser)
+  {
+    return;
+  }
+
+  if (browser->IsWindow())
+  {
+    browser->DestroyWindow();
+  }
+
+  delete browser;
+}
+
+STDMETHODIMP CSalsitaContentApi::closePopupWindow(INT popupId)
+{
+  m_PopupMapT::CPair *pair = m_Popups.Lookup(popupId);
+  if (!pair || !pair->m_value)
+  {
+    return S_OK; ///< already closed
+  }
+
+  DoClosePopupWindow(pair->m_value);
+
+  m_Popups.RemoveKey(popupId);
+  return S_OK;
+}
+
+STDMETHODIMP CSalsitaContentApi::closeAllPopupWindows()
+{
+  POSITION p = m_Popups.GetStartPosition();
+  while (p)
+  {
+    m_PopupMapT::CPair *pair = m_Popups.GetNext(p);
+    DoClosePopupWindow(pair->m_value);
+  }
+
+  m_Popups.RemoveAll();
+
+  return S_OK;
+}

@@ -88,4 +88,12 @@ if (typeof _salsita_content_impl !== "undefined") {
       getParam(p, 'height', -1),
       function(id, wnd) { callback({id: id, window: wnd }); });
   };
+
+  salsita.content.closePopupWindow = function(id) {
+    return contentApiImpl.closePopupWindow(id);
+  };
+
+  salsita.content.closeAllPopupWindows = function() {
+    return contentApiImpl.closeAllPopupWindows();
+  };
 }
