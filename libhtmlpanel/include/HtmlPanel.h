@@ -28,5 +28,5 @@ public:
 protected:
   CHtmlPanel();
 
-  virtual void OnBrowserDocumentComplete(VARIANT *URL) = 0;
+  virtual void OnBrowserDocumentComplete(VARIANT *URL);
 };

@@ -45,3 +45,7 @@ STDMETHODIMP_(void) CHtmlPanel::BrowserDocumentCompleteEvent(IDispatch *pDisp, V
     OnBrowserDocumentComplete(URL);
   }
 }
+
+void CHtmlPanel::OnBrowserDocumentComplete(VARIANT *URL)
+{
+}
