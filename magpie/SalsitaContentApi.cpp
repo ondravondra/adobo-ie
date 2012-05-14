@@ -90,7 +90,10 @@ STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top,
     urlVal = url.bstrVal;
   }
 
-  CPopupBrowser *wnd = new CPopupBrowser(id, ready.p);
+  CComObject<CPopupBrowser> *wnd;
+  IF_FAILED_RET(CComObject<CPopupBrowser>::CreateInstance(&wnd));
+  wnd->AddRef();
+  wnd->Init(id, ready.p);
   RECT rect;
 
   if (left == -1 || top == -1 || width == -1 || height == -1) // all or nothing, ATL is stupid
@@ -137,7 +140,7 @@ void CSalsitaContentApi::DoClosePopupWindow(CPopupBrowser *browser)
     browser->DestroyWindow();
   }
 
-  delete browser;
+  browser->Release();
 }
 
 STDMETHODIMP CSalsitaContentApi::closePopupWindow(INT popupId)

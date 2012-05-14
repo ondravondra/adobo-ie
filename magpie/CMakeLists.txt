@@ -4,7 +4,7 @@ set(generated_files "${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)/magpie_i.c")
 add_library(magpie SHARED ${source_files} ${generated_files})
 set_source_files_properties(${generated_files} PROPERTIES GENERATED 1)
 
-include_directories("${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)" "../libcomhelper/include")
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS -D_UNICODE -D_ATL_STATIC_REGISTRY -D_CRT_NON_CONFORMING_SWPRINTFS")
 

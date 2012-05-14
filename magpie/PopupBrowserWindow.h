@@ -6,7 +6,8 @@ class CPopupBrowser :
   public CHtmlPanel
 {
 public:
-  CPopupBrowser(INT id, IDispatch *onReady);
+  CPopupBrowser();
+  void Init(INT id, IDispatch *onReady);
 
 protected:
   virtual void OnBrowserDocumentComplete(VARIANT *URL);

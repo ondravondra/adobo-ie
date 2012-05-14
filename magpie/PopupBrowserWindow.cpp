@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "PopupBrowserWindow.h"
 
-CPopupBrowser::CPopupBrowser(INT id, IDispatch *onReady)
+CPopupBrowser::CPopupBrowser()
+{
+}
+
+void CPopupBrowser::Init(INT id, IDispatch *onReady)
 {
   m_Id = id;
   m_OnReady = onReady;
