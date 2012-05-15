@@ -96,4 +96,48 @@ if (typeof _salsita_content_impl !== "undefined") {
   salsita.content.closeAllPopupWindows = function() {
     return contentApiImpl.closeAllPopupWindows();
   };
+
+  // menu api
+  // p has parent, rect
+  // rect has left, top, width, height; left and top are relative to parent's topleft corner
+  // position properties used here work in ie but might not work elsewhere!
+  salsita.content.openMenu = function(p, callback) {
+    var top = p.parent.offsetTop;
+    var left = p.parent.offsetLeft;
+    var el = p.parent;
+    while (el.offsetParent && el.offsetParent !== el)
+    {
+      el = el.offsetParent;
+      top += el.offsetTop;
+      left += el.offsetLeft;
+    }
+    top += window.screenTop;
+    left += window.screenLeft;
+
+    var w = -1, h = -1;
+    if ('rect' in p)
+    {
+      top += getParam(p.rect, 'top', 0);
+      left += getParam(p.rect, 'left', 0);
+      w = getParam(p.rect, 'width', 0);
+      h = getParam(p.rect, 'height', 0);
+    }
+
+    (function(_wndPar) {
+      var cbFunc = function(wnd)
+      {
+        callback(
+          {
+            menu: { identity: wnd.id, rect: _wndPar },
+            root: wnd.window.document,
+            window: wnd.window
+          });
+      };
+      salsita.content.openPopupWindow(_wndPar, cbFunc);
+    })({left: left, top: top, width: w, height: h});
+  };
+
+  salsita.content.closeMenu = function (identity) {
+    salsita.content.closePopupWindow(identity);
+  };
 }
