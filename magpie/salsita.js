@@ -129,7 +129,7 @@ if (typeof _salsita_content_impl !== "undefined") {
         callback(
           {
             menu: { identity: wnd.id, rect: _wndPar },
-            root: wnd.window.document,
+            root: wnd.window.document.body,
             window: wnd.window
           });
       };
