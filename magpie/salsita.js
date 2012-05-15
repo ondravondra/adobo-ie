@@ -101,31 +101,35 @@ if (typeof _salsita_content_impl !== "undefined") {
   // p has parent, rect
   // rect has left, top, width, height; left and top are relative to parent's topleft corner
   // position properties used here work in ie but might not work elsewhere!
-  salsita.content.openMenu = function(p, callback) {
-    var top = p.parent.offsetTop;
-    var left = p.parent.offsetLeft;
+  salsita.content.openMenu = function (p, callback) {
     var el = p.parent;
-    while (el.offsetParent && el.offsetParent !== el)
-    {
+    var top = el.offsetTop - el.scrollTop;
+    var left = el.offsetLeft - el.scrollLeft;
+
+    while (el.offsetParent && el.offsetParent !== el) {
       el = el.offsetParent;
-      top += el.offsetTop;
-      left += el.offsetLeft;
+      top += el.offsetTop - el.scrollTop;
+      left += el.offsetLeft - el.scrollLeft;
+    };
+
+    if (el.parentElement) {
+      top -= el.parentElement.scrollTop;
+      left -= el.parentElement.scrollLeft;
     }
-    top += window.screenTop;
-    left += window.screenLeft;
+
+    top += el.ownerDocument.parentWindow.screenTop;
+    left += el.ownerDocument.parentWindow.screenLeft;
 
     var w = -1, h = -1;
-    if ('rect' in p)
-    {
+    if ('rect' in p) {
       top += getParam(p.rect, 'top', 0);
       left += getParam(p.rect, 'left', 0);
       w = getParam(p.rect, 'width', 0);
       h = getParam(p.rect, 'height', 0);
     }
 
-    (function(_wndPar) {
-      var cbFunc = function(wnd)
-      {
+    (function (_wndPar) {
+      var cbFunc = function (wnd) {
         callback(
           {
             menu: { identity: wnd.id, rect: _wndPar },
@@ -134,7 +138,7 @@ if (typeof _salsita_content_impl !== "undefined") {
           });
       };
       salsita.content.openPopupWindow(_wndPar, cbFunc);
-    })({left: left, top: top, width: w, height: h});
+    })({ left: left, top: top, width: w, height: h });
   };
 
   salsita.content.closeMenu = function (identity) {
