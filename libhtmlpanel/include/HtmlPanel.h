@@ -30,6 +30,7 @@ public:
   BEGIN_SINK_MAP(CHtmlPanel)
     SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_BEFORENAVIGATE2, BrowserBeforeNavigate2Event)
     SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE, BrowserDocumentCompleteEvent)
+    SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_WINDOWCLOSING, BrowserWindowClosing)
   END_SINK_MAP()
 
   LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -37,10 +38,12 @@ public:
 
   STDMETHOD_(void, BrowserBeforeNavigate2Event)(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel);
   STDMETHOD_(void, BrowserDocumentCompleteEvent)(IDispatch *pDisp, VARIANT *URL);
+  STDMETHOD_(void, BrowserWindowClosing)(VARIANT_BOOL IsChildWindow, VARIANT_BOOL *Cancel);
 
 protected:
   CHtmlPanel();
 
   virtual void OnBrowserBeforeNavigate2(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel);
   virtual void OnBrowserDocumentComplete(VARIANT *URL);
+  virtual void OnBrowserWindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL *Cancel);
 };

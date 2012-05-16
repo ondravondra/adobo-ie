@@ -20,3 +20,11 @@ void CHtmlToolbarWindow::OnBrowserDocumentComplete(VARIANT *URL)
     m_toolbarCallback->ToolbarWindowReady(URL);
   }
 }
+
+void CHtmlToolbarWindow::OnBrowserWindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL *Cancel)
+{
+  if (Cancel)
+  {
+    *Cancel = TRUE;
+  }
+}

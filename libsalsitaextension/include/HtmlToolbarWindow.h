@@ -18,4 +18,5 @@ public:
 protected:
   virtual void OnBrowserBeforeNavigate2(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel);
   virtual void OnBrowserDocumentComplete(VARIANT *URL);
+  virtual void OnBrowserWindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL *Cancel);
 };

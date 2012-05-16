@@ -57,10 +57,19 @@ STDMETHODIMP_(void) CHtmlPanel::BrowserDocumentCompleteEvent(IDispatch *pDisp, V
   }
 }
 
+STDMETHODIMP_(void) CHtmlPanel::BrowserWindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL *Cancel)
+{
+  OnBrowserWindowClosing(IsChildWindow, Cancel);
+}
+
 void CHtmlPanel::OnBrowserBeforeNavigate2(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel)
 {
 }
 
 void CHtmlPanel::OnBrowserDocumentComplete(VARIANT *URL)
+{
+}
+
+void CHtmlPanel::OnBrowserWindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL *Cancel)
 {
 }
