@@ -24,7 +24,6 @@ LRESULT CHtmlPanel::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/
   if (FAILED(hr))
     return -1;
 
-  IDocHostUIHandlerDispatch *h = (IDocHostUIHandlerDispatch *)this;
   SetExternalUIHandler((IDocHostUIHandlerDispatch *)this);
 
   return 0;
