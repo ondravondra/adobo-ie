@@ -39,6 +39,15 @@ LRESULT CHtmlPanel::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*
   return 0;
 }
 
+STDMETHODIMP_(void) CHtmlPanel::BrowserBeforeNavigate2Event(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel)
+{
+  CComQIPtr<IWebBrowser2> caller = pDisp;
+  if (caller && caller.IsEqualObject(m_pWebBrowser))
+  {
+    OnBrowserBeforeNavigate2(pDisp, pURL, Flags, TargetFrameName, PostData, Headers, Cancel);
+  }
+}
+
 STDMETHODIMP_(void) CHtmlPanel::BrowserDocumentCompleteEvent(IDispatch *pDisp, VARIANT *URL)
 {
   CComQIPtr<IWebBrowser2> caller = pDisp;
@@ -46,6 +55,10 @@ STDMETHODIMP_(void) CHtmlPanel::BrowserDocumentCompleteEvent(IDispatch *pDisp, V
   {
     OnBrowserDocumentComplete(URL);
   }
+}
+
+void CHtmlPanel::OnBrowserBeforeNavigate2(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel)
+{
 }
 
 void CHtmlPanel::OnBrowserDocumentComplete(VARIANT *URL)

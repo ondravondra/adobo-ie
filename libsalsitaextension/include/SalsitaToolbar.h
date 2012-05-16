@@ -123,6 +123,11 @@ private:
     return m_HtmlWindow->m_pWebBrowser->Navigate(CComBSTR(m_PageUrl.c_str()), NULL, NULL, NULL, NULL);
   }
 
+  virtual void ToolbarWindowBeforeNavigate()
+  {
+    DestroyMagpieInstance();
+  }
+
   virtual void ToolbarWindowReady(VARIANT *pURL)
   {
     HRESULT hr;

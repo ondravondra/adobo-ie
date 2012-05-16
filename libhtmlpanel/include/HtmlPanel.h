@@ -28,16 +28,19 @@ public:
   END_COM_MAP()
 
   BEGIN_SINK_MAP(CHtmlPanel)
+    SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_BEFORENAVIGATE2, BrowserBeforeNavigate2Event)
     SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE, BrowserDocumentCompleteEvent)
   END_SINK_MAP()
 
   LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
   LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
 
+  STDMETHOD_(void, BrowserBeforeNavigate2Event)(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel);
   STDMETHOD_(void, BrowserDocumentCompleteEvent)(IDispatch *pDisp, VARIANT *URL);
 
 protected:
   CHtmlPanel();
 
+  virtual void OnBrowserBeforeNavigate2(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel);
   virtual void OnBrowserDocumentComplete(VARIANT *URL);
 };
