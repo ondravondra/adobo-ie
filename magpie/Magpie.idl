@@ -8,6 +8,14 @@ import "oaidl.idl";
 import "ocidl.idl";
 
 /*==========================================================================*/
+
+typedef enum
+{
+  TAB_CREATED = 0,
+  TAB_ACTIVATED = 1,
+  TAB_REMOVED = 2
+} TabEventType;
+
 [
   helpstring(
     "IMagpieApplication Interface. This is the interface "
@@ -63,9 +71,9 @@ interface IMagpieApplication : IUnknown
   HRESULT ScriptAddNamedItem([in, string] const OLECHAR *name, [in] LPDISPATCH pDisp, [in] ULONG dwFlags);
 
   [helpstring(
-    "Invoked from the extension when the user activates its window."
+    "Invoked from the extension when window state changes."
   )]
-  HRESULT RaiseTabActivatedEvent();
+  HRESULT RaiseTabEvent([in] TabEventType eventType);
 };
 
 /*==========================================================================*/

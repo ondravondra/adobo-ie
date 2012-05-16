@@ -106,7 +106,7 @@ public:
   STDMETHOD(Run)(const OLECHAR* lpszModuleID);
   STDMETHOD(Shutdown)();
   STDMETHOD(ScriptAddNamedItem)(const OLECHAR *name, LPDISPATCH pDisp, ULONG dwFlags);
-  STDMETHOD(RaiseTabActivatedEvent)();
+  STDMETHOD(RaiseTabEvent)(TabEventType eventType);
 
 private:
   // -------------------------------------------------------------------------

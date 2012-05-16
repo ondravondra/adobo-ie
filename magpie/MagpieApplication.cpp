@@ -361,11 +361,17 @@ STDMETHODIMP CMagpieApplication::ScriptAddNamedItem(const OLECHAR *name, LPDISPA
   return m_ScriptEngine.AddNamedItem(name, pDisp, dwFlags);
 }
 
-STDMETHODIMP CMagpieApplication::RaiseTabActivatedEvent()
+STDMETHODIMP CMagpieApplication::RaiseTabEvent(TabEventType eventType)
 {
   if (!m_SalsitaApiService)
   {
     return E_UNEXPECTED;
   }
-  return m_SalsitaApiService->tabActivated(m_TabId);
+  switch (eventType)
+  {
+  case TAB_ACTIVATED:
+    return m_SalsitaApiService->tabActivated(m_TabId);
+  default:
+    return E_INVALIDARG;
+  }
 }

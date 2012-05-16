@@ -71,6 +71,11 @@ protected:
       m_WebBrowser.Release();
     }
 
+    if (m_Magpie)
+    {
+      m_Magpie->RaiseTabEvent(TAB_REMOVED);
+    }
+
     CleanupScriptedClient();
 
     return S_OK;
@@ -108,7 +113,7 @@ protected:
   {
     if (m_Magpie && (dwValidFlagsMask & OLECMDIDF_WINDOWSTATE_USERVISIBLE) && (dwFlags & OLECMDIDF_WINDOWSTATE_USERVISIBLE))
     {
-      m_Magpie->RaiseTabActivatedEvent();
+      m_Magpie->RaiseTabEvent(TAB_ACTIVATED);
     }
   }
 
