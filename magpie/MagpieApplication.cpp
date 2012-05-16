@@ -369,8 +369,12 @@ STDMETHODIMP CMagpieApplication::RaiseTabEvent(TabEventType eventType)
   }
   switch (eventType)
   {
+  case TAB_CREATED:
+    return m_SalsitaApiService->tabCreated(m_TabId);
   case TAB_ACTIVATED:
     return m_SalsitaApiService->tabActivated(m_TabId);
+  case TAB_REMOVED:
+    return m_SalsitaApiService->tabRemoved(m_TabId);
   default:
     return E_INVALIDARG;
   }

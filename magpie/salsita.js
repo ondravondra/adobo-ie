@@ -52,15 +52,15 @@ salsita.tabs.sendRequest = function (tabId, request, callback) {
   apiImpl.performSendRequest(tabId, createSender(), request, callback);
 };
 salsita.tabs.onCreated = {};
-salsita.tabs.onCreated.addListener = function (listener) { // TODO: implement in the c++ code
-  apiImpl.addEventListener('tabs.onCreated', function (_tabId) { listener({ tabId: _tabId }); });
+salsita.tabs.onCreated.addListener = function (listener) {
+  apiImpl.addEventListener('tabs.onCreated', function (_tabId) { listener({ id: _tabId }); });
 };
 salsita.tabs.onActivated = {};
 salsita.tabs.onActivated.addListener = function (listener) {
   apiImpl.addEventListener('tabs.onActivated', function (_tabId) { listener({ tabId: _tabId }); });
 };
 salsita.tabs.onRemoved = {};
-salsita.tabs.onRemoved.addListener = function (listener) { // TODO: implement in the c++ code
+salsita.tabs.onRemoved.addListener = function (listener) {
   apiImpl.addEventListener('tabs.onRemoved', listener);
 };
 
