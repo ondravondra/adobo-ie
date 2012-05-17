@@ -23,6 +23,9 @@ public:
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
+  BEGIN_COM_MAP(CSalsitaExtensionEventHandler)
+  END_COM_MAP()
+
   BEGIN_SINK_MAP(CSalsitaExtensionEventHandler)
     SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_BEFORENAVIGATE2, OnBrowserBeforeNavigate2)
     SINK_ENTRY_EX(1, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE, OnBrowserDocumentComplete)
@@ -32,4 +35,10 @@ public:
   STDMETHOD_(void, OnBrowserBeforeNavigate2)(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel);
   STDMETHOD_(void, OnBrowserDocumentComplete)(LPDISPATCH pDisp, VARIANT *pURL);
   STDMETHOD_(void, OnBrowserWindowStateChanged)(ULONG dwFlags, ULONG dwValidFlagsMask);
+
+  void AdviseBrowser(IUnknown *browser);
+  void UnadviseBrowser(IUnknown *browser);
+
+private:
+  DWORD m_eventsCookie;
 };
