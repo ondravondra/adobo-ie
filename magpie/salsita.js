@@ -110,7 +110,7 @@ if (typeof _salsita_content_impl !== "undefined") {
       el = el.offsetParent;
       top += el.offsetTop - el.scrollTop;
       left += el.offsetLeft - el.scrollLeft;
-    };
+    }
 
     if (el.parentElement) {
       top -= el.parentElement.scrollTop;
