@@ -207,10 +207,16 @@ protected:
       return S_OK;
     }
 
+    const IID *factoryCLSID = GetBackgroundScriptServiceFactoryCLSID();
+    if (!factoryCLSID)
+    {
+      return S_FALSE;
+    }
+
     m_BackgroundScriptFailed = true;
 
     CComPtr<IUnknown> pFactoryObject;
-    hr = pFactoryObject.CoCreateInstance(*GetBackgroundScriptServiceFactoryCLSID());
+    hr = pFactoryObject.CoCreateInstance(*factoryCLSID);
     if (FAILED(hr))
     {
       return hr;

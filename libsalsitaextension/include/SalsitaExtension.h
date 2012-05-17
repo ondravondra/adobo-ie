@@ -2,19 +2,20 @@
 
 #include <string>
 #include "SalsitaScriptedClient.h"
+#include "SalsitaExtensionEventHandler.h"
 
 template <class Timpl>
 class CSalsitaExtension :
+  public CComObjectRootEx<CComSingleThreadModel>,
   public CSalsitaScriptedClientWithEvents<Timpl>,
-  public IObjectWithSiteImpl<Timpl>,
-  public IDispEventImpl<1, Timpl, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 0>
+  public SalsitaExtensionEventCallback,
+  public IObjectWithSiteImpl<Timpl>
 {
 protected:
-  DWORD m_WebBrowserEventsCookie;
   CComPtr<IWebBrowser2> m_WebBrowser;
+  CComObject<CSalsitaExtensionEventHandler> *m_EventHandler;
 
-  CSalsitaExtension() :
-    m_WebBrowserEventsCookie(0)
+  CSalsitaExtension()
   {
   }
 
@@ -52,9 +53,7 @@ protected:
       return E_FAIL;
     }
 
-    // advise DWebBrowserEvents2
-    ATLASSERT(!m_WebBrowserEventsCookie);
-    AtlAdvise(m_WebBrowser, (IUnknown*)(IDispEventImpl<1, Timpl, &DIID_DWebBrowserEvents2, &LIBID_SHDocVw, 1, 0>*)this, DIID_DWebBrowserEvents2, &m_WebBrowserEventsCookie);
+    m_EventHandler->AdviseBrowser(m_WebBrowser);
 
     return S_OK;
   }
@@ -63,11 +62,7 @@ protected:
   {
     if (m_WebBrowser)
     {
-      if (m_WebBrowserEventsCookie)
-      {
-        AtlUnadvise(m_WebBrowser, DIID_DWebBrowserEvents2, m_WebBrowserEventsCookie);
-        m_WebBrowserEventsCookie = 0;
-      }
+      m_EventHandler->UnadviseBrowser(m_WebBrowser);
       m_WebBrowser.Release();
     }
 
@@ -97,18 +92,27 @@ protected:
     return (!thisBrowser || !thisBrowser.IsEqualObject(m_WebBrowser));
   }
 
-  HRESULT ReloadContentScriptOnNavigation(IDispatch *pWebBrowser)
+  virtual void ReleaseContentScriptBeforeNavigation(IDispatch *pWebBrowser)
   {
-    if (IsFrame(pWebBrowser))
+    if (!IsFrame(pWebBrowser))
     {
-      return S_FALSE;
+      DestroyMagpieInstance();
     }
-
-    return ReloadContentScript();
   }
 
-  // invoked from BrowserWindowStateChanged event handler
-  // TODO: handle this automatically
+  virtual void ReloadScriptsOnNavigation(IDispatch *pWebBrowser)
+  {
+    HRESULT hr;
+    hr = ConnectToBackgroundScript();
+    ATLASSERT(SUCCEEDED(hr));
+
+    if (!IsFrame(pWebBrowser))
+    {
+      hr = ReloadContentScript();
+      ATLASSERT(SUCCEEDED(hr));
+    }
+  }
+
   void ProcessBrowserWindowStateChanged(ULONG dwFlags, ULONG dwValidFlagsMask)
   {
     if (m_Magpie && (dwValidFlagsMask & OLECMDIDF_WINDOWSTATE_USERVISIBLE) && (dwFlags & OLECMDIDF_WINDOWSTATE_USERVISIBLE))
@@ -118,6 +122,31 @@ protected:
   }
 
 public:
+  HRESULT FinalConstruct()
+  {
+    HRESULT hr = CComObject<CSalsitaExtensionEventHandler>::CreateInstance(&m_EventHandler);
+    if (FAILED(hr))
+    {
+      return hr;
+    }
+    m_EventHandler->AddRef();
+    m_EventHandler->m_extensionCallback = dynamic_cast<SalsitaExtensionEventCallback *>(this);
+    return S_OK;
+  }
+
+  void FinalRelease()
+  {
+    if (m_EventHandler)
+    {
+      m_EventHandler->m_extensionCallback = NULL;
+      m_EventHandler->Release();
+      m_EventHandler = NULL;
+    }
+
+    ATLASSERT(!m_spUnkSite);
+    ATLASSERT(!m_WebBrowser);
+  }
+
   // IObjectWithSite
   STDMETHODIMP SetSite(IUnknown *pUnkSite)
   {
@@ -136,4 +165,3 @@ public:
     return S_OK;
   }
 };
-
