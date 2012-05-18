@@ -215,7 +215,12 @@ public:
 
       if (pdbi->dwMask & DBIM_TITLE)
       {
-        wcscpy_s(pdbi->wszTitle, _countof(pdbi->wszTitle), title);
+        if (!title)
+        {
+          pdbi->dwMask &= ~DBIM_TITLE;
+        } else {
+          wcscpy_s(pdbi->wszTitle, _countof(pdbi->wszTitle), title);
+        }
       }
 
       if (pdbi->dwMask & DBIM_MODEFLAGS)
