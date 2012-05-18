@@ -6,7 +6,8 @@
 
 class ATL_NO_VTABLE CSalsitaContentApi :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public IDispatchImpl<ISalsitaContentApi, &IID_ISalsitaContentApi, &LIBID_MagpieLib, IDISP_MAGPIE_LIBVERSION>
+  public IDispatchImpl<ISalsitaContentApi, &IID_ISalsitaContentApi, &LIBID_MagpieLib, IDISP_MAGPIE_LIBVERSION>,
+  public PopupBrowserEventCallback
 {
 public:
   CSalsitaContentApi();
@@ -32,6 +33,8 @@ public:
   // COM standard methods
   HRESULT FinalConstruct();
   void FinalRelease();
+
+  virtual bool GetActivatedWindowPopupId(HWND activatedWindow, INT &popupId);
 
 public:
   STDMETHOD(openNewTab)(BSTR url, BOOL setActive);

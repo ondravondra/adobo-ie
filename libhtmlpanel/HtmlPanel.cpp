@@ -39,6 +39,12 @@ LRESULT CHtmlPanel::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*
   return 0;
 }
 
+LRESULT CHtmlPanel::OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+  bHandled = FALSE;
+  return 0;
+}
+
 STDMETHODIMP_(void) CHtmlPanel::BrowserBeforeNavigate2Event(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel)
 {
   CComQIPtr<IWebBrowser2> caller = pDisp;

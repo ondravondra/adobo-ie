@@ -33,6 +33,7 @@ HRESULT CSalsitaContentApi::FinalConstruct()
 
 void CSalsitaContentApi::FinalRelease()
 {
+  closeAllPopupWindows();
 }
 
 HRESULT CSalsitaContentApi::Init(LPUNKNOWN pClientSite)
@@ -93,7 +94,7 @@ STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top,
   CComObject<CPopupBrowser> *wnd;
   IF_FAILED_RET(CComObject<CPopupBrowser>::CreateInstance(&wnd));
   wnd->AddRef();
-  wnd->Init(id, ready.p);
+  wnd->Init(id, ready.p, NULL /* TODO: implement */, dynamic_cast<PopupBrowserEventCallback *>(this));
   RECT rect;
 
   if (left == -1 || top == -1 || width == -1 || height == -1) // all or nothing, ATL is stupid
@@ -140,6 +141,8 @@ void CSalsitaContentApi::DoClosePopupWindow(CPopupBrowser *browser)
     browser->DestroyWindow();
   }
 
+  browser->Dispose();
+
   browser->Release();
 }
 
@@ -169,4 +172,20 @@ STDMETHODIMP CSalsitaContentApi::closeAllPopupWindows()
   m_Popups.RemoveAll();
 
   return S_OK;
+}
+
+bool CSalsitaContentApi::GetActivatedWindowPopupId(HWND activatedWindow, INT &popupId)
+{
+  POSITION p = m_Popups.GetStartPosition();
+  while (p)
+  {
+    m_PopupMapT::CPair *pair = m_Popups.GetNext(p);
+    if (activatedWindow && (pair->m_value->m_hWnd == activatedWindow || IsChild(pair->m_value->m_hWnd, activatedWindow)))
+    {
+      popupId = pair->m_key;
+      return true;
+    }
+  }
+
+  return false;
 }
