@@ -11,6 +11,7 @@ void CPopupBrowser::Init(INT id, IDispatch *onReady, IDispatch *onDeactivated, P
   m_OnReady = onReady;
   m_OnDeactivated = onDeactivated;
   m_OnReadyInvoked = false;
+  m_OnDeactivatedInvoking = false;
   m_EventCallback = eventCallback;
 }
 
@@ -22,11 +23,12 @@ void CPopupBrowser::Dispose()
 
 void CPopupBrowser::InvokeOnDeactivated(INT *activatedId)
 {
-  if (!m_OnDeactivated)
+  if (!m_OnDeactivated || m_OnDeactivatedInvoking)
   {
     return;
   }
 
+  m_OnDeactivatedInvoking = true;
   CComVariant varId(m_Id, VT_INT);
   if (activatedId)
   {
@@ -37,6 +39,7 @@ void CPopupBrowser::InvokeOnDeactivated(INT *activatedId)
     CComVariant varArgs[1] = { varId };
     m_OnDeactivated.InvokeN((DISPID)0, varArgs, _countof(varArgs));
   }
+  m_OnDeactivatedInvoking = false;
 }
 
 LRESULT CPopupBrowser::OnActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

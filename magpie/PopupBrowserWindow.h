@@ -22,7 +22,7 @@ protected:
 private:
   INT m_Id;
   CIDispatchHelper m_OnReady, m_OnDeactivated;
-  bool m_OnReadyInvoked;
+  bool m_OnReadyInvoked, m_OnDeactivatedInvoking;
   PopupBrowserEventCallback *m_EventCallback;
 
   void InvokeOnDeactivated(INT *activatedId);
