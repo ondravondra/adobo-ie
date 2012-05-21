@@ -113,7 +113,7 @@ private:
     GetToolbarPage(m_PageUrl);
 
     m_HtmlWindow->Create(m_hWndParent, CWindow::rcDefault, L"about:blank",
-        WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_HSCROLL | WS_VSCROLL, WS_EX_CLIENTEDGE);
+        WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_HSCROLL | WS_VSCROLL, 0);
 
     if (!m_HtmlWindow->m_pWebBrowser)
     {
