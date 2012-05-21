@@ -160,6 +160,28 @@ private:
   //  of any kind does not work.
   IUnknown*
           m_ConsolePtr;
+
+  // used for profiling
+  struct ExecutingModule {
+    CString name;
+    LARGE_INTEGER entryTime, finishTime;
+    int timeMs;
+
+    ExecutingModule *parent, *firstChild, *lastChild, *next;
+
+    ExecutingModule(LPCOLESTR lpszModuleID);
+    void Entry();
+    void Finish();
+    void DestroyChildren();
+    ExecutingModule *Append(LPCOLESTR lpszModuleID);
+    void DumpTree(INT tabId);
+#ifdef DUMP_MODULE_TIMES
+    void DumpTree(int level, HANDLE hFile);
+#endif
+  };
+
+  ExecutingModule *executingApplication; ///< times are invalid for the root node
+  ExecutingModule *currentExecutingModule;
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(MagpieApplication), CMagpieApplication)

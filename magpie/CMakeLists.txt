@@ -8,6 +8,10 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}/$(IntDir)" "../libcomhelper/inc
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS -D_UNICODE -D_ATL_STATIC_REGISTRY -D_CRT_NON_CONFORMING_SWPRINTFS")
 
+if(DUMP_MODULE_TIMES)
+	add_definitions("-DDUMP_MODULE_TIMES")
+endif(DUMP_MODULE_TIMES)
+
 target_link_libraries(magpie libcomhelper libhtmlpanel)
 add_dependencies(magpie libcomhelper libhtmlpanel)
 

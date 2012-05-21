@@ -55,3 +55,17 @@ HRESULT Misc::LoadHtmlResource(const wchar_t *name, CStringW &contents)
   }
   return hrRet;
 }
+
+void Misc::TakeTimeStamp(LARGE_INTEGER & t)
+{
+  QueryPerformanceCounter(&t);
+}
+
+int Misc::GetTimeStampDiffMs(LARGE_INTEGER & first, LARGE_INTEGER & second)
+{
+  LARGE_INTEGER f;
+  QueryPerformanceFrequency(&f);
+  __int64 diff = (*((__int64 *)&second)) - (*((__int64 *)&first));
+  __int64 res = (diff * 1000) / (*((__int64 *)&f));
+  return (int)res;
+}
