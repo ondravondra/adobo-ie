@@ -73,7 +73,7 @@ STDMETHODIMP CSalsitaContentApi::navigateTo(BSTR url)
   return m_WebBrowser->Navigate2(&vtUrl, NULL, NULL, NULL, NULL);
 }
 
-STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top, INT width, INT height, VARIANT onReady, INT *popupId)
+STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top, INT width, INT height, VARIANT onReady, VARIANT onDeactivated, INT *popupId)
 {
   ENSURE_RETVAL(popupId);
 
@@ -85,6 +85,12 @@ STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top,
     ready = onReady.pdispVal;
   }
 
+  CComPtr<IDispatch> deactivated;
+  if (onDeactivated.vt == VT_DISPATCH)
+  {
+    deactivated = onDeactivated.pdispVal;
+  }
+
   const OLECHAR *urlVal = NULL;
   if (url.vt == VT_BSTR)
   {
@@ -94,7 +100,7 @@ STDMETHODIMP CSalsitaContentApi::openPopupWindow(VARIANT url, INT left, INT top,
   CComObject<CPopupBrowser> *wnd;
   IF_FAILED_RET(CComObject<CPopupBrowser>::CreateInstance(&wnd));
   wnd->AddRef();
-  wnd->Init(id, ready.p, NULL /* TODO: implement */, dynamic_cast<PopupBrowserEventCallback *>(this));
+  wnd->Init(id, ready.p, deactivated.p, dynamic_cast<PopupBrowserEventCallback *>(this));
   RECT rect;
 
   if (left == -1 || top == -1 || width == -1 || height == -1) // all or nothing, ATL is stupid

@@ -39,7 +39,7 @@ public:
 public:
   STDMETHOD(openNewTab)(BSTR url, BOOL setActive);
   STDMETHOD(navigateTo)(BSTR url);
-  STDMETHOD(openPopupWindow)(VARIANT url, INT left, INT top, INT width, INT height, VARIANT onReady, INT *popupId);
+  STDMETHOD(openPopupWindow)(VARIANT url, INT left, INT top, INT width, INT height, VARIANT onReady, VARIANT onDeactivated, INT *popupId);
   STDMETHOD(closePopupWindow)(INT popupId);
   STDMETHOD(closeAllPopupWindows)();
 

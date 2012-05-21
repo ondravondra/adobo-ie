@@ -33,8 +33,7 @@ void CPopupBrowser::InvokeOnDeactivated(INT *activatedId)
     CComVariant varActivatedId(*activatedId, VT_INT);
     CComVariant varArgs[2] = { varId, varActivatedId };
     m_OnDeactivated.InvokeN((DISPID)0, varArgs, _countof(varArgs));
-  } else {    
-    CComVariant varActivatedId(*activatedId, VT_INT);
+  } else {
     CComVariant varArgs[1] = { varId };
     m_OnDeactivated.InvokeN((DISPID)0, varArgs, _countof(varArgs));
   }

@@ -80,13 +80,22 @@ if (typeof _salsita_content_impl !== "undefined") {
   };
 
   salsita.content.openPopupWindow = function (p, callback) {
+    var deact = getParam(p, 'onDeactivated', null);
+    var wrappedCb = function(id, wnd) {
+      if (typeof callback !== "undefined")
+      {
+        callback({id: id, window: wnd });
+      }
+    };
+
     return contentApiImpl.openPopupWindow(
       getParam(p, 'url', null),
       getParam(p, 'left', -1),
       getParam(p, 'top', -1),
       getParam(p, 'width', -1),
       getParam(p, 'height', -1),
-      function(id, wnd) { callback({id: id, window: wnd }); });
+      wrappedCb,
+      deact);
   };
 
   salsita.content.closePopupWindow = function(id) {
@@ -128,15 +137,22 @@ if (typeof _salsita_content_impl !== "undefined") {
       h = getParam(p.rect, 'height', 0);
     }
 
-    (function (_wndPar) {
+    (function (_wndRect) {
       var cbFunc = function (wnd) {
         callback(
           {
-            menu: { identity: wnd.id, rect: _wndPar },
+            menu: { identity: wnd.id, rect: _wndRect },
             root: wnd.window.document.body,
             window: wnd.window
           });
       };
+      var _wndPar = {left: _wndRect.left, top: _wndRect.top, width: _wndRect.width, height: _wndRect.height,
+        onDeactivated: function(id, actId) {
+          // TODO: here we can check for window parents etc
+          salsita.content.closePopupWindow(id);
+        }
+      };
+
       salsita.content.openPopupWindow(_wndPar, cbFunc);
     })({ left: left, top: top, width: w, height: h });
   };
