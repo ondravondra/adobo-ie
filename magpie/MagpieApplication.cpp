@@ -448,7 +448,7 @@ CMagpieApplication::ExecutingModule *CMagpieApplication::ExecutingModule::Append
 void CMagpieApplication::ExecutingModule::DumpTree(INT tabId)
 {
   CHAR fileName[128];
-  sprintf(fileName, "c:\\magpie-modules.%i.log", tabId);
+  sprintf(fileName, "c:\\temp\\magpie-modules.%i.log", tabId);
   HANDLE hFile = CreateFileA(fileName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
   if (hFile == INVALID_HANDLE_VALUE)
   {
