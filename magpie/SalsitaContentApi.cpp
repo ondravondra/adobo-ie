@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SalsitaContentApi.h"
+#include <vector>
 
 CSalsitaContentApi::CSalsitaContentApi() : m_PopupIndexSeq(0)
 {
@@ -160,22 +161,30 @@ STDMETHODIMP CSalsitaContentApi::closePopupWindow(INT popupId)
     return S_OK; ///< already closed
   }
 
-  DoClosePopupWindow(pair->m_value);
+  CPopupBrowser *browser = pair->m_value;
+  m_Popups.RemoveKey(popupId); ///< first we remove it from map to avoid recursive calls
 
-  m_Popups.RemoveKey(popupId);
+  DoClosePopupWindow(browser);
   return S_OK;
 }
 
 STDMETHODIMP CSalsitaContentApi::closeAllPopupWindows()
 {
+  // first we remove the elements from map to avoid recursive calls
+  std::vector<CPopupBrowser *> toDelete;
   POSITION p = m_Popups.GetStartPosition();
   while (p)
   {
     m_PopupMapT::CPair *pair = m_Popups.GetNext(p);
-    DoClosePopupWindow(pair->m_value);
+    toDelete.push_back(pair->m_value);
   }
 
   m_Popups.RemoveAll();
+
+  for (std::vector<CPopupBrowser *>::iterator it = toDelete.begin(); it != toDelete.end(); it ++)
+  {
+    DoClosePopupWindow(*it);
+  }
 
   return S_OK;
 }
