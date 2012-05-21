@@ -71,7 +71,7 @@ public:
   // Shutdown script engine and cleanup
   HRESULT Shutdown();
 
-  HRESULT CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi);
+  HRESULT CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi, VARIANT pContentApi);
 
   // Run a module. Runs the module unconditionally, so this method should be
   //  used only by the module itself after checking if the module ran
@@ -114,6 +114,9 @@ private:
 
   CComPtr<CSalsitaApiImplComObject> m_SalsitaApiImpl;
   CComPtr<CSalsitaFrameworkComObject> m_SalsitaFramework;
+
+  // object implementing methods for salsita.content.* api.
+  CComQIPtr<IDispatch> m_SalsitaContentApi;
 
   HRESULT GetSalsitaObject(VARIANT * result);
 

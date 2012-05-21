@@ -78,7 +78,7 @@ STDMETHODIMP CSalsitaApiServiceImpl::addEventListener(LPWSTR eventId, INT tabId,
   return S_OK;
 }
 
-HRESULT CSalsitaApiServiceImpl::CallListeners(LPWSTR eventId, INT recipientTabId, VARIANT *pvarParams, int nParams)
+HRESULT CSalsitaApiServiceImpl::CallListeners(LPWSTR eventId, INT recipientTabId, VARIANT *pvarParams, int nParams, INT skipTabId)
 {
   CAtlArray<CIDispatchHelper *> recipients;
 
@@ -86,7 +86,7 @@ HRESULT CSalsitaApiServiceImpl::CallListeners(LPWSTR eventId, INT recipientTabId
   for (size_t i = 0; i < listeners->GetCount(); i ++)
   {
     EventListenerT *l = listeners->GetAt(i);
-    if (recipientTabId == -1 || l->tabId == recipientTabId)
+    if ((recipientTabId == -1 || l->tabId == recipientTabId) && (skipTabId == -1 || skipTabId != l->tabId))
     {
       recipients.Add(new CIDispatchHelper(l->listener)); // increases refcount
     }
@@ -112,10 +112,26 @@ STDMETHODIMP CSalsitaApiServiceImpl::sendRequest(INT senderTabId, INT recipientT
   return CallListeners(L"extension.onRequest", recipientTabId, varArgs, _countof(varArgs));
 }
 
+STDMETHODIMP CSalsitaApiServiceImpl::tabCreated(INT tabId)
+{
+  CComVariant varTabId(tabId, VT_INT);
+
+  CComVariant varArgs[1] = { varTabId };
+  return CallListeners(L"tabs.onCreated", -1, varArgs, _countof(varArgs));
+}
+
 STDMETHODIMP CSalsitaApiServiceImpl::tabActivated(INT tabId)
 {
   CComVariant varTabId(tabId, VT_INT);
 
   CComVariant varArgs[1] = { varTabId };
   return CallListeners(L"tabs.onActivated", -1, varArgs, _countof(varArgs));
+}
+
+STDMETHODIMP CSalsitaApiServiceImpl::tabRemoved(INT tabId)
+{
+  CComVariant varTabId(tabId, VT_INT);
+
+  CComVariant varArgs[1] = { varTabId };
+  return CallListeners(L"tabs.onRemoved", -1, varArgs, _countof(varArgs), tabId);
 }

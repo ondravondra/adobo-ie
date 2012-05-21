@@ -3,6 +3,7 @@
 // Used by Magpie.rc
 //
 #define IDS_PROJNAME                    100
+#define IDS_POPUPWND                    150
 #define IDR_MAGPIE                      101
 #define IDR_MAGPIEAPPLICATION           102
 

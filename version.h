@@ -6,7 +6,7 @@
 
 #define VER_NUMBER_MAJOR   1
 #define VER_NUMBER_MINOR   0
-#define VER_NUMBER_RELEASE 1
+#define VER_NUMBER_RELEASE 2
 
 #ifndef VER_NUMBER_BUILD
 #define VER_NUMBER_BUILD  -1

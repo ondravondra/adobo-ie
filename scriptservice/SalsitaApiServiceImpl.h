@@ -29,7 +29,9 @@ public:
   STDMETHOD(releaseClient)(INT tabId);
   STDMETHOD(addEventListener)(LPWSTR eventId, INT tabId, LPDISPATCH listener);
   STDMETHOD(sendRequest)(INT senderTabId, INT recipientTabId, VARIANT senderObject, VARIANT request, VARIANT requestCallback);
+  STDMETHOD(tabCreated)(INT tabId);
   STDMETHOD(tabActivated)(INT tabId);
+  STDMETHOD(tabRemoved)(INT tabId);
 
 private:
 
@@ -53,5 +55,5 @@ private:
   EventListenerArrayT *GetListenerArray(LPWSTR eventId);
   void RemoveListenersForTab(INT tabId, EventListenerArrayT *listenerArray);
 
-  HRESULT CallListeners(LPWSTR eventId, INT recipientTabId, VARIANT *pvarParams, int nParams);
+  HRESULT CallListeners(LPWSTR eventId, INT recipientTabId, VARIANT *pvarParams, int nParams, INT skipTabId = -1);
 };

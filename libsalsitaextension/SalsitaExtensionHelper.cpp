@@ -57,3 +57,21 @@ void CSalsitaExtensionHelper::ResourcesDirMakeUrl(const wchar_t *resourcesDir, c
   pageUrl.append(relativeUrl);
   std::replace(pageUrl.begin(), pageUrl.end(), L'\\', L'/');
 }
+
+bool CSalsitaExtensionHelper::CheckDocumentElementAvailable(IWebBrowser2 *browser)
+{
+  CComPtr<IDispatch> pdispDocument;
+  if (FAILED(browser->get_Document(&pdispDocument.p)))
+  {
+    return false;
+  }
+
+  CComQIPtr<IHTMLDocument3> document = pdispDocument;
+  CComPtr<IHTMLElement> documentElement;
+  if (!document || (FAILED(document->get_documentElement(&documentElement.p))) || !documentElement)
+  {
+    return false;
+  }
+
+  return true;
+}

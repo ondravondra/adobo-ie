@@ -8,6 +8,14 @@ import "oaidl.idl";
 import "ocidl.idl";
 
 /*==========================================================================*/
+
+typedef enum
+{
+  TAB_CREATED = 0,
+  TAB_ACTIVATED = 1,
+  TAB_REMOVED = 2
+} TabEventType;
+
 [
   helpstring(
     "IMagpieApplication Interface. This is the interface "
@@ -31,9 +39,20 @@ interface IMagpieApplication : IUnknown
   HRESULT Init([in, string] const OLECHAR* extensionId, [in, string] const OLECHAR* lpszFolderName, [in, optional] VARIANT extensionTabId);
 
   [helpstring(
-    "Creates the salsita. api object in the script engine. Requires ISalsitaApiService implementation which is retrieved from the scriptservice com server."
+    "Creates a dispatch object implementing methods for salsita.content.* api. "
+    "Resulting instance must be passed to CreateSalsitaApi call. "
+    "This api directly controls the browser in specific conent script application and is used e.g. to create new tabs."
+    )]
+  HRESULT CreateSalsitaContentApiImplementation([in] LPUNKNOWN pClientSite, [out, retval] LPDISPATCH *pContentApi);
+
+  [helpstring(
+    "Creates the salsita.* api object in the script engine. Requires ISalsitaApiService implementation which is retrieved from the scriptservice com server. "
+    "Content script apps pass pContentApi object created using CreateSalsitaContentApiImplementation."
   )]
-  HRESULT CreateSalsitaApi([in] INT tabId /* -1 for background script */, [in] LPUNKNOWN /* ISalsitaApiService */ pSalsitaApi);
+  HRESULT CreateSalsitaApi(
+    [in] INT tabId /* -1 for background script */,
+    [in] LPUNKNOWN /* ISalsitaApiService */ pSalsitaApi,
+    [in, optional] /* VT_ERROR or VT_DISPATCH */ VARIANT pContentApi);
 
   [helpstring(
     "Run-method. Pass the module ID of your main script in "
@@ -52,9 +71,9 @@ interface IMagpieApplication : IUnknown
   HRESULT ScriptAddNamedItem([in, string] const OLECHAR *name, [in] LPDISPATCH pDisp, [in] ULONG dwFlags);
 
   [helpstring(
-    "Invoked from the extension when the user activates its window."
+    "Invoked from the extension when window state changes."
   )]
-  HRESULT RaiseTabActivatedEvent();
+  HRESULT RaiseTabEvent([in] TabEventType eventType);
 };
 
 /*==========================================================================*/
@@ -243,7 +262,39 @@ library MagpieLib
     HRESULT releaseClient([in] INT tabId);
     HRESULT addEventListener([in, string] const OLECHAR *eventId, [in] INT tabId /* id of the current tab, -1 for background*/, [in] LPDISPATCH listener);
     HRESULT sendRequest([in] INT senderTabId, [in] INT recipientTabId /* -1 for broadcast */, [in] VARIANT senderObject, [in] VARIANT request, [in, optional] VARIANT requestCallback);
+    HRESULT tabCreated([in] INT tabId);
     HRESULT tabActivated([in] INT tabId);
+    HRESULT tabRemoved([in] INT tabId);
+  }
+
+  [
+    helpstring("ISalsitaContentApi interface is used to provide salsita.content.* apis a way to communicate with IE"),
+    object,
+    uuid(CD58C03F-D056-488D-B4AD-F86CB4C3DD0D),
+    dual,
+    nonextensible,
+    pointer_default(unique)
+  ]
+  interface ISalsitaContentApi : IDispatch
+  {
+    [id(1)]
+    HRESULT openNewTab([in, string] BSTR url, [in] BOOL setActive);
+
+    [id(2)]
+    HRESULT navigateTo([in, string] BSTR url);
+
+    [id(3)]
+    HRESULT openPopupWindow([in] VARIANT url,
+      [in] INT left, [in] INT top, [in] INT width, [in] INT height,
+      [in, optional] VARIANT onReady /* callback(INT id, IHTMLWindow2 window) */,
+      [in, optional] VARIANT onDeactivated /* callback(INT id, __in_opt INT activatedId) */,
+      [out, retval] INT *popupId);
+
+    [id(4)]
+    HRESULT closePopupWindow([in] INT popupId);
+
+    [id(5)]
+    HRESULT closeAllPopupWindows();
   }
 
   [

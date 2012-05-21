@@ -1,18 +1,22 @@
 #pragma once
 
 #include <atlwin.h>
+#include "HtmlPanel.h"
 
-class CHtmlToolbarWindow : public CWindowImpl<CHtmlToolbarWindow, CAxWindow>
+struct SalsitaToolbarCallback {
+  virtual void ToolbarWindowBeforeNavigate() = 0;
+  virtual void ToolbarWindowReady(VARIANT *pURL) = 0;
+};
+
+class CHtmlToolbarWindow : public CHtmlPanel
 {
 public:
-  CComPtr<IWebBrowser2> m_pWebBrowser;
-  DECLARE_WND_SUPERCLASS(NULL, CAxWindow::GetWndClassName())
+  CHtmlToolbarWindow();
 
-  BEGIN_MSG_MAP(CHtmlToolbarWindow)
-    MESSAGE_HANDLER(WM_CREATE, OnCreate)
-    MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-  END_MSG_MAP()
+  SalsitaToolbarCallback *m_toolbarCallback;
 
-  LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-  LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+protected:
+  virtual void OnBrowserBeforeNavigate2(LPDISPATCH pDisp, VARIANT *pURL, VARIANT *Flags, VARIANT *TargetFrameName, VARIANT *PostData, VARIANT *Headers, BOOL *Cancel);
+  virtual void OnBrowserDocumentComplete(VARIANT *URL);
+  virtual void OnBrowserWindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL *Cancel);
 };

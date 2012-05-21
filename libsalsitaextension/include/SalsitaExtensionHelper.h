@@ -33,4 +33,11 @@ public:
    * Converts relative url to file:/// url pointing to resources directory.
    */
   static void ResourcesDirMakeUrl(const wchar_t *resourcesDir, const wchar_t *relativeUrl, std::wstring &pageUrl);
+
+  /**
+   * Checks if document.documentElement is not null.
+   * When the user clicks a link on google search page it sends him to a redirect page which doesn't contain documentElement.
+   * Scripts relying on this property then crash.
+   */
+  static bool CheckDocumentElementAvailable(IWebBrowser2 *browser);
 };

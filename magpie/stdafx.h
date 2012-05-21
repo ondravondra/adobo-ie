@@ -17,12 +17,18 @@
 
 #include "resource.h"
 #include <atlbase.h>
+#include <atlapp.h>
 #include <atlstr.h>
 #include <atlcom.h>
 #include <atlctl.h>
 #include <atlcoll.h>
 #include <atlfile.h>
 #include <activdbg.h>
+#include <atlwin.h>
+#include <atlframe.h>
+
+#include <shlguid.h>
+#include <exdispid.h>
 
 using namespace ATL;
 

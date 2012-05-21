@@ -101,11 +101,12 @@ public:
   // -------------------------------------------------------------------------
   // IMagpieApplication methods. See .idl for description.
   STDMETHOD(Init)(const OLECHAR* extensionId, const OLECHAR* lpszFolderName, VARIANT extensionTabId);
-  STDMETHOD(CreateSalsitaApi)(INT tabId, LPUNKNOWN pSalsitaApi);
+  STDMETHOD(CreateSalsitaContentApiImplementation)(LPUNKNOWN pClientSite, LPDISPATCH *pContentApi);
+  STDMETHOD(CreateSalsitaApi)(INT tabId, LPUNKNOWN pSalsitaApi, VARIANT pContentApi);
   STDMETHOD(Run)(const OLECHAR* lpszModuleID);
   STDMETHOD(Shutdown)();
   STDMETHOD(ScriptAddNamedItem)(const OLECHAR *name, LPDISPATCH pDisp, ULONG dwFlags);
-  STDMETHOD(RaiseTabActivatedEvent)();
+  STDMETHOD(RaiseTabEvent)(TabEventType eventType);
 
 private:
   // -------------------------------------------------------------------------
@@ -159,6 +160,28 @@ private:
   //  of any kind does not work.
   IUnknown*
           m_ConsolePtr;
+
+  // used for profiling
+  struct ExecutingModule {
+    CString name;
+    LARGE_INTEGER entryTime, finishTime;
+    int timeMs;
+
+    ExecutingModule *parent, *firstChild, *lastChild, *next;
+
+    ExecutingModule(LPCOLESTR lpszModuleID);
+    void Entry();
+    void Finish();
+    void DestroyChildren();
+    ExecutingModule *Append(LPCOLESTR lpszModuleID);
+    void DumpTree(INT tabId);
+#ifdef DUMP_MODULE_TIMES
+    void DumpTree(int level, HANDLE hFile);
+#endif
+  };
+
+  ExecutingModule *executingApplication; ///< times are invalid for the root node
+  ExecutingModule *currentExecutingModule;
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(MagpieApplication), CMagpieApplication)

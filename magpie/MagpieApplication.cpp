@@ -7,6 +7,7 @@
 #include "stdafx.h"
 #include "MagpieApplication.h"
 #include "DispExIdManager.h"
+#include "SalsitaContentApi.h"
 
 /*============================================================================
  * class CMagpieApplication
@@ -20,6 +21,8 @@ CMagpieApplication::CMagpieApplication() :
   m_ConsolePtr(NULL),
   m_TabId(-2)
 {
+  executingApplication = new ExecutingModule(L"<root>");
+  currentExecutingModule = executingApplication;
 }
 
 //----------------------------------------------------------------------------
@@ -40,6 +43,14 @@ void CMagpieApplication::FinalRelease()
   {
     m_ConsolePtr->Release();
     m_ConsolePtr = NULL;
+  }
+  if (executingApplication)
+  {
+    executingApplication->DumpTree(m_TabId);
+    currentExecutingModule = NULL;
+    executingApplication->DestroyChildren();
+    delete executingApplication;
+    executingApplication = NULL;
   }
 }
 
@@ -241,12 +252,17 @@ void CMagpieApplication::EnterModule(
   LPCOLESTR lpszModuleID)
 {
   m_Console.EnterModule(lpszModuleID);
+  currentExecutingModule = currentExecutingModule->Append(lpszModuleID);
+  currentExecutingModule->Entry();
 }
 
 //----------------------------------------------------------------------------
 //  ExitModule
 void CMagpieApplication::ExitModule()
 {
+  currentExecutingModule->Finish();
+  ATLASSERT(currentExecutingModule->parent);
+  currentExecutingModule = currentExecutingModule->parent;
   m_Console.ExitModule();
 }
 
@@ -300,7 +316,13 @@ STDMETHODIMP CMagpieApplication::Init(
   return S_OK;
 }
 
-STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi)
+STDMETHODIMP CMagpieApplication::CreateSalsitaContentApiImplementation(LPUNKNOWN pClientSite, LPDISPATCH *pContentApi)
+{
+  ENSURE_RETVAL(pContentApi);
+  return CSalsitaContentApi::Create(*pContentApi, pClientSite);
+}
+
+STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaApi, VARIANT pContentApi)
 {
   if (!pSalsitaApi)
   {
@@ -313,7 +335,7 @@ STDMETHODIMP CMagpieApplication::CreateSalsitaApi(INT tabId, LPUNKNOWN pSalsitaA
   {
     return E_INVALIDARG;
   }
-  return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi);
+  return m_ScriptEngine.CreateSalsitaApi(tabId, pSalsitaApi, pContentApi);
 }
 
 //----------------------------------------------------------------------------
@@ -354,11 +376,124 @@ STDMETHODIMP CMagpieApplication::ScriptAddNamedItem(const OLECHAR *name, LPDISPA
   return m_ScriptEngine.AddNamedItem(name, pDisp, dwFlags);
 }
 
-STDMETHODIMP CMagpieApplication::RaiseTabActivatedEvent()
+STDMETHODIMP CMagpieApplication::RaiseTabEvent(TabEventType eventType)
 {
   if (!m_SalsitaApiService)
   {
     return E_UNEXPECTED;
   }
-  return m_SalsitaApiService->tabActivated(m_TabId);
+  switch (eventType)
+  {
+  case TAB_CREATED:
+    return m_SalsitaApiService->tabCreated(m_TabId);
+  case TAB_ACTIVATED:
+    return m_SalsitaApiService->tabActivated(m_TabId);
+  case TAB_REMOVED:
+    return m_SalsitaApiService->tabRemoved(m_TabId);
+  default:
+    return E_INVALIDARG;
+  }
 }
+
+// performance logging stuff
+
+CMagpieApplication::ExecutingModule::ExecutingModule(LPCOLESTR lpszModuleID)
+{
+  name = lpszModuleID;
+  parent = firstChild = lastChild = next = NULL;
+}
+
+void CMagpieApplication::ExecutingModule::Entry()
+{
+  Misc::TakeTimeStamp(entryTime);
+}
+
+void CMagpieApplication::ExecutingModule::Finish()
+{
+  Misc::TakeTimeStamp(finishTime);
+  timeMs = Misc::GetTimeStampDiffMs(entryTime, finishTime);
+}
+
+void CMagpieApplication::ExecutingModule::DestroyChildren()
+{
+  for (ExecutingModule *m = firstChild; m;)
+  {
+    m->DestroyChildren();
+    ExecutingModule *n = m;
+    m = m->next;
+    delete n;
+  }
+
+  firstChild = lastChild = NULL;
+}
+
+CMagpieApplication::ExecutingModule *CMagpieApplication::ExecutingModule::Append(LPCOLESTR lpszModuleID)
+{
+  ExecutingModule *m = new ExecutingModule(lpszModuleID);
+  m->parent = this;
+  ATLASSERT((lastChild == NULL && firstChild == NULL) || (lastChild && firstChild));
+
+  if (lastChild)
+  {
+    lastChild->next = m;
+  } else {
+    firstChild = m;
+  }
+
+  lastChild = m;
+  return m;
+}
+
+#ifdef DUMP_MODULE_TIMES
+void CMagpieApplication::ExecutingModule::DumpTree(INT tabId)
+{
+  CHAR fileName[128];
+  sprintf(fileName, "c:\\temp\\magpie-modules.%i.log", tabId);
+  HANDLE hFile = CreateFileA(fileName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  if (hFile == INVALID_HANDLE_VALUE)
+  {
+    return;
+  }
+
+  SetFilePointer(hFile, 0, NULL, FILE_END);
+  
+  CHAR msg[128];
+  sprintf(msg, "==================================================\r\n");
+  DWORD w;
+  WriteFile(hFile, msg, strlen(msg), &w, NULL);
+
+  DumpTree(-1, hFile); // don't display root element, its meaningless
+
+  CloseHandle(hFile);
+}
+
+void CMagpieApplication::ExecutingModule::DumpTree(int level, HANDLE hFile)
+{
+  if (level > -1)
+  {
+    CHAR msg[128];
+    DWORD w;
+    int l = min(level, _countof(msg));
+
+    for (int i = 0; i < l; i ++)
+    {
+      msg[i] = ' ';
+    }
+    WriteFile(hFile, msg, l, &w, NULL);
+
+    CW2A nm(name);
+    sprintf(msg, "%s: %i ms\r\n", nm.operator LPSTR(), timeMs);
+    WriteFile(hFile, msg, strlen(msg), &w, NULL);
+  }
+
+  for (ExecutingModule *m = firstChild; m; m = m->next)
+  {
+    m->DumpTree(level + 1, hFile);
+  }
+}
+#else
+void CMagpieApplication::ExecutingModule::DumpTree(INT tabId)
+{
+  tabId;
+}
+#endif
