@@ -107,9 +107,11 @@ if (typeof _salsita_content_impl !== "undefined") {
   };
 
   // menu api
-  // p has parent, rect
+  // p has parent, rect, onDeactivated
   // rect has left, top, width, height; left and top are relative to parent's topleft corner
   // position properties used here work in ie but might not work elsewhere!
+  // onDeactivated if defined can return true to let the menu be closed or false otherwise
+  // without onDeactivated the menu gets closed when deactivated
   salsita.content.openMenu = function (p, callback) {
     var el = p.parent;
     var top = el.offsetTop - el.scrollTop;
@@ -137,7 +139,7 @@ if (typeof _salsita_content_impl !== "undefined") {
       h = getParam(p.rect, 'height', 0);
     }
 
-    (function (_wndRect) {
+    (function (_wndRect, _onDeact) {
       var cbFunc = function (wnd) {
         callback(
           {
@@ -148,13 +150,21 @@ if (typeof _salsita_content_impl !== "undefined") {
       };
       var _wndPar = {left: _wndRect.left, top: _wndRect.top, width: _wndRect.width, height: _wndRect.height,
         onDeactivated: function(id, actId) {
-          // TODO: here we can check for window parents etc
-          salsita.content.closePopupWindow(id);
+          if (typeof _onDeact !== "undefined")
+          {
+            if (_onDeact(id, actId))
+            {
+              salsita.content.closePopupWindow(id);
+            }
+          } else {
+            // TODO: here we can check for window parents etc
+            salsita.content.closePopupWindow(id);
+          }
         }
       };
 
       salsita.content.openPopupWindow(_wndPar, cbFunc);
-    })({ left: left, top: top, width: w, height: h });
+    })({ left: left, top: top, width: w, height: h }, p.onDeactivated);
   };
 
   salsita.content.closeMenu = function (identity) {
