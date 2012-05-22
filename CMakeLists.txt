@@ -26,12 +26,12 @@ if(version_build)
 	add_definitions("-DVER_NUMBER_BUILD=${version_build}")
 endif(version_build)
 
-if(NOT omit_activation_manifests)
-	# USE_ACTIVATION_MANIFESTS enables pushing manifests into the activation context using CreateActCtx calls
-	# this is used to be able to load adobo shared com libraries without the need for their global registration
+if(DISABLE_REGFREE_ACTIVATION)
+	# DISABLE_REGFREE_ACTIVATION disables pushing manifests into the activation context using CreateActCtx calls and embedding the manifests into binaries
+	# RegFree activation is used to be able to load adobo shared com libraries without the need for their global registration
 	# this way each IE extension can have its own copy of adobo and be independent on others installed on end user's OS
-	add_definitions("-DUSE_ACTIVATION_MANIFESTS")
-endif(NOT omit_activation_manifests)
+	add_definitions("-DDISABLE_REGFREE_ACTIVATION")
+endif(DISABLE_REGFREE_ACTIVATION)
 
 add_subdirectory(libcomhelper)
 add_subdirectory(libsalsitaextension)

@@ -51,6 +51,9 @@ void WriteAdoboVersionHeader()
   ofstream f;
   f.open("adoboversion.h");
   f << "#define ADOBO_VERSION \"" << manifestVersion << "\"" << endl;
+#ifdef DISABLE_REGFREE_ACTIVATION
+  f << "#define ADOBO_DISABLE_REGFREE_ACTIVATION" << endl;
+#endif
   f.close();
 }
 

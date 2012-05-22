@@ -5,12 +5,14 @@
 #include "ActivationHelper.h"
 
 #include "adoboversion.h"
+#ifndef ADOBO_DISABLE_REGFREE_ACTIVATION
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='scriptservice' version='" ADOBO_VERSION "' \
 language='*'\"")
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='magpie' version='" ADOBO_VERSION "' \
 language='*'\"")
+#endif // ADOBO_DISABLE_REGFREE_ACTIVATION
 
 template <class Timpl>
 class CSalsitaScriptedClient
