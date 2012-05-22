@@ -13,7 +13,7 @@ if(DUMP_MODULE_TIMES)
 endif(DUMP_MODULE_TIMES)
 
 target_link_libraries(magpie libcomhelper libhtmlpanel)
-add_dependencies(magpie libcomhelper libhtmlpanel)
+add_dependencies(magpie libcomhelper libhtmlpanel exportversion)
 
 set_property(TARGET magpie PROPERTY RUNTIME_OUTPUT_DIRECTORY_RELEASE ${outdir_bin_release})
 set_property(TARGET magpie PROPERTY RUNTIME_OUTPUT_DIRECTORY_DEBUG ${outdir_bin_debug})
