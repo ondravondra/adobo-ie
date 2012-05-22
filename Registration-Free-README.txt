@@ -2,7 +2,7 @@ How to use the adobo library without its registration.
 
 Shared dll registration sucks, fortunatelly COM libraries can be loaded without it on WinXP+.
 
-We use two things:
+We use these mechanisms:
 
 XML manifests
 
@@ -12,7 +12,12 @@ See http://msdn.microsoft.com/en-us/library/windows/desktop/aa374219%28v=vs.85%2
 This is sufficient to make background service exe server work because in ScriptServiceFactory.h there is comment telling the linker to add manifest dependency.
 For the BHO library loaded into iexplore.exe this would not be sufficient.
 
-Activation API
+ISOLATION_AWARE_ENABLED defined in stdafx.h
+
+It causes com apis to be wrapped so first the manifest is loaded from the calling module (our bho).
+There is manifestdependency defined for the bho which is set in SalsitaScriptedClient.h and it contains references to adobo libraries.
+
+Activation API - Maybe not needed anymore or only for IDispatchImpl
 
 http://msdn.microsoft.com/en-us/library/windows/desktop/aa376620%28v=vs.85%29.aspx
 

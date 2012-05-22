@@ -3,6 +3,8 @@
  */
 #pragma once
 
+#define ISOLATION_AWARE_ENABLED 1
+
 #include <atlbase.h>
 #include <atlstr.h>
 #include <atlcom.h>
