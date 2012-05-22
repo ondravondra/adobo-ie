@@ -52,7 +52,7 @@ leaveCtor:
 
 CActivationHelper::~CActivationHelper()
 {
-#ifdef DISABLE_REGFREE_ACTIVATION
+#ifndef DISABLE_REGFREE_ACTIVATION
   if (!error)
   {
     ::DeactivateActCtx(0, cookie);
