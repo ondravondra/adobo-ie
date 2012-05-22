@@ -16,7 +16,12 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   wchar_t * lastSlash = wcsrchr(path, L'\\');
   if (lastSlash)
   {
+    *lastSlash = 0;
+    wcscpy(dir, path);
+    *lastSlash = L'\\';
     lastSlash[1] = 0;
+  } else {
+    wcscpy(dir, path);
   }
 
   if (wcscat_s(path, requiredDllName) != 0)
@@ -29,8 +34,9 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   memset(&actCtx, 0, sizeof(actCtx));
   actCtx.cbSize = sizeof(actCtx);
   actCtx.lpSource = path;
+  actCtx.lpAssemblyDirectory = dir;
   actCtx.lpResourceName = MAKEINTRESOURCE(2);
-  actCtx.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
+  actCtx.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID | ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID;
 
   contextHandle = ::CreateActCtx(&actCtx);
   if (contextHandle == INVALID_HANDLE_VALUE)
