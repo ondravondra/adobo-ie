@@ -28,5 +28,5 @@ This library is used to create background script com exe server. Particular exte
 
 == Installing Adobo ==
 
-The Adobo library can be installed as a shared library or it can be used as side by side assembly (or rather assemblies). For information how to use Adobo without registering it globally in the system, see Registration-Free-README.txt
+The Adobo library can be installed as a shared library or it can be used as side by side assembly (or rather assemblies). For information how to use Adobo without registering it globally in the system, see [[Registration-Free-README.mediawiki]].
 

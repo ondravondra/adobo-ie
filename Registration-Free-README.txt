@@ -1,6 +1,0 @@
-How to use the adobo library without its registration.
-
-Shared dll registration sucks, fortunatelly COM libraries can be loaded without it on WinXP+.
-
-For more information see the 'activation' branch. It is work in progress which can someday be polished and merged when needed.
-
