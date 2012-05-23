@@ -14,8 +14,9 @@ class CSalsitaExtension :
 protected:
   CComPtr<IWebBrowser2> m_WebBrowser;
   CComObject<CSalsitaExtensionEventHandler> *m_EventHandler;
+  bool m_RaiseTabActivatedWhenMagpieIsAvailable;
 
-  CSalsitaExtension()
+  CSalsitaExtension() : m_RaiseTabActivatedWhenMagpieIsAvailable(false)
   {
   }
 
@@ -110,14 +111,26 @@ protected:
     {
       hr = ReloadContentScript();
       ATLASSERT(SUCCEEDED(hr));
+
+      if (m_Magpie && m_RaiseTabActivatedWhenMagpieIsAvailable)
+      {
+        m_RaiseTabActivatedWhenMagpieIsAvailable = false;
+        m_Magpie->RaiseTabEvent(TAB_ACTIVATED);
+      }
     }
   }
 
   void ProcessBrowserWindowStateChanged(ULONG dwFlags, ULONG dwValidFlagsMask)
   {
-    if (m_Magpie && (dwValidFlagsMask & OLECMDIDF_WINDOWSTATE_USERVISIBLE) && (dwFlags & OLECMDIDF_WINDOWSTATE_USERVISIBLE))
+    if ((dwValidFlagsMask & OLECMDIDF_WINDOWSTATE_USERVISIBLE) && (dwFlags & OLECMDIDF_WINDOWSTATE_USERVISIBLE))
     {
-      m_Magpie->RaiseTabEvent(TAB_ACTIVATED);
+      if (m_Magpie)
+      {
+        m_RaiseTabActivatedWhenMagpieIsAvailable = false;
+        m_Magpie->RaiseTabEvent(TAB_ACTIVATED);
+      } else {
+        m_RaiseTabActivatedWhenMagpieIsAvailable = true;
+      }
     }
   }
 

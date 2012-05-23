@@ -1,0 +1,32 @@
+= Adobo IE library =
+
+== Description ==
+
+The Adobo IE library is used to create extension for IE with JS codebase shared with other browsers. It supplies the api for the extension as well as background/content script support.
+
+== Modules ==
+
+=== libcomhelper ===
+
+Static library with useful classes mostly for atl com operations.
+
+=== libhtmlpanel ===
+
+Static library containing a window with webbrowser control used for creating html toolbars and popup windows. The webbrowser control is restricted so the html inside it is protected from unwanted user modification.
+
+=== libsalsitaextension ===
+
+Static library containing helper classes and template classes used to create the BHO com class (CSalsitaExtension) and toolbar com class (CSalsitaToolbar). It handles script execution and most of the stuff so the programmer must only write code which is specific to the particular extension.
+
+=== magpie ===
+
+Created by Arne Seib and extended by Ondrej Vondra this is the core of the scripting functionality. Provides active script execution environment with support for JS debugging. Also provides salsita api for the scripts.
+
+=== scriptservice ===
+
+This library is used to create background script com exe server. Particular extension project will make its own executable containing a COM singleton class. This class extends CScriptServiceFactory defining the guid and implementing among others the method SetupScriptServiceInstance for initializing background script service instance (which will always be singleton per user session).
+
+== Installing Adobo ==
+
+The Adobo library can be installed as a shared library or it can be used as side by side assembly (or rather assemblies). For information how to use Adobo without registering it globally in the system, see Registration-Free-README.txt
+
