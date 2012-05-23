@@ -6,7 +6,6 @@ namespace LIB_COMHelper {
  * Handles pushing manifest into the activation stack.
  * http://msdn.microsoft.com/en-us/library/windows/desktop/aa374166%28v=vs.85%29.aspx
  * This enables loading of com libraries without the need for registration.
- * TODO: This class may not be needed after all. It looks like ISOLATION_AWARE_ENABLED define handles redirection nicely.
  */
 class CActivationHelper
 {

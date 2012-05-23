@@ -30,3 +30,7 @@ It causes com apis to be wrapped so first the manifest is loaded from the callin
 There is manifestdependency defined for the bho which is set in SalsitaScriptedClient.h and it contains references to adobo libraries.
 Theoretically it should make activation api unnecessary but it is not wrapping calls inside atl classes and without activation api it did not suffice in all cases.
 
+Interresting articles about the topic:
+
+Everything you Never Wanted to Know about WinSxS - http://omnicognate.wordpress.com/2009/10/05/winsxs/
+
