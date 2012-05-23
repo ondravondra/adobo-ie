@@ -14,7 +14,7 @@ name='magpie' version='" ADOBO_VERSION "' \
 language='*'\"")
 
 #ifndef ISOLATION_AWARE_ENABLED
-#error You must define ISOLATION_AWARE_ENABLED <somevalue> (include libsalsitaextension_stdheaders.h) for SxS activation to work properly.
+//#error You must define ISOLATION_AWARE_ENABLED <somevalue> (include libsalsitaextension_stdheaders.h) for SxS activation to work properly.
 #endif
 
 #endif // ADOBO_DISABLE_REGFREE_ACTIVATION
@@ -172,7 +172,7 @@ protected:
 
     HRESULT hr;
 
-    //CActivationHelper actHelper(GetLibraryModule(), L"magpie.dll"); // handled by ISOLATION_AWARE_ENABLED
+    CActivationHelper actHelper(GetLibraryModule());
 
     hr = CreateMagpieInstance();
     if (FAILED(hr))
@@ -233,7 +233,7 @@ protected:
 
     m_BackgroundScriptFailed = true;
 
-    //CActivationHelper actHelper(GetLibraryModule(), L"scriptservice.dll"); // handled by ISOLATION_AWARE_ENABLED
+    CActivationHelper actHelper(GetLibraryModule());
 
     CComPtr<IUnknown> pFactoryObject;
     hr = pFactoryObject.CoCreateInstance(*factoryCLSID);

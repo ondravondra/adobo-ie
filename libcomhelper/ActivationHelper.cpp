@@ -3,7 +3,7 @@
 
 namespace LIB_COMHelper {
 
-CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requiredDllName) :
+CActivationHelper::CActivationHelper(HMODULE callerModule) :
   contextHandle(INVALID_HANDLE_VALUE), cookie(0), error(0)
 {
 #ifndef DISABLE_REGFREE_ACTIVATION // see root CMakeLists.txt for explanation
@@ -14,20 +14,19 @@ CActivationHelper::CActivationHelper(HMODULE callerModule, const wchar_t *requir
   }
 
   wchar_t * lastSlash = wcsrchr(path, L'\\');
-  if (lastSlash)
+  if (!lastSlash)
   {
-    *lastSlash = 0;
-    wcscpy(dir, path);
-    *lastSlash = L'\\';
-    lastSlash[1] = 0;
-  } else {
-    wcscpy(dir, path);
+    lastSlash = wcsrchr(path, L'/');
   }
 
-  if (wcscat_s(path, requiredDllName) != 0)
+  if (lastSlash)
   {
-    error = -1;
-    goto leaveCtor;
+    wchar_t ch = *lastSlash;
+    *lastSlash = 0;
+    wcscpy(dir, path);
+    *lastSlash = ch;
+  } else {
+    wcscpy(dir, path);
   }
 
   ACTCTXW actCtx;

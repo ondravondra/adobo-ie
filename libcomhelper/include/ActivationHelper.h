@@ -17,11 +17,9 @@ private:
   ULONG_PTR cookie;
 public:
   /**
-   * Creates activation context for given required dll.
-   * Loads the manifest from the dll's resource identified by its name.
-   * The dll is expected to be located in the same directory as the caller whose module handle gets passed to the ctor.
+   * Creates activation context from RT_MANIFEST #2 contained in calling dll.
    */
-  CActivationHelper(HMODULE callerModule, const wchar_t *requiredDllName);
+  CActivationHelper(HMODULE callerModule);
   ~CActivationHelper();
   inline DWORD GetErrorCode() { return error; }
 
