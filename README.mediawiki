@@ -28,12 +28,14 @@ Created by Arne Seib and extended by Ondrej Vondra this is the core of the scrip
 ** provides implementation for methods like ''sendRequest''
 ** dispatch interface '''ISalsitaApiInternal'''
 ** needs background script to work, clients ask the background script service for '''ISalsitaApiService''' implementation and pass it to ''IMagpieApplication::CreateSalsitaApi''.
+** extension scripts can access it using wrappers defined in ''salsita.js''
 
 * salsita content script only api
 ** provides implementation for methods tied to a browser window like ''openPopupWindow''
 ** dispatch interface '''ISalsitaContentApi'''
 ** instance created using ''IMagpieApplication::CreateSalsitaContentApiImplementation''
-** client initializes it by passing ''IUnknown'' obtained in ''SetSite'', this is converted to ''IWebBrowser2'''
+** client initializes it by passing ''IUnknown'' obtained in ''SetSite'', this is converted to ''IWebBrowser2''
+** extension scripts can access it using wrappers defined in ''salsita.js''
 
 * salsita IE framework
 ** contains IE specific methods for operations like creating XMLHttpRequest or making javascript variables available in global scope
