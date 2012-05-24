@@ -22,9 +22,31 @@ Static library containing helper classes and template classes used to create the
 
 Created by Arne Seib and extended by Ondrej Vondra this is the core of the scripting functionality. Provides active script execution environment with support for JS debugging. Also provides salsita api for the scripts.
 
+'''APIs provided to the scripts'''
+
+* salsita api
+** provides implementation for methods like ''sendRequest''
+** dispatch interface '''ISalsitaApiInternal'''
+** needs background script to work, clients ask the background script service for '''ISalsitaApiService''' implementation and pass it to ''IMagpieApplication::CreateSalsitaApi''.
+** extension scripts can access it using wrappers defined in ''salsita.js''
+
+* salsita content script only api
+** provides implementation for methods tied to a browser window like ''openPopupWindow''
+** dispatch interface '''ISalsitaContentApi'''
+** instance created using ''IMagpieApplication::CreateSalsitaContentApiImplementation''
+** client initializes it by passing ''IUnknown'' obtained in ''SetSite'', this is converted to ''IWebBrowser2''
+** extension scripts can access it using wrappers defined in ''salsita.js''
+
+* salsita IE framework
+** contains IE specific methods for operations like creating XMLHttpRequest or making javascript variables available in global scope
+** dispatch interface '''ISalsitaFramework'''
+** visible to the scripts as '''salsitaFramework'''
+
 === scriptservice ===
 
-This library is used to create background script com exe server. Particular extension project will make its own executable containing a COM singleton class. This class extends CScriptServiceFactory defining the guid and implementing among others the method SetupScriptServiceInstance for initializing background script service instance (which will always be singleton per user session).
+This library is used to create background script com exe server. Particular extension project will make its own executable containing a COM singleton class. This class extends ''CScriptServiceFactory'' defining the guid and implementing among others the method ''SetupScriptServiceInstance'' for initializing background script service instance (which will always be singleton per user session).
+
+The scriptservice library creates implementation for '''ISalsitaApiService''' and makes it available to content script clients using ''IScriptServiceInstanceClient::GetSalsitaApiService''. The '''ISalsitaApiService''' implementation is of course also passed to the instance of ''IMagpieApplication'' which runs the background script in the script service exe server.
 
 == Installing Adobo ==
 
