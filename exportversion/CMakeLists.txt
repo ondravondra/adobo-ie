@@ -14,5 +14,6 @@ set_property(TARGET exportversion PROPERTY ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${outd
 add_custom_command(
 	TARGET exportversion
 	POST_BUILD
-	COMMAND "$(TargetPath)" \"${CMAKE_BINARY_DIR}\"
+	#something must be before the first quotation mark for it to translate properly
+	COMMAND if 1==1 \"$(TargetPath)\" \"${CMAKE_BINARY_DIR}\"
 	)
